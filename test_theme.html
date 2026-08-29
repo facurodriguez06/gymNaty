@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Theme Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .test-box { width: 100px; height: 100px; margin: 10px; display: inline-block; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200">
+    <button onclick="document.body.classList.toggle('light')">Toggle Theme</button>
+    
+    <div class="test-box bg-slate-900 text-slate-100 border border-slate-700">
+        bg-slate-900
+    </div>
+    
+    <div class="test-box bg-slate-800 text-slate-400">
+        bg-slate-800
+    </div>
+
+</body>
+</html>

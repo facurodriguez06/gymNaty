@@ -1,0 +1,90 @@
+name: Build iOS App (.ipa) with Dynamic Island
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install NPM Dependencies
+        run: npm install
+
+      - name: Build Web Assets & Sync Capacitor iOS
+        run: |
+          npm run build
+          npx cap sync ios
+
+      - name: Inject Widget Extension Target
+        run: |
+          gem install xcodeproj
+          ruby add_widget_target.rb
+
+      - name: Build Xcode Project
+        run: |
+          cd ios/App
+          if [ -d "App.xcworkspace" ]; then
+            xcodebuild -workspace App.xcworkspace \
+              -scheme App \
+              -configuration Release \
+              -sdk iphoneos \
+              -destination 'generic/platform=iOS' \
+              -derivedDataPath build \
+              CODE_SIGNING_ALLOWED=NO \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGN_IDENTITY="" \
+              clean build
+          else
+            xcodebuild -project App.xcodeproj \
+              -scheme App \
+              -configuration Release \
+              -sdk iphoneos \
+              -destination 'generic/platform=iOS' \
+              -derivedDataPath build \
+              CODE_SIGNING_ALLOWED=NO \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGN_IDENTITY="" \
+              clean build
+          fi
+
+      - name: Package App into .IPA
+        run: |
+          PRODUCTS_DIR="ios/App/build/Build/Products/Release-iphoneos"
+
+          # Embed VigorWidgets.appex inside App.app/PlugIns/
+          APPEX_PATH="$PRODUCTS_DIR/VigorWidgets.appex"
+          APP_PATH="$PRODUCTS_DIR/App.app"
+
+          if [ -d "$APPEX_PATH" ]; then
+            echo "✅ Found VigorWidgets.appex — embedding into App.app/PlugIns/"
+            mkdir -p "$APP_PATH/PlugIns"
+            cp -r "$APPEX_PATH" "$APP_PATH/PlugIns/"
+          else
+            echo "⚠️ VigorWidgets.appex NOT found at $APPEX_PATH"
+            echo "Listing products directory:"
+            ls -la "$PRODUCTS_DIR"
+          fi
+
+          # Build the IPA
+          mkdir -p Payload
+          cp -r "$APP_PATH" Payload/
+          zip -r Vigor-Gym-iOS.ipa Payload
+          echo "✅ IPA Package created successfully!"
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Vigor-Gym-iOS-IPA
+          path: Vigor-Gym-iOS.ipa
+          retention-days: 14

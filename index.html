@@ -1,0 +1,1956 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>VITAL</title>
+    <!-- Mobile Web App Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" href="favicon.svg">
+    <link rel="manifest" href="manifest.json">
+    <!-- DNS Prefetch & Font preconnects for faster resolution -->
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+    <link rel="dns-prefetch" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://api.open-meteo.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet">
+    
+    <!-- Capacitor Core -->
+    <script src="config.js"></script>
+    <script src="capacitor.js"></script>
+    
+    <!-- Tailwind CSS (Local Bundle - 100% Offline & Instant) -->
+    <script src="tailwind.min.js"></script>
+    <script>
+        if (typeof tailwind !== "undefined") {
+            tailwind.config = {
+                darkMode: 'class',
+            }
+        }
+    </script>
+    <!-- Lucide Icons (Local Bundle - 100% Offline & Instant) -->
+    <script src="lucide.min.js"></script>
+    <link rel="stylesheet" href="styles.css?v=2">
+
+    <style>
+        /* Hide Number Input Spinners */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        body { background: #020617; }
+    </style>
+</head>
+
+<body
+    class="bg-slate-950 text-slate-200 transition-colors duration-300 selection:bg-emerald-500/30 selection:text-emerald-200 h-[100dvh] w-[100vw] overflow-hidden flex flex-col">
+    <!-- Sidebar / Drawer -->
+    <div id="sidebar-overlay" onclick="toggleSidebar()"
+        class="fixed inset-0 bg-black/60 z-40 hidden backdrop-blur-sm transition-opacity opacity-0"></div>
+    <div id="app-content" class="hidden w-full h-full overflow-y-auto overflow-x-hidden flex-col relative">
+<aside id="sidebar"
+        class="fixed top-0 left-0 w-64 h-[100dvh] bg-slate-900 border-r border-slate-800 z-50 transform -translate-x-full transition-transform duration-300 ease-out shadow-2xl">
+        <div class="p-6 flex flex-col h-full overflow-y-auto">
+            <div class="flex items-center gap-3 mb-4">
+                <div
+                    class="w-11 h-11 rounded-xl border border-white/10 shadow-xl overflow-hidden flex items-center justify-center bg-slate-950/80 backdrop-blur-sm relative group p-1">
+                    <img src="favicon.svg" class="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(16,185,129,0.4)] transition-transform duration-300 group-hover:scale-105" alt="Vital Logo">
+                </div>
+                <div>
+                    <h2 class="text-lg font-black text-white leading-none tracking-wider font-mono">VITAL</h2>
+                    <span class="text-[10px] text-slate-400 uppercase tracking-widest">Alma y Facu</span>
+                </div>
+            </div>
+
+            <!-- Date & Weather in Sidebar (for mobile) -->
+            <div
+                class="mb-6 px-2 py-3 bg-slate-800/50 rounded-xl border border-slate-700/50 flex items-center justify-between">
+                <span id="sidebar-date" class="text-[10px] text-slate-400 font-medium uppercase tracking-wider"></span>
+                <div id="sidebar-weather" class="hidden flex items-center gap-1.5 text-xs text-sky-300 font-bold">
+                    <i data-lucide="thermometer" class="w-3.5 h-3.5"></i>
+                    <span id="sidebar-temp">--°C</span>
+                </div>
+            </div>
+
+            <nav class="flex-1 space-y-2">
+                <button onclick="navigateTo('ai-routine')"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all group btn-ai-routine">
+                    <i data-lucide="sparkles" class="w-5 h-5 transition-colors"></i>
+                    <span class="font-medium">ARMA TU RUTINA</span>
+                </button>
+                <button onclick="navigateTo('routine')"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group active-nav-item">
+                    <i data-lucide="dumbbell" class="w-5 h-5 group-hover:text-emerald-400 transition-colors"></i>
+                    <span class="font-medium">Rutina</span>
+                </button>
+                <button onclick="navigateTo('history')"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group">
+                    <i data-lucide="calendar" class="w-5 h-5 group-hover:text-violet-400 transition-colors"></i>
+                    <span class="font-medium">Historial</span>
+                </button>
+                <button onclick="navigateTo('stats')"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group">
+                    <i data-lucide="line-chart" class="w-5 h-5 group-hover:text-yellow-400 transition-colors"></i>
+                    <span class="font-medium">Progreso</span>
+                </button>
+                <button onclick="navigateTo('achievements')"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group">
+                    <i data-lucide="trophy" class="w-5 h-5 group-hover:text-fuchsia-400 transition-colors"></i>
+                    <span class="font-medium">Logros</span>
+                </button>
+                <button onclick="navigateTo('water')"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group">
+                    <div class="relative">
+                        <i data-lucide="droplets" class="w-5 h-5 group-hover:text-cyan-400 transition-colors"></i>
+                        <span id="sidebar-water-badge"
+                            class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border border-slate-900 hidden"></span>
+                    </div>
+                    <span class="font-medium">Hidratación</span>
+                </button>
+                <button onclick="openRoutinesManagerModal()"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group">
+                    <i data-lucide="folder-cog" class="w-5 h-5 group-hover:text-blue-400 transition-colors"></i>
+                    <span class="font-medium">Mis Rutinas</span>
+                </button>
+                <div class="my-4 border-t border-slate-800/50"></div>
+                <button onclick="openCalculatorModal()"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group">
+                    <i data-lucide="calculator" class="w-5 h-5 group-hover:text-violet-400 transition-colors"></i>
+                    <span class="font-medium">Calculadora</span>
+                </button>
+                <button onclick="openProfileModal()"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group">
+                    <i data-lucide="user-cog" class="w-5 h-5 group-hover:text-pink-400 transition-colors"></i>
+                    <span class="font-medium">Perfil</span>
+                </button>
+            </nav>
+
+            <div class="mt-auto pt-4 border-t border-slate-800/50">
+                <button id="theme-toggle-sidebar" onclick="toggleTheme()"
+                    class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition-all border border-slate-800 bg-slate-950/30">
+                    <span class="text-sm font-medium">Tema</span>
+                    <i id="theme-icon-sidebar" data-lucide="moon" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Header -->
+    <header id="main-header"
+        class="bg-slate-900 border-b border-slate-800 sticky top-0 z-20 shadow-lg header-safe-area transform-gpu">
+        <div class="max-w-5xl mx-auto px-4 relative">
+            <!-- Top Row: Title & Date -->
+            <div class="flex items-center justify-between min-h-[50px]">
+                <div class="flex items-center gap-3">
+                    <!-- Menu Button -->
+                    <button onclick="toggleSidebar()"
+                        class="p-2 -ml-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+
+                    <!-- Title Group -->
+                    <div class="flex items-center gap-2.5">
+                        <img src="favicon.svg" class="w-6 h-6 object-contain drop-shadow-[0_0_8px_rgba(16,185,129,0.4)]" alt="Vital">
+                        <h1 class="text-xl font-black text-white flex items-center gap-2 leading-none tracking-wider font-mono">
+                            VITAL
+                        </h1>
+                    </div>
+
+                    <!-- Static Trainee Indicator Badge -->
+                    <div id="header-who-badge"
+                        class="flex items-center gap-1.5 px-2.5 py-1 bg-slate-950 border-2 border-[var(--accent-vigor)] rounded-lg text-xs font-mono font-black uppercase text-[var(--accent-vigor)] shadow-lg"
+                        title="Modo de entrenamiento activo">
+                        <i data-lucide="users" class="w-3.5 h-3.5"></i>
+                        <span id="header-who-label">Ambos</span>
+                    </div>
+                </div>
+
+                <!-- Right: Date & Weather (hidden on mobile, shown in sidebar instead) -->
+                <div class="hidden sm:flex items-center gap-3">
+                    <span class="text-[10px] text-slate-400 font-medium uppercase tracking-wider"
+                        id="header-full-date"></span>
+                    <div id="header-weather"
+                        class="hidden flex items-center gap-1.5 text-xs text-sky-300 font-bold bg-sky-500/10 px-2.5 py-1 rounded-full border border-sky-500/20">
+                        <i data-lucide="thermometer" class="w-3.5 h-3.5"></i>
+                        <span id="weather-temp-header">--°C</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gamification / Streak Display -->
+            <div id="streak-display" class="hidden pb-3"></div>
+        </div>
+    </header>
+
+    <main class="flex flex-col max-w-5xl mx-auto px-4 py-6 md:py-8 w-full flex-1 overflow-y-auto overflow-x-hidden">
+
+        <!-- ROUTINE VIEW -->
+        <div id="routine-view" class="flex flex-col md:flex-row gap-6">
+            <!-- Sidebar / Top Tabs -->
+            <nav class="md:w-64 flex-shrink-0 animate-slide-up">
+                <div id="tabs-container"
+                    class="flex md:flex-col overflow-x-auto md:overflow-visible gap-2 pb-2 md:pb-0 scrollbar-hide">
+                    <!-- Botones inyectados por JS -->
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <div class="flex-1 w-full">
+
+                <!-- Start Routine Content -->                <!-- Active Session Control Panel -->
+                <div id="session-control-panel" class="mb-6 brutal-panel p-4 hidden animate-slide-up stagger-1 bg-slate-900/80 backdrop-blur-md border-2 border-slate-800 shadow-lg">
+                    <div class="flex flex-wrap items-center justify-between gap-4 w-full">
+                        <!-- Left: Session Icon -->
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 bg-slate-950 border-2 border-[var(--border-strong)] shadow-lg text-[var(--accent-vigor)] flex items-center justify-center rounded-lg">
+                                <i data-lucide="timer" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <span class="text-[9px] text-[var(--text-dim)] font-black uppercase tracking-wider block font-mono">Control de</span>
+                                <span class="text-sm font-black text-white font-mono uppercase tracking-wider">Sesión</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Middle: Control Buttons -->
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <button id="btn-session-play" onclick="startWorkoutSession()" 
+                                class="h-9 px-3 bg-slate-800 hover:bg-slate-700 text-white border-2 border-[var(--border-strong)] rounded-lg font-black text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-lg active:translate-y-0.5 active:shadow-none">
+                                <i data-lucide="play" class="w-3.5 h-3.5"></i> Iniciar
+                            </button>
+                            <button id="btn-session-pause" onclick="pauseWorkoutSession()" 
+                                class="h-9 px-3 bg-slate-850 hover:bg-slate-750 text-[var(--accent-vigor)] border-2 border-[var(--accent-vigor)] rounded-lg font-black text-xs uppercase tracking-wider transition-all hidden items-center gap-1.5 shadow-lg active:translate-y-0.5 active:shadow-none">
+                                <i data-lucide="pause" class="w-3.5 h-3.5"></i> Pausar
+                            </button>
+                            <button id="btn-session-reset" onclick="confirmResetWorkoutSession()" 
+                                class="h-9 px-3 bg-red-950/30 hover:bg-red-950/60 text-red-400 border-2 border-red-900/50 rounded-lg font-black text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-lg active:translate-y-0.5 active:shadow-none" title="Reiniciar Cronómetro">
+                                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reiniciar
+                            </button>
+                            <button onclick="openWorkoutSummaryModal()" 
+                                class="h-9 px-3 bg-[var(--accent-vigor)] hover:bg-[var(--accent-vigor)]/90 text-black border-2 border-black rounded-lg font-black text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-lg active:translate-y-0.5 active:shadow-none">
+                                <i data-lucide="trophy" class="w-3.5 h-3.5"></i> Finalizar
+                            </button>
+                        </div>
+
+                        <!-- Right: Live Session Volumes -->
+                        <div class="flex items-center gap-3 flex-wrap">
+                            <span class="text-[9px] text-[var(--text-dim)] font-black uppercase tracking-wider font-mono">Volumen:</span>
+                            <div class="flex gap-2">
+                                <div class="user-volume-badge facu h-9" title="Tonelaje total levantado por Facu hoy">
+                                    <i data-lucide="user" class="w-3.5 h-3.5"></i>
+                                    <span>Facu: </span>
+                                    <span id="session-vol-facu" class="font-mono font-black text-white ml-0.5">0</span>
+                                    <span class="text-[9px] font-bold text-[var(--text-dim)] uppercase">kg</span>
+                                </div>
+                                <div class="user-volume-badge alma h-9" title="Tonelaje total levantado por Alma hoy">
+                                    <i data-lucide="user" class="w-3.5 h-3.5"></i>
+                                    <span>Alma: </span>
+                                    <span id="session-vol-alma" class="font-mono font-black text-white ml-0.5">0</span>
+                                    <span class="text-[9px] font-bold text-[var(--text-dim)] uppercase">kg</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Section -->
+                <div id="progress-container"
+                    class="mb-6 bg-slate-900 rounded-xl p-4 border border-slate-800 shadow-sm animate-slide-up stagger-1 hidden">
+                    <div class="flex justify-between items-end mb-2">
+                        <div>
+                            <h2 id="day-title" class="text-2xl font-bold text-white flex items-center gap-2">
+                                <!-- Título del día -->
+                            </h2>
+                            <p class="text-slate-400 text-sm mt-1 flex items-center gap-1">
+                                <i data-lucide="flame" class="w-4 h-4 text-violet-500"></i>
+                                <span id="exercise-count">0 Ejercicios</span>
+                            </p>
+                        </div>
+                        <div class="text-right">
+                            <span id="progress-text"
+                                class="text-3xl font-bold text-emerald-400 transition-all duration-500">0%</span>
+                        </div>
+                    </div>
+                    <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                        <div id="progress-bar"
+                            class="bg-emerald-500 h-2.5 rounded-full transition-all duration-1000 ease-out shadow-lg"
+                            style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Exercises List -->
+                <div id="exercises-list" class="space-y-4">
+                    <!-- Tarjetas inyectadas por JS -->
+                </div>
+
+                <!-- Completion Message & Day Marking -->
+                <div id="completion-message"
+                    class="hidden mt-8 p-6 bg-gradient-to-r from-emerald-900/30 to-slate-900 rounded-2xl border border-emerald-900/50 text-center animate-slide-up shadow-lg">
+                    <div
+                        class="inline-flex items-center justify-center p-3 bg-emerald-500/20 rounded-full mb-4 animate-bounce">
+                        <i data-lucide="trophy" class="w-8 h-8 text-emerald-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">¡Entrenamiento Completado!</h3>
+                    <p class="text-slate-400 mb-4">Excelente trabajo hoy. Abre el resumen para registrar tu sobrecarga progresiva y tonelaje.</p>
+                    <div class="flex gap-3 justify-center flex-wrap">
+                        <button onclick="openWorkoutSummaryModal()"
+                            class="px-6 py-3 bg-[var(--accent-vigor)] hover:opacity-90 text-black border-2 border-black rounded-xl font-black transition-all flex items-center gap-2 shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-none uppercase tracking-wide">
+                            <i data-lucide="trophy" class="w-5 h-5"></i> Ver Resumen y Guardar
+                        </button>
+                    </div>
+                </div>
+
+            </div> <!-- Close Routine Main Content -->
+        </div> <!-- Close Routine View -->
+
+        <!-- STATS VIEW (CHARTS) -->
+        <div id="view-stats" class="hidden animate-fade-in pb-4 md:pb-8">
+            <header class="mb-8 flex justify-between items-center">
+                <div>
+                    <h1
+                        class="text-3xl font-black text-violet-400 mb-1">
+                        Tu Progreso
+                    </h1>
+                    <p class="text-slate-400 text-sm">Visualiza tus mejores marcas</p>
+                </div>
+            </header>
+
+            <div id="charts-container" class="space-y-8">
+                <!-- Charts will be injected here -->
+                <div class="flex flex-col items-center justify-center py-12 text-slate-500">
+                    <i data-lucide="bar-chart-2" class="w-12 h-12 mb-4 opacity-50"></i>
+                    <p>Cargando gráficos...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACHIEVEMENTS VIEW -->
+        <div id="view-achievements" class="hidden animate-fade-in pb-4 md:pb-8">
+            <header class="mb-8 flex justify-between items-center">
+                <div>
+                    <h1
+                        class="text-3xl font-black text-fuchsia-400 mb-1">
+                        Logros
+                    </h1>
+                    <p class="text-slate-400 text-sm">Medallas desbloqueadas</p>
+                </div>
+                <div class="bg-slate-800 px-3 py-1 rounded-full border border-slate-700">
+                    <span class="text-xs font-bold text-fuchsia-400" id="total-achievements-count">0 / 0</span>
+                </div>
+            </header>
+
+            <!-- Filter Tabs -->
+            <div class="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-hide" id="achievements-filter-tabs">
+                <button onclick="filterAchievements('Todos')"
+                    class="px-4 py-2 rounded-xl bg-slate-800 text-white border border-slate-700 font-bold text-sm whitespace-nowrap active-filter">
+                    Todos
+                </button>
+                <button onclick="filterAchievements('Común')"
+                    class="px-4 py-2 rounded-xl bg-slate-800 text-slate-400 border border-slate-700/50 font-medium text-sm whitespace-nowrap">
+                    Común
+                </button>
+                <button onclick="filterAchievements('Raro')"
+                    class="px-4 py-2 rounded-xl bg-slate-800 text-slate-400 border border-slate-700/50 font-medium text-sm whitespace-nowrap">
+                    Raro
+                </button>
+                <button onclick="filterAchievements('Épico')"
+                    class="px-4 py-2 rounded-xl bg-slate-800 text-slate-400 border border-slate-700/50 font-medium text-sm whitespace-nowrap">
+                    Épico
+                </button>
+                <button onclick="filterAchievements('Legendario')"
+                    class="px-4 py-2 rounded-xl bg-slate-800 text-slate-400 border border-slate-700/50 font-medium text-sm whitespace-nowrap">
+                    Legendario
+                </button>
+            </div>
+
+            <div id="achievements-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- Badges injected here -->
+            </div>
+        </div>
+
+        <!-- WATER VIEW (AquaFlow Dual) -->
+        <div id="view-water" class="hidden animate-slide-up pb-4">
+            <!-- Canvas for Confetti -->
+            <canvas id="confetti-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-50"></canvas>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative overflow-hidden">
+
+                <!-- Background Decor -->
+                <div
+                    class="absolute -top-20 -right-20 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl pointer-events-none">
+                </div>
+                <div
+                    class="absolute -bottom-20 -left-20 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none">
+                </div>
+
+                <!-- FACU PANEL -->
+                <div class="glass-panel rounded-[2rem] p-6 relative overflow-hidden flex flex-col items-center">
+                    <div class="w-full flex justify-between items-center mb-4 z-10">
+                        <div class="flex items-center gap-2">
+                            <div
+                                class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
+                                <span class="text-sm"><i data-lucide="user" class="w-4 h-4"></i></span>
+                            </div>
+                            <h2 class="text-xl font-black text-slate-800 dark:text-white">Facu</h2>
+                        </div>
+                        <button onclick="resetDay('facu')"
+                            class="text-slate-400 hover:text-red-500 transition-colors p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full">
+                            <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <!-- Bottle Container Facu -->
+                    <div class="bottle-wrapper" id="bottle-container-facu">
+                        <div class="stream" id="water-stream-facu"></div>
+                        <svg class="bottle-svg" viewBox="0 0 185 605" preserveAspectRatio="xMidYMid meet">
+                            <defs>
+                                <path id="bottle-path-facu"
+                                    d="M163.59 463.4v-5c.37-8.81 1.16-15.28 1.16-17.62 0-6.27 10.81-71.64 12.41-86.76s-2.26-18.68-2.26-18.68c10-55.8-8.72-115.6-8.72-115.6 6.76-5.72-7.25-35.54-7.25-35.54-10.41-24.62-22.93-59.56-22.93-59.56a.15.15 0 0 0-.09 0c-2-7.86-4.79-19.38-6.91-32-1.85-19.31-2-38.95-2-45.29 0-4.89 6.32-4.67 6.32-9.12 0-5.19-6.26-17.84-6.63-19.15a8.6 8.6 0 0 1 .49-4.47 7.87 7.87 0 0 1 2-2.55c0-6-4.62-12-11.67-12H62.55c-7 0-11.68 6-11.68 12a7.62 7.62 0 0 1 2 2.55 8.41 8.41 0 0 1 .5 4.47c-.35 1.31-6.63 14-6.63 19.15 0 4.45 6.32 4.23 6.32 9.12 0 6.33-.17 25.88-2 45.14-2.13 12.67-4.89 24.25-6.93 32.14a.23.23 0 0 0-.11 0s-12.5 34.94-22.87 59.52c0 0-14 29.82-7.25 35.54 0 0-18.76 59.8-8.73 115.6 0 0-3.85 3.57-2.26 18.68s12.39 80.49 12.4 86.76c0 2.37.82 8.94 1.18 17.9v4.76c0 39.69-16.44 59-16.44 84.69C0 582.23 21.75 600 90 600s90-17.77 90-51.91c0-25.68-16.41-45-16.41-84.69" />
+                                <clipPath id="bottle-mask-facu">
+                                    <use href="#bottle-path-facu" />
+                                </clipPath>
+                                <linearGradient id="water-grad-facu" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <use href="#bottle-path-facu" fill="rgba(59, 130, 246, 0.1)" />
+                            <g clip-path="url(#bottle-mask-facu)">
+                                <rect id="water-rect-facu" x="0" y="605" width="185" height="605"
+                                    fill="url(#water-grad-facu)" />
+                                <g id="bubbles-group-facu"></g>
+                            </g>
+                            <path d="M50 100 Q 30 200 40 500" stroke="rgba(255,255,255,0.4)" stroke-width="6"
+                                fill="none" stroke-linecap="round" filter="blur(2px)" />
+                            <use href="#bottle-path-facu" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="4" />
+                        </svg>
+                        <div class="bottle-info">
+                            <h2 class="text-3xl font-black text-slate-800 dark:text-white drop-shadow-md"
+                                id="percent-facu">0%
+                            </h2>
+                            <p class="text-xs font-bold text-slate-500 dark:text-white mt-1 drop-shadow-md"
+                                id="amount-facu">0 ml
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Controls Facu -->
+                    <div class="w-full mt-6 z-10 space-y-4">
+                        <div class="flex justify-between items-center text-xs font-bold text-slate-400">
+                            <span>META</span>
+                            <span id="goal-text-facu" class="text-blue-500">2500 ml</span>
+                        </div>
+                        <input type="range" id="goal-input-facu" min="1500" max="4000" step="50" value="2500"
+                            class="w-full h-2 bg-slate-500 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500 border border-slate-300 dark:border-none">
+
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="addWater('facu', 250)"
+                                class="bg-white dark:bg-slate-800 p-2 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm hover:-translate-y-1 transition-all flex flex-col items-center gap-1">
+                                <i data-lucide="glass-water" class="w-5 h-5 text-blue-500"></i>
+                                <span class="text-[10px] font-bold text-slate-500 dark:text-slate-200">250ml</span>
+                            </button>
+                            <button onclick="addWater('facu', 500)"
+                                class="bg-white dark:bg-slate-800 p-2 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm hover:-translate-y-1 transition-all flex flex-col items-center gap-1">
+                                <i data-lucide="flask-conical" class="w-5 h-5 text-blue-600"></i>
+                                <span class="text-[10px] font-bold text-slate-500 dark:text-slate-200">500ml</span>
+                            </button>
+                            <button onclick="addWater('facu', 750)"
+                                class="bg-white dark:bg-slate-800 p-2 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm hover:-translate-y-1 transition-all flex flex-col items-center gap-1">
+                                <i data-lucide="droplets" class="w-5 h-5 text-blue-700"></i>
+                                <span class="text-[10px] font-bold text-slate-500 dark:text-slate-200">750ml</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ALMA PANEL -->
+                <div class="glass-panel rounded-[2rem] p-6 relative overflow-hidden flex flex-col items-center">
+                    <div class="w-full flex justify-between items-center mb-4 z-10">
+                        <div class="flex items-center gap-2">
+                            <div
+                                class="w-8 h-8 rounded-full bg-pink-500/20 flex items-center justify-center border border-pink-500/30">
+                                <span class="text-sm"><i data-lucide="user" class="w-4 h-4"></i></span>
+                            </div>
+                            <h2 class="text-xl font-black text-slate-800 dark:text-white">Alma</h2>
+                        </div>
+                        <button onclick="resetDay('alma')"
+                            class="text-slate-400 hover:text-red-500 transition-colors p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full">
+                            <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <!-- Bottle Container Alma -->
+                    <div class="bottle-wrapper" id="bottle-container-alma">
+                        <div class="stream" id="water-stream-alma"></div>
+                        <svg class="bottle-svg" viewBox="0 0 185 605" preserveAspectRatio="xMidYMid meet">
+                            <defs>
+                                <path id="bottle-path-alma"
+                                    d="M163.59 463.4v-5c.37-8.81 1.16-15.28 1.16-17.62 0-6.27 10.81-71.64 12.41-86.76s-2.26-18.68-2.26-18.68c10-55.8-8.72-115.6-8.72-115.6 6.76-5.72-7.25-35.54-7.25-35.54-10.41-24.62-22.93-59.56-22.93-59.56a.15.15 0 0 0-.09 0c-2-7.86-4.79-19.38-6.91-32-1.85-19.31-2-38.95-2-45.29 0-4.89 6.32-4.67 6.32-9.12 0-5.19-6.26-17.84-6.63-19.15a8.6 8.6 0 0 1 .49-4.47 7.87 7.87 0 0 1 2-2.55c0-6-4.62-12-11.67-12H62.55c-7 0-11.68 6-11.68 12a7.62 7.62 0 0 1 2 2.55 8.41 8.41 0 0 1 .5 4.47c-.35 1.31-6.63 14-6.63 19.15 0 4.45 6.32 4.23 6.32 9.12 0 6.33-.17 25.88-2 45.14-2.13 12.67-4.89 24.25-6.93 32.14a.23.23 0 0 0-.11 0s-12.5 34.94-22.87 59.52c0 0-14 29.82-7.25 35.54 0 0-18.76 59.8-8.73 115.6 0 0-3.85 3.57-2.26 18.68s12.39 80.49 12.4 86.76c0 2.37.82 8.94 1.18 17.9v4.76c0 39.69-16.44 59-16.44 84.69C0 582.23 21.75 600 90 600s90-17.77 90-51.91c0-25.68-16.41-45-16.41-84.69" />
+                                <clipPath id="bottle-mask-alma">
+                                    <use href="#bottle-path-alma" />
+                                </clipPath>
+                                <linearGradient id="water-grad-alma" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1" />
+                                    <!-- Pink 500 -->
+                                    <stop offset="100%" style="stop-color:#be185d;stop-opacity:1" />
+                                    <!-- Pink 700 -->
+                                </linearGradient>
+                            </defs>
+                            <use href="#bottle-path-alma" fill="rgba(236, 72, 153, 0.1)" />
+                            <g clip-path="url(#bottle-mask-alma)">
+                                <rect id="water-rect-alma" x="0" y="605" width="185" height="605"
+                                    fill="url(#water-grad-alma)" />
+                                <g id="bubbles-group-alma"></g>
+                            </g>
+                            <path d="M50 100 Q 30 200 40 500" stroke="rgba(255,255,255,0.4)" stroke-width="6"
+                                fill="none" stroke-linecap="round" filter="blur(2px)" />
+                            <use href="#bottle-path-alma" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="4" />
+                        </svg>
+                        <div class="bottle-info">
+                            <h2 class="text-3xl font-black text-slate-800 dark:text-white drop-shadow-md"
+                                id="percent-alma">0%
+                            </h2>
+                            <p class="text-xs font-bold text-slate-500 dark:text-white mt-1 drop-shadow-md"
+                                id="amount-alma">0 ml
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Controls Alma -->
+                    <div class="w-full mt-6 z-10 space-y-4">
+                        <div class="flex justify-between items-center text-xs font-bold text-slate-400">
+                            <span>META</span>
+                            <span id="goal-text-alma" class="text-pink-500">2000 ml</span>
+                        </div>
+                        <input type="range" id="goal-input-alma" min="1500" max="4000" step="50" value="2000"
+                            class="w-full h-2 bg-slate-500 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-pink-500 border border-slate-300 dark:border-none">
+
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="addWater('alma', 250)"
+                                class="bg-white dark:bg-slate-800 p-2 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm hover:-translate-y-1 transition-all flex flex-col items-center gap-1">
+                                <i data-lucide="glass-water" class="w-5 h-5 text-pink-500"></i>
+                                <span class="text-[10px] font-bold text-slate-500 dark:text-slate-200">250ml</span>
+                            </button>
+                            <button onclick="addWater('alma', 500)"
+                                class="bg-white dark:bg-slate-800 p-2 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm hover:-translate-y-1 transition-all flex flex-col items-center gap-1">
+                                <i data-lucide="flask-conical" class="w-5 h-5 text-pink-600"></i>
+                                <span class="text-[10px] font-bold text-slate-500 dark:text-slate-200">500ml</span>
+                            </button>
+                            <button onclick="addWater('alma', 750)"
+                                class="bg-white dark:bg-slate-800 p-2 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm hover:-translate-y-1 transition-all flex flex-col items-center gap-1">
+                                <i data-lucide="droplets" class="w-5 h-5 text-pink-700"></i>
+                                <span class="text-[10px] font-bold text-slate-500 dark:text-slate-200">750ml</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- WATER HISTORY LOG -->
+            <div class="mt-6 bg-slate-900/50 backdrop-blur-sm rounded-2xl p-4 border border-slate-800">
+                <div class="flex items-center gap-2 mb-3">
+                    <i data-lucide="history" class="w-4 h-4 text-slate-400"></i>
+                    <h3 class="text-sm font-bold text-slate-300">Registro de Hoy</h3>
+                </div>
+                <div id="water-history-list" class="space-y-2 max-h-48 overflow-y-auto">
+                    <p class="text-slate-500 text-xs italic text-center py-4">Sin registros hoy</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- HISTORY VIEW -->
+        <div id="history-view" class="hidden animate-slide-up">
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-slate-900 rounded-xl p-4 border border-slate-800">
+                    <div class="flex items-center gap-2 text-pink-400 mb-1">
+                        <span class="text-lg"><i data-lucide="user" class="w-4 h-4"></i></span>
+                        <span class="text-xs uppercase font-bold tracking-wider">Alma</span>
+                    </div>
+                    <p id="stat-alma" class="text-2xl font-bold text-white">0 <span
+                            class="text-sm text-slate-500">días</span></p>
+                </div>
+                <div class="bg-slate-900 rounded-xl p-4 border border-slate-800">
+                    <div class="flex items-center gap-2 text-blue-400 mb-1">
+                        <span class="text-lg"><i data-lucide="user" class="w-4 h-4"></i></span>
+                        <span class="text-xs uppercase font-bold tracking-wider">Facu</span>
+                    </div>
+                    <p id="stat-facu" class="text-2xl font-bold text-white">0 <span
+                            class="text-sm text-slate-500">días</span></p>
+                </div>
+                <div class="bg-slate-900 rounded-xl p-4 border border-slate-800">
+                    <div class="flex items-center gap-2 text-emerald-400 mb-1">
+                        <span class="text-lg"><i data-lucide="users" class="w-4 h-4"></i></span>
+                        <span class="text-xs uppercase font-bold tracking-wider">Juntos</span>
+                    </div>
+                    <p id="stat-both" class="text-2xl font-bold text-white">0 <span
+                            class="text-sm text-slate-500">días</span></p>
+                </div>
+                <div class="bg-slate-900 rounded-xl p-4 border border-slate-800">
+                    <div class="flex items-center gap-2 text-violet-400 mb-1">
+                        <i data-lucide="flame" class="w-4 h-4"></i>
+                        <span class="text-xs uppercase font-bold tracking-wider">Total</span>
+                    </div>
+                    <p id="stat-total" class="text-2xl font-bold text-white">0 <span
+                            class="text-sm text-slate-500">días</span></p>
+                </div>
+            </div>
+
+            <!-- Stats Cards Extended -->
+            <div class="flex flex-col gap-6 mb-6">
+                <!-- Main Header Stats (Already Existing, keeping them as summary) -->
+
+                <!-- Detailed Stats Dashboard -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <!-- Weekly Balance -->
+                    <div class="bg-slate-900 rounded-2xl border border-slate-800 p-6 relative overflow-hidden">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                    <i data-lucide="calendar-days" class="w-5 h-5 text-emerald-400"></i>
+                                    Esta Semana
+                                </h3>
+                                <p class="text-slate-400 text-xs mt-1">Lunes a Domingo</p>
+                            </div>
+                            <!-- Mini Sparkline or Status -->
+                            <span id="week-status-badge"
+                                class="px-2 py-1 rounded-md bg-slate-800 text-xs font-bold text-slate-500 border border-slate-700">En
+                                Progreso</span>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- Alma Week -->
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="text-pink-300 font-medium">Alma</span>
+                                    <span class="text-slate-400"><span id="week-alma-current"
+                                            class="text-white font-bold">0</span>/3</span>
+                                </div>
+                                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                    <div id="week-alma-bar"
+                                        class="bg-pink-500 h-full rounded-full transition-all duration-1000"
+                                        style="width: 0%"></div>
+                                </div>
+                            </div>
+
+                            <!-- Facu Week -->
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="text-blue-300 font-medium">Facu</span>
+                                    <span class="text-slate-400"><span id="week-facu-current"
+                                            class="text-white font-bold">0</span>/5</span>
+                                </div>
+                                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                    <div id="week-facu-bar"
+                                        class="bg-blue-500 h-full rounded-full transition-all duration-1000"
+                                        style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Monthly/Yearly Overview -->
+                    <!-- Monthly/Yearly Overview (Volume Focus) -->
+                    <div class="bg-slate-900 rounded-2xl border border-slate-800 p-6 relative overflow-hidden">
+                        <!-- BG Decoration -->
+                        <div class="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
+                            <i data-lucide="dumbbell" class="w-24 h-24 text-slate-500"></i>
+                        </div>
+
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2 mb-4 relative z-10">
+                            <i data-lucide="trending-up" class="w-5 h-5 text-emerald-400"></i>
+                            Progreso de Fuerza
+                        </h3>
+
+                        <div class="grid grid-cols-2 gap-4 relative z-10">
+                            <div
+                                class="bg-slate-950/50 p-3 rounded-xl border border-slate-800 text-center group hover:border-emerald-500/30 transition-colors">
+                                <p class="text-[10px] text-slate-400 uppercase font-bold mb-1">Volumen Mes</p>
+                                <div class="flex justify-center items-end gap-1">
+                                    <span id="month-volume"
+                                        class="text-2xl font-bold text-white tabular-nums group-hover:text-emerald-400 transition-colors">0</span>
+                                    <span class="text-[10px] text-slate-500 mb-1">Kg</span>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-slate-950/50 p-3 rounded-xl border border-slate-800 text-center group hover:border-yellow-500/30 transition-colors">
+                                <p class="text-[10px] text-slate-400 uppercase font-bold mb-1">Volumen Año</p>
+                                <div class="flex justify-center items-end gap-1">
+                                    <span id="year-volume"
+                                        class="text-2xl font-bold text-white tabular-nums group-hover:text-yellow-400 transition-colors">0</span>
+                                    <span class="text-[10px] text-slate-500 mb-1">Ton</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="mt-4 pt-4 border-t border-slate-800/50 flex justify-between items-center px-2 relative z-10">
+                            <div class="text-center w-1/2 border-r border-slate-800">
+                                <p class="text-[10px] uppercase text-pink-400 font-bold">Alma Total</p>
+                                <p id="total-alma-volume" class="text-xl font-bold text-white tabular-nums">0 t
+                                </p>
+                            </div>
+                            <div class="text-center w-1/2">
+                                <p class="text-[10px] uppercase text-blue-400 font-bold">Facu Total</p>
+                                <p id="total-facu-volume" class="text-xl font-bold text-white tabular-nums">0 t
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- Calendar -->
+            <div class="bg-slate-900 rounded-2xl border border-slate-800 p-6">
+                <!-- Calendar Header -->
+                <div class="flex items-center justify-between mb-6">
+                    <button onclick="changeMonth(-1)" class="p-2 hover:bg-slate-800 rounded-lg transition-colors">
+                        <i data-lucide="chevron-left" class="w-5 h-5 text-slate-400"></i>
+                    </button>
+                    <h2 id="calendar-month" class="text-xl font-bold text-white capitalize"></h2>
+                    <button onclick="changeMonth(1)" class="p-2 hover:bg-slate-800 rounded-lg transition-colors">
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-slate-400"></i>
+                    </button>
+                </div>
+
+                <!-- Weekday Headers -->
+                <div class="grid grid-cols-7 gap-1 mb-2">
+                    <div class="text-center text-xs font-bold text-slate-500 uppercase py-2">Dom</div>
+                    <div class="text-center text-xs font-bold text-slate-500 uppercase py-2">Lun</div>
+                    <div class="text-center text-xs font-bold text-slate-500 uppercase py-2">Mar</div>
+                    <div class="text-center text-xs font-bold text-slate-500 uppercase py-2">Mié</div>
+                    <div class="text-center text-xs font-bold text-slate-500 uppercase py-2">Jue</div>
+                    <div class="text-center text-xs font-bold text-slate-500 uppercase py-2">Vie</div>
+                    <div class="text-center text-xs font-bold text-slate-500 uppercase py-2">Sáb</div>
+                </div>
+
+                <!-- Calendar Grid -->
+                <div id="calendar-grid" class="grid grid-cols-7 gap-1">
+                    <!-- Days injected by JS -->
+                </div>
+
+                <!-- Legend -->
+                <div class="flex gap-4 justify-center mt-6 pt-4 border-t border-slate-800">
+                    <div class="flex items-center gap-2 text-sm text-slate-400">
+                        <div class="w-4 h-4 rounded bg-pink-500/30 border border-pink-500"></div>
+                        <span>Alma</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-slate-400">
+                        <div class="w-4 h-4 rounded bg-blue-500/30 border border-blue-500"></div>
+                        <span>Facu</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-slate-400">
+                        <div class="w-4 h-4 rounded bg-emerald-500/30 border border-emerald-500"></div>
+                        <span>Ambos</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Mark Today -->
+            <div class="mt-6 bg-slate-900 rounded-xl border border-slate-800 p-4">
+                <p class="text-slate-400 text-sm mb-3 text-center">Marcar hoy como día de entrenamiento:</p>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="markDayCompleted('alma')"
+                        class="p-3 bg-pink-500/10 border border-pink-500/30 rounded-xl flex items-center justify-center gap-2 text-pink-400 font-bold hover:bg-pink-500/20 active:scale-95 transition-all">
+                        <i data-lucide="check" class="w-4 h-4"></i>
+                        Alma
+                    </button>
+                    <button onclick="markDayCompleted('facu')"
+                        class="p-3 bg-blue-500/10 border border-blue-500/30 rounded-xl flex items-center justify-center gap-2 text-blue-400 font-bold hover:bg-blue-500/20 active:scale-95 transition-all">
+                        <i data-lucide="check" class="w-4 h-4"></i>
+                        Facu
+                    </button>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Water View (Separate Tab) -->
+        <div id="view-water" class="view-section hidden max-w-5xl mx-auto px-4 py-8 animate-slide-up">
+
+            <div class="text-center mb-8 relative">
+                <h2 class="text-2xl font-bold text-white mb-2">Monitor de Hidratación</h2>
+                <p class="text-slate-400 text-sm">Manteneos hidratados para rendir al máximo.</p>
+
+                <!-- Motivation Floating Badge -->
+                <div id="water-message"
+                    class="absolute -bottom-8 left-0 right-0 text-cyan-400 text-xs font-bold opacity-0 transition-opacity duration-300">
+                    ¡Agua registrada!
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Alma Card -->
+                <div class="bg-slate-900 rounded-2xl p-6 border border-pink-500/20 relative overflow-hidden group">
+                    <!-- Background Wave -->
+                    <div
+                        class="absolute bottom-0 left-0 w-full h-[150%] opacity-10 bg-gradient-to-t from-pink-600 to-transparent transition-transform transform translate-y-full group-hover:translate-y-1/2 duration-700">
+                    </div>
+
+                    <div class="flex justify-between items-center mb-6 relative z-10">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-pink-500/10 flex items-center justify-center border border-pink-500/30">
+                                <i data-lucide="user" class="w-5 h-5 text-pink-400"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white">Alma</h3>
+                                <p id="water-goal-alma-view" class="text-xs text-pink-300">Meta: -- L</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p id="water-pct-alma" class="text-3xl font-bold text-pink-400">0%</p>
+                        </div>
+                    </div>
+
+                    <!-- Circular Progress or Big Number -->
+                    <div class="text-center py-6 relative z-10">
+                        <span id="water-current-alma"
+                            class="text-5xl font-bold text-white tabular-nums tracking-tighter">0</span>
+                        <span class="text-sm text-slate-400 ml-1">ml</span>
+                    </div>
+
+                    <div
+                        class="w-full bg-slate-800 h-3 rounded-full overflow-hidden relative z-10 mb-6 border border-slate-700">
+                        <div id="water-progress-alma"
+                            class="h-full bg-gradient-to-r from-pink-600 to-pink-400 transition-all duration-700 shadow-lg"
+                            style="width: 0%"></div>
+                    </div>
+
+                    <div class="flex gap-3 relative z-10">
+                        <button onclick="addWater('alma', -250)"
+                            class="flex-1 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-all font-medium border border-slate-700">
+                            - 250ml
+                        </button>
+                        <button onclick="addWater('alma', 250)"
+                            class="flex-[2] py-3 rounded-xl bg-pink-600 hover:bg-pink-500 text-white shadow-lg shadow-pink-600/20 active:scale-95 transition-all font-bold flex items-center justify-center gap-2">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            Tomar 250ml
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Facu Card -->
+                <div class="bg-slate-900 rounded-2xl p-6 border border-blue-500/20 relative overflow-hidden group">
+                    <!-- Background Wave -->
+                    <div
+                        class="absolute bottom-0 left-0 w-full h-[150%] opacity-10 bg-gradient-to-t from-blue-600 to-transparent transition-transform transform translate-y-full group-hover:translate-y-1/2 duration-700">
+                    </div>
+
+                    <div class="flex justify-between items-center mb-6 relative z-10">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center border border-blue-500/30">
+                                <i data-lucide="user" class="w-5 h-5 text-blue-400"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white">Facu</h3>
+                                <p id="water-goal-facu-view" class="text-xs text-blue-300">Meta: -- L</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p id="water-pct-facu" class="text-3xl font-bold text-blue-400">0%</p>
+                        </div>
+                    </div>
+
+                    <div class="text-center py-6 relative z-10">
+                        <span id="water-current-facu"
+                            class="text-5xl font-bold text-white tabular-nums tracking-tighter">0</span>
+                        <span class="text-sm text-slate-400 ml-1">ml</span>
+                    </div>
+
+                    <div
+                        class="w-full bg-slate-800 h-3 rounded-full overflow-hidden relative z-10 mb-6 border border-slate-700">
+                        <div id="water-progress-facu"
+                            class="h-full bg-gradient-to-r from-blue-600 to-blue-400 transition-all duration-700 shadow-lg"
+                            style="width: 0%"></div>
+                    </div>
+
+                    <div class="flex gap-3 relative z-10">
+                        <button onclick="addWater('facu', -250)"
+                            class="flex-1 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-all font-medium border border-slate-700">
+                            - 250ml
+                        </button>
+                        <button onclick="addWater('facu', 250)"
+                            class="flex-[2] py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/20 active:scale-95 transition-all font-bold flex items-center justify-center gap-2">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            Tomar 250ml
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-3 justify-center flex-wrap">
+                <button onclick="markDayCompleted('alma')"
+                    class="px-4 py-2 bg-pink-600/20 hover:bg-pink-600/40 text-pink-400 border border-pink-600/50 rounded-lg font-medium transition-all flex items-center gap-2">
+                    <i data-lucide="user" class="w-4 h-4"></i> Alma
+                </button>
+                <button onclick="markDayCompleted('facu')"
+                    class="px-4 py-2 bg-blue-600/20 hover:bg-blue-600/40 text-blue-400 border border-blue-600/50 rounded-lg font-medium transition-all flex items-center gap-2">
+                    <i data-lucide="user" class="w-4 h-4"></i> Facu
+                </button>
+                <button onclick="markDayCompleted('both')"
+                    class="px-4 py-2 bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-400 border border-emerald-600/50 rounded-lg font-medium transition-all flex items-center gap-2">
+                    <i data-lucide="users" class="w-4 h-4"></i> Ambos
+                </button>
+            </div>
+        </div>
+        </div>
+
+        <!-- AI ROUTINE GENERATOR VIEW -->
+        <div id="ai-routine-view" class="hidden animate-slide-up pb-4 md:pb-8 max-w-4xl mx-auto flex-col flex-1 w-full">
+            <header class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <i data-lucide="sparkles" class="w-7 h-7 md:w-8 md:h-8 text-cyan-400 animate-pulse shrink-0"></i>
+                        <h1 class="text-2xl md:text-3xl font-black text-cyan-400 flex-1 min-w-0 leading-tight">
+                            Asistente Personal Trainer IA
+                        </h1>
+                    </div>
+                    <p class="text-slate-400 text-sm">Diseña tu rutina perfecta con la ayuda del Coach Vital</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="navigateTo('routine')" class="px-4 py-2 bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700/50 rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-2 active:scale-[0.97]">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Volver
+                    </button>
+                    <button onclick="openRoutinesManagerModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-2 active:scale-[0.97]">
+                        <i data-lucide="folder-cog" class="w-4 h-4"></i> Mis Rutinas
+                    </button>
+                </div>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 min-h-0">
+                <!-- Advisor / Settings Sidebar (Hidden on mobile) -->
+                <div class="hidden md:flex bg-slate-900 rounded-2xl border border-slate-800 p-6 flex-col gap-6">
+                    <div class="text-center pb-4 border-b border-slate-800">
+                        <div class="inline-flex items-center justify-center p-4 bg-cyan-500/10 rounded-full mb-3 ring-2 ring-cyan-500/20">
+                            <i data-lucide="dumbbell" class="w-10 h-10 text-cyan-400"></i>
+                        </div>
+                        <h3 class="text-lg font-black text-white">Coach Vital</h3>
+                        <p class="text-xs text-emerald-400 font-bold uppercase tracking-widest mt-1">Personal Trainer IA</p>
+                        <p class="text-[10px] text-slate-500 mt-2 italic leading-relaxed">"Certificaciones en cambio físico, hipertrofia y prevención de lesiones."</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Información Clave</h4>
+                        <div class="flex flex-col gap-3 text-xs">
+                            <div class="flex justify-between py-1.5 border-b border-slate-800/50">
+                                <span class="text-slate-500">Modelo</span>
+                                <span class="text-slate-300 font-mono">Gemini 3 Flash</span>
+                            </div>
+                            <div class="flex justify-between py-1.5 border-b border-slate-800/50">
+                                <span class="text-slate-500">Especialidad</span>
+                                <span class="text-slate-300">Cambio Físico & Fuerza</span>
+                            </div>
+                            <div class="flex justify-between py-1.5">
+                                <span class="text-slate-500">Configuración</span>
+                                <a href="#" onclick="openProfileModal(); return false;" class="text-cyan-400 hover:underline flex items-center gap-1">
+                                    Ver Perfil <i data-lucide="external-link" class="w-3 h-3"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-auto">
+                        <button onclick="resetAIChat()" class="w-full py-2.5 bg-slate-800 hover:bg-red-950/30 hover:text-red-400 text-slate-400 hover:border-red-900/50 border border-slate-700 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i> Reiniciar Chat
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Chat Area -->
+                <div class="md:col-span-2 rounded-2xl border border-slate-800 flex flex-col h-[calc(100dvh-240px)] md:h-[600px] relative overflow-hidden">
+                    <!-- Chat Header -->
+                    <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/40 animate-fade-in">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Coach en Línea</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div id="api-key-status" class="text-xs">
+                                <!-- Injected by JS: status of Gemini API key -->
+                            </div>
+                            <button onclick="resetAIChat()" class="md:hidden p-1.5 text-slate-500 hover:text-red-400 transition-colors" title="Reiniciar Chat">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Chat Messages Container -->
+                    <div id="ai-chat-messages" class="flex-1 p-6 overflow-y-auto space-y-4 scrollbar-thin">
+                        <!-- Initial Message -->
+                        <div class="flex gap-3">
+                            <div class="w-8 h-8 rounded-full bg-cyan-500/10 flex items-center justify-center flex-shrink-0 border border-cyan-500/20">
+                                <i data-lucide="dumbbell" class="w-4 h-4 text-cyan-400"></i>
+                            </div>
+                            <div class="bg-slate-800 border border-slate-700 text-slate-200 rounded-2xl rounded-tl-none p-4 max-w-[85%] text-sm leading-relaxed shadow-sm">
+                                ¡Hola, Ing. Rodriguez! Soy el <strong>Coach Vital</strong>. Como su entrenador personal certificado, estoy aquí para diseñar una rutina de entrenamiento de primer nivel adaptada a sus objetivos y estilo de vida.
+                                <br><br>
+                                Para armar el plan ideal, cuénteme:
+                                <ul class="list-disc list-inside mt-2 space-y-1 text-slate-300">
+                                    <li>¿Para cuántas personas es el entrenamiento? (¿Usted solo o junto a su novia?)</li>
+                                    <li>¿Cuántos días a la semana pueden entrenar?</li>
+                                    <li>¿Cuál es su objetivo físico principal? (¿Ganancia muscular, pérdida de grasa, fuerza?)</li>
+                                    <li>¿Tienen alguna lesión o ejercicio que prefieran evitar?</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Typing Indicator -->
+                    <div id="chat-typing-indicator" class="hidden px-6 py-3 bg-slate-950/20 text-slate-400 text-xs flex items-center gap-2 border-t border-slate-800/30">
+                        <div class="flex gap-1">
+                            <span class="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce" style="animation-delay: 0ms"></span>
+                            <span class="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce" style="animation-delay: 150ms"></span>
+                            <span class="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce" style="animation-delay: 300ms"></span>
+                        </div>
+                        <span class="font-medium text-slate-500">Coach Vital está planificando...</span>
+                    </div>
+
+                    <!-- Chat Input -->
+                    <div class="p-4 border-t border-slate-800 bg-slate-950">
+                        <form id="ai-chat-form" onsubmit="event.preventDefault(); sendAIChatMessage();" class="flex gap-2 items-end">
+                            <textarea id="ai-chat-input" rows="1"
+                                class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/30 outline-none transition-all placeholder:text-slate-600 resize-none overflow-hidden"
+                                placeholder="Escribe tu respuesta aquí..." style="max-height: 120px;"></textarea>
+                            <button type="submit" 
+                                class="p-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl shadow-lg shadow-cyan-600/20 active:scale-95 transition-all flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="send" class="w-5 h-5"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+    <!-- Timer Modal -->
+    <div id="timer-modal"
+        class="fixed inset-0 z-50 hidden items-center justify-center p-4 transition-all duration-300 pointer-events-none"
+        data-minimized="false">
+        <!-- Background Flash Effect -->
+        <div id="timer-bg-flash" class="absolute inset-0 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+        <!-- Full Timer Modal -->
+        <div id="timer-full"
+            class="relative bg-slate-950 border border-slate-800 p-8 max-w-md w-[90vw] mx-auto text-center transition-all duration-300 shadow-2xl rounded-[32px]">
+            <!-- Top Controls: Minimize -->
+            <div class="absolute top-4 right-4 flex items-center gap-2">
+                <button id="timer-minimize-btn"
+                    class="p-2 bg-slate-900 border border-slate-800 hover:bg-slate-800 transition-all rounded-xl"
+                    title="Minimizar">
+                    <i data-lucide="minimize-2" class="w-5 h-5 text-white"></i>
+                </button>
+            </div>
+            
+            <div class="mb-6 timer-header-anim animate-slide-up stagger-1">
+                <i data-lucide="timer" class="w-16 h-16 text-[var(--text-main)] mx-auto mb-4 animate-float"></i>
+                <h3 class="text-3xl font-black text-white tracking-widest uppercase">Descanso</h3>
+                <p id="timer-exercise-name" class="text-lg text-[var(--text-dim)] font-bold uppercase truncate mt-2"></p>
+            </div>
+            
+            <!-- Huge Brutalist Number Display -->
+            <div id="timer-display" class="text-[8rem] leading-none font-mono font-black text-[var(--accent-vigor)] mb-4 tabular-nums timer-text-anim animate-pop stagger-2 drop-shadow-lg">
+                0:00
+            </div>
+            
+            <div id="timer-progress-ring" class="relative w-40 h-40 mx-auto mb-8 animate-slide-up stagger-2 hidden">
+                <!-- Using purely numerical display in Brutalism, ring is optional but let's keep it styled -->
+                <svg class="w-40 h-40 transform -rotate-90 drop-shadow-lg">
+                    <circle cx="80" cy="80" r="72" stroke="var(--border-strong)" stroke-width="12" fill="none" />
+                    <circle id="timer-ring" cx="80" cy="80" r="72" stroke="var(--accent-vigor)" stroke-width="12" fill="none"
+                        stroke-dasharray="452.39" stroke-dashoffset="0"
+                        class="transition-all duration-1000 ease-linear" />
+                </svg>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <span id="timer-seconds-left" class="text-4xl font-black text-white drop-shadow-lg"></span>
+                </div>
+            </div>
+            
+            <div class="flex gap-4 justify-center animate-slide-up stagger-3">
+                <button id="timer-skip-btn"
+                    class="px-6 py-3 bg-slate-900 border border-slate-800 text-white text-lg font-bold rounded-2xl hover:bg-slate-800 transition-colors flex items-center gap-2">
+                    <i data-lucide="skip-forward" class="w-5 h-5"></i>
+                    Saltar
+                </button>
+                <button id="timer-add-btn"
+                    class="px-6 py-3 bg-[#ea580c] text-black text-lg font-bold rounded-2xl hover:brightness-110 transition-colors flex items-center gap-2">
+                    <i data-lucide="plus" class="w-5 h-5"></i>
+                    30s
+                </button>
+            </div>
+        </div>
+
+        <!-- Minimized Timers Container -->
+        <!-- Minimized Timers Container -->
+        <div id="mini-timers-container" class="fixed bottom-24 right-4 flex flex-col gap-3 items-end z-[60] pointer-events-auto">
+        </div>
+    </div>
+
+    <!-- Plate Calculator Modal -->
+    <div id="calculator-modal"
+        class="fixed inset-0 bg-black/95 z-[80] hidden items-center justify-center p-4 transition-all duration-300">
+        <div
+            class="bg-slate-950 border border-slate-800 p-8 max-w-md w-[90vw] mx-auto text-center transition-all duration-300 shadow-2xl rounded-[32px] relative overflow-hidden">
+
+            <!-- Close Button -->
+            <button onclick="closeCalculatorModal()"
+                class="absolute top-4 right-4 p-2 bg-[var(--bg-base)] border-2 border-[var(--border-strong)] hover:-translate-y-1 hover:shadow-lg active:translate-y-0 active:shadow-none transition-all z-10">
+                <i data-lucide="x" class="w-6 h-6 text-white"></i>
+            </button>
+
+            <div class="text-center mb-6 mt-4">
+                <div class="inline-flex items-center justify-center p-3 bg-[var(--accent-facu)] border-2 border-black mb-4 shadow-lg">
+                    <i data-lucide="calculator" class="w-8 h-8 text-black"></i>
+                </div>
+                <h3 class="text-3xl font-black text-white uppercase tracking-widest mb-1">Calculadora</h3>
+                <p class="text-[var(--text-dim)] font-bold uppercase text-sm">Barra Olímpica 20kg</p>
+            </div>
+
+            <!-- Input -->
+            <div class="flex justify-center mb-8">
+                <div class="relative">
+                    <input type="number" id="calc-weight-input" placeholder="0"
+                        class="text-6xl font-black bg-[var(--bg-base)] border-2 border-[var(--border-strong)] text-white text-center w-48 p-4 focus:border-[var(--accent-facu)] outline-none transition-colors placeholder:text-[var(--border-strong)] shadow-lg"
+                        oninput="calculatePlates(this.value)">
+                    <span class="absolute -right-4 -bottom-4 bg-[var(--accent-facu)] text-black border-2 border-black px-2 py-1 font-black text-xl shadow-lg">KG</span>
+                </div>
+            </div>
+
+            <!-- Visual Barbell -->
+            <div
+                class="bg-[var(--bg-base)] border-2 border-[var(--border-strong)] p-4 mb-6 flex flex-col items-center justify-center min-h-[140px] shadow-lg">
+                <div id="plate-display" class="flex items-center gap-1 h-32 w-full justify-center relative">
+                    <!-- Barbell Center -->
+                    <div class="h-6 w-full bg-[#404040] absolute z-0 border-y-2 border-black"></div>
+                    <!-- Plates will be injected here as relative z-10 -->
+                    <span class="text-[var(--accent-facu)] bg-black px-2 py-1 text-xs font-black absolute -top-4 border border-[var(--accent-facu)] tracking-widest">LADO ÚNICO</span>
+                </div>
+                <div id="plate-text" class="text-white font-mono font-bold text-sm mt-4 text-center h-5">INGRESA UN PESO...
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="calculatePlates(40)"
+                    class="p-4 bg-[var(--bg-panel-alt)] border-2 border-[var(--border-strong)] text-white hover:border-[var(--accent-facu)] hover:-translate-y-1 hover:shadow-lg active:translate-y-0 active:shadow-none font-black text-sm uppercase transition-all">40 kg
+                    (Calentar)</button>
+                <button onclick="calculatePlates(60)"
+                    class="p-4 bg-[var(--bg-panel-alt)] border-2 border-[var(--border-strong)] text-white hover:border-[var(--accent-facu)] hover:-translate-y-1 hover:shadow-lg active:translate-y-0 active:shadow-none font-black text-sm uppercase transition-all">60 kg (1
+                    Disco)</button>
+            </div>
+
+            <!-- 1RM Estimator Section -->
+            <div class="mt-8 pt-6 border-t-[4px] border-[var(--border-strong)]">
+                <h4 class="text-[var(--accent-vigor)] text-lg font-black uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <i data-lucide="biceps-flexed" class="w-6 h-6"></i> Estimador 1RM
+                </h4>
+                <div class="bg-[var(--bg-base)] p-4 border-2 border-[var(--border-strong)] shadow-lg flex gap-4 items-center">
+                    <div>
+                        <label class="text-[10px] text-[var(--text-dim)] block mb-1 uppercase font-black tracking-widest">Peso (kg)</label>
+                        <input type="number" id="rm-weight" oninput="calculate1RM()"
+                            class="w-20 bg-[var(--bg-panel)] border-2 border-[var(--border-strong)] p-2 text-white font-black text-center focus:border-[var(--accent-vigor)] outline-none transition-colors"
+                            placeholder="0">
+                    </div>
+                    <div class="text-[var(--border-strong)] font-black text-xl">X</div>
+                    <div>
+                        <label class="text-[10px] text-[var(--text-dim)] block mb-1 uppercase font-black tracking-widest">Reps</label>
+                        <input type="number" id="rm-reps" oninput="calculate1RM()"
+                            class="w-20 bg-[var(--bg-panel)] border-2 border-[var(--border-strong)] p-2 text-white font-black text-center focus:border-[var(--accent-vigor)] outline-none transition-colors"
+                            placeholder="0">
+                    </div>
+                    <div class="flex-1 text-right">
+                        <div class="text-[10px] text-[var(--text-dim)] uppercase font-black tracking-widest">Fuerza Máx</div>
+                        <div id="rm-result" class="text-3xl font-black text-[var(--accent-vigor)] drop-shadow-lg">0 <span
+                                class="text-sm">kg</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Details Modal -->
+    <div id="history-details-modal"
+        class="fixed inset-0 bg-black/90 z-[80] hidden items-center justify-center p-4 backdrop-blur-md transition-opacity duration-300">
+        <div
+            class="bg-slate-900 border border-slate-700 rounded-3xl p-6 max-w-md w-full shadow-2xl relative flex flex-col max-h-[80vh]">
+
+            <!-- Close Button -->
+            <button onclick="closeHistoryDetailsModal()"
+                class="absolute top-4 right-4 p-2 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white rounded-full transition-all z-10">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+
+            <div class="mb-4">
+                <h3 id="hist-modal-title" class="text-xl font-bold text-white mb-1">Historial</h3>
+                <p class="text-slate-400 text-xs uppercase tracking-wider font-semibold">Progreso de Cargas</p>
+            </div>
+
+            <!-- Content -->
+            <div id="hist-modal-content" class="flex-1 overflow-y-auto space-y-3 pr-2">
+                <!-- Items injected here -->
+                <div class="text-center text-slate-500 py-8">No hay datos registrados aún.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workout Summary Modal -->
+    <div id="workout-summary-modal"
+        class="fixed inset-0 bg-black/90 z-[95] hidden items-center justify-center p-4 backdrop-blur-md transition-opacity duration-300">
+        <div
+            class="bg-slate-900 border-3 border-[var(--accent-vigor)] rounded-3xl p-6 max-w-md w-full shadow-2xl relative flex flex-col max-h-[90vh] shadow-lg">
+
+            <!-- Close Button -->
+            <button onclick="closeWorkoutSummaryModal()"
+                class="absolute top-4 right-4 p-2 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white rounded-full transition-all z-10">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+
+            <div class="text-center mb-5">
+                <div class="inline-flex items-center justify-center p-3 bg-[var(--accent-vigor)]/10 text-[var(--accent-vigor)] border-2 border-[var(--accent-vigor)] shadow-lg rounded-2xl mb-3 animate-bounce">
+                    <i data-lucide="trophy" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-3xl font-black text-white uppercase tracking-tight leading-none mb-1">¡Sesión Finalizada!</h3>
+                <p class="text-[var(--accent-vigor)] font-bold text-xs uppercase tracking-widest font-mono">Análisis de Progreso</p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="space-y-4 overflow-y-auto pr-1 mb-5 flex-1">
+                <!-- Elapsed Time -->
+                <div class="bg-slate-950 p-4 border-2 border-[var(--border-strong)] rounded-xl flex items-center justify-between shadow-lg">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="clock" class="w-5 h-5 text-slate-400"></i>
+                        <span class="text-xs text-slate-300 font-bold uppercase">Duración Total</span>
+                    </div>
+                    <span id="summary-duration" class="font-mono font-black text-white text-lg">00:00:00</span>
+                </div>
+
+                <!-- Facu Stats Card -->
+                <div id="summary-facu-card" class="bg-slate-950 p-4 border-2 border-[var(--accent-facu)]/40 rounded-xl shadow-lg">
+                    <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-800">
+                        <div class="flex items-center gap-2 text-[var(--accent-facu)]">
+                            <i data-lucide="user" class="w-5 h-5"></i>
+                            <span class="font-black text-xs uppercase tracking-wide">FACUNDO</span>
+                        </div>
+                        <span class="text-[9px] bg-slate-900 border border-slate-800 px-2 py-0.5 rounded font-black uppercase font-mono" id="summary-facu-overload-badge">--</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <span class="text-[8px] text-[var(--text-dim)] font-bold uppercase tracking-wider block">Volumen</span>
+                            <span class="font-mono font-black text-white text-lg" id="summary-facu-vol">0 <span class="text-xs font-normal text-[var(--text-dim)]">kg</span></span>
+                        </div>
+                        <div>
+                            <span class="text-[8px] text-[var(--text-dim)] font-bold uppercase tracking-wider block">vs. Anterior</span>
+                            <span class="font-mono font-black text-md" id="summary-facu-vs-prev">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alma Stats Card -->
+                <div id="summary-alma-card" class="bg-slate-950 p-4 border-2 border-[var(--accent-alma)]/40 rounded-xl shadow-lg">
+                    <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-800">
+                        <div class="flex items-center gap-2 text-[var(--accent-alma)]">
+                            <i data-lucide="user" class="w-5 h-5"></i>
+                            <span class="font-black text-xs uppercase tracking-wide">ALMA</span>
+                        </div>
+                        <span class="text-[9px] bg-slate-900 border border-slate-800 px-2 py-0.5 rounded font-black uppercase font-mono" id="summary-alma-overload-badge">--</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <span class="text-[8px] text-[var(--text-dim)] font-bold uppercase tracking-wider block">Volumen</span>
+                            <span class="font-mono font-black text-white text-lg" id="summary-alma-vol">0 <span class="text-xs font-normal text-[var(--text-dim)]">kg</span></span>
+                        </div>
+                        <div>
+                            <span class="text-[8px] text-[var(--text-dim)] font-bold uppercase tracking-wider block">vs. Anterior</span>
+                            <span class="font-mono font-black text-md" id="summary-alma-vs-prev">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gems/Gemas earned -->
+                <div class="bg-slate-950 p-4 border-2 border-yellow-500/40 rounded-xl flex items-center justify-between shadow-lg">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="gem" class="w-5 h-5 text-yellow-400"></i>
+                        <span class="text-xs text-slate-300 font-bold uppercase">Gemas Ganadas</span>
+                    </div>
+                    <span class="font-mono font-black text-yellow-400 text-lg">+10 Gemas</span>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex gap-3">
+                <button onclick="saveSessionAndCloseSummary()"
+                    class="flex-1 py-3 bg-[var(--accent-vigor)] text-black border-2 border-black rounded-xl font-bold uppercase tracking-wider transition-all shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-none text-center text-sm font-black">
+                    Guardar y Registrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shop Modal -->
+    <div id="shop-modal"
+        class="fixed inset-0 bg-black/90 z-[90] hidden items-center justify-center p-4 backdrop-blur-md transition-opacity duration-300">
+        <div
+            class="bg-slate-900 border border-slate-700 rounded-3xl p-6 max-w-sm w-full shadow-2xl relative flex flex-col">
+
+            <!-- Close Button -->
+            <button onclick="closeShopModal()"
+                class="absolute top-4 right-4 p-2 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white rounded-full transition-all z-10">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+
+            <div class="mb-6 text-center">
+                <div
+                    class="inline-flex items-center justify-center p-4 bg-emerald-500/10 rounded-full mb-3 ring-1 ring-emerald-500/30">
+                    <i data-lucide="store" class="w-8 h-8 text-emerald-400"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-1">Tienda de Puntos</h3>
+                <p id="shop-user-title" class="text-slate-400 text-xs uppercase tracking-wider font-semibold">FACU - 300
+                    GEMAS</p>
+            </div>
+
+            <!-- Items -->
+            <div class="space-y-4">
+                <!-- Freeze Item -->
+                <div
+                    class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i data-lucide="shield-check" class="w-24 h-24 text-cyan-400"></i>
+                    </div>
+
+                    <div class="relative z-10 flex gap-4">
+                        <div class="p-3 bg-cyan-500/10 rounded-lg h-fit">
+                            <i data-lucide="shield-check" class="w-6 h-6 text-cyan-400"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-slate-200">Protector de Racha</h4>
+                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">Si no completas tu meta semanal
+                                (Facu: 5, Alma: 3), este escudo se usará automáticamente para salvar tu racha.</p>
+
+                            <div class="mt-4 flex items-center justify-between">
+                                <span class="font-bold text-emerald-400 text-sm flex items-center gap-1">
+                                    <i data-lucide="gem" class="w-3 h-3"></i> 500
+                                </span>
+                                <button id="shop-buy-btn"
+                                    class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-colors shadow-lg shadow-emerald-500/20 active:scale-95">
+                                    Comprar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="text-[10px] text-slate-600 text-center mt-6">¡Entrena para ganar más gemas!</p>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="image-modal"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 opacity-0 hidden transition-opacity duration-300 pointer-events-none"
+        onclick="closeImageModal()">
+        <!-- Modal Backdrop -->
+        <div class="absolute inset-0 bg-slate-950/90 backdrop-blur-md pointer-events-auto"></div>
+
+        <!-- Modal Content -->
+        <div class="relative w-full max-w-lg bg-slate-950 rounded-[32px] border border-slate-800 shadow-2xl overflow-hidden pointer-events-auto transform scale-95 opacity-0 transition-all duration-300 flex flex-col max-h-[85vh] sm:max-h-[90vh]"
+            onclick="event.stopPropagation()">
+
+            <!-- Header -->
+            <div class="flex justify-between items-center p-5 border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-10 shrink-0">
+                <h3 class="text-xl font-bold text-white tracking-tight ml-2">Vista Previa</h3>
+                <button onclick="closeImageModal()"
+                    class="p-2 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <!-- Scrollable Content Area -->
+            <div class="flex-1 overflow-y-auto p-4 flex items-center justify-center min-h-[40vh]" id="image-modal-content">
+                <!-- Image goes here via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profile-modal"
+        class="fixed inset-0 bg-black/90 z-[90] hidden items-center justify-center p-4 backdrop-blur-md transition-opacity duration-300">
+        <div
+            class="bg-slate-900 border border-slate-700 rounded-3xl p-6 max-w-sm w-full shadow-2xl relative flex flex-col">
+
+            <!-- Close Button -->
+            <button onclick="closeProfileModal()"
+                class="absolute top-4 right-4 p-2 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white rounded-full transition-all z-10">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+
+            <div class="mb-6 text-center">
+                <div
+                    class="inline-flex items-center justify-center p-4 bg-violet-500/10 rounded-full mb-3 ring-1 ring-violet-500/30">
+                    <i data-lucide="user-cog" class="w-8 h-8 text-violet-400"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-1">Configuración de Perfil</h3>
+                <p class="text-slate-400 text-xs">Ajusta tus datos para recomendaciones precisas</p>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Facu -->
+                <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                    <label class="flex items-center gap-2 text-blue-300 font-bold mb-3">
+                        <i data-lucide="user" class="w-4 h-4"></i> Facu
+                    </label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div>
+                            <span class="text-xs text-slate-400 block mb-1">Peso</span>
+                            <div class="flex items-center gap-1">
+                                <input type="number" id="profile-weight-facu"
+                                    class="w-full bg-slate-950 border border-slate-700 rounded text-center py-1.5 text-white font-bold focus:border-blue-500 outline-none text-sm"
+                                    placeholder="80">
+                                <span class="text-[10px] text-slate-500 font-bold">KG</span>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 block mb-1">Altura</span>
+                            <div class="flex items-center gap-1">
+                                <input type="number" id="profile-height-facu"
+                                    class="w-full bg-slate-950 border border-slate-700 rounded text-center py-1.5 text-white font-bold focus:border-blue-500 outline-none text-sm"
+                                    placeholder="175">
+                                <span class="text-[10px] text-slate-500 font-bold">CM</span>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 block mb-1">Edad</span>
+                            <div class="flex items-center gap-1">
+                                <input type="number" id="profile-age-facu"
+                                    class="w-full bg-slate-950 border border-slate-700 rounded text-center py-1.5 text-white font-bold focus:border-blue-500 outline-none text-sm"
+                                    placeholder="23">
+                                <span class="text-[10px] text-slate-500 font-bold">AÑOS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alma -->
+                <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                    <label class="flex items-center gap-2 text-pink-300 font-bold mb-3">
+                        <i data-lucide="user" class="w-4 h-4"></i> Alma
+                    </label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div>
+                            <span class="text-xs text-slate-400 block mb-1">Peso</span>
+                            <div class="flex items-center gap-1">
+                                <input type="number" id="profile-weight-alma"
+                                    class="w-full bg-slate-950 border border-slate-700 rounded text-center py-1.5 text-white font-bold focus:border-pink-500 outline-none text-sm"
+                                    placeholder="60">
+                                <span class="text-[10px] text-slate-500 font-bold">KG</span>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 block mb-1">Altura</span>
+                            <div class="flex items-center gap-1">
+                                <input type="number" id="profile-height-alma"
+                                    class="w-full bg-slate-950 border border-slate-700 rounded text-center py-1.5 text-white font-bold focus:border-pink-500 outline-none text-sm"
+                                    placeholder="165">
+                                <span class="text-[10px] text-slate-500 font-bold">CM</span>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 block mb-1">Edad</span>
+                            <div class="flex items-center gap-1">
+                                <input type="number" id="profile-age-alma"
+                                    class="w-full bg-slate-950 border border-slate-700 rounded text-center py-1.5 text-white font-bold focus:border-pink-500 outline-none text-sm"
+                                    placeholder="23">
+                                <span class="text-[10px] text-slate-500 font-bold">AÑOS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gemini API Key -->
+                <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                    <label class="flex items-center gap-2 text-cyan-300 font-bold mb-2 text-xs uppercase tracking-wider">
+                        <i data-lucide="key" class="w-4 h-4"></i> API Key de Gemini
+                    </label>
+                    <input type="password" id="profile-gemini-key"
+                        class="w-full bg-slate-950 border border-slate-700 rounded px-3 py-1.5 text-white font-mono focus:border-cyan-500 outline-none text-xs"
+                        placeholder="AIzaSy...">
+                    <p class="text-[10px] text-slate-500 mt-1.5 leading-tight">
+                        Necesaria para el generador de rutinas con IA. Obtenla gratis en 
+                        <a href="https://aistudio.google.com/" target="_blank" class="text-cyan-400 hover:underline">Google AI Studio</a>.
+                    </p>
+                </div>
+
+                <!-- Cloud sync is automatic -->
+                <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                    <label class="flex items-center gap-2 text-emerald-300 font-bold mb-2 text-xs uppercase tracking-wider">
+                        <i data-lucide="database" class="w-4 h-4"></i> Sincronización en la nube
+                    </label>
+                    <p class="text-[10px] text-slate-500 leading-tight">
+                        La app sincroniza automáticamente con la API propia en el mismo origen.
+                    </p>
+                    <p id="cloud-sync-status" class="text-[10px] text-slate-500 mt-1.5 leading-tight">Sincronización automática activa</p>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <button onclick="saveProfile()"
+                    class="w-full py-3 bg-violet-600 hover:bg-violet-500 text-white font-bold rounded-xl shadow-lg shadow-violet-500/20 transition-all active:scale-[0.98]">
+                    Guardar Cambios
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day Edit Modal -->
+    <div id="day-modal" class="fixed inset-0 bg-black/90 z-50 hidden items-center justify-center p-4 transition-all duration-300">
+        <div class="bg-slate-950 border border-slate-800 p-8 max-w-md w-[90vw] mx-auto text-center transition-all duration-300 shadow-2xl rounded-[32px] relative">
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center p-3 bg-[var(--accent-vigor)] border-2 border-black mb-3 shadow-lg">
+                    <i data-lucide="calendar" class="w-8 h-8 text-black"></i>
+                </div>
+                <h3 id="day-modal-title" class="text-3xl font-black text-white tracking-widest uppercase mt-2">15/01</h3>
+                <p id="day-modal-status" class="text-sm text-[var(--text-dim)] font-bold uppercase mt-1">Sin registro</p>
+            </div>
+            <div class="space-y-4">
+                <button onclick="setDayTraining('alma')"
+                    class="w-full px-4 py-4 bg-[var(--bg-panel-alt)] text-[var(--accent-alma)] border-2 border-[var(--border-strong)] hover:border-[var(--accent-alma)] hover:-translate-y-1 hover:shadow-lg font-black uppercase transition-all flex items-center justify-center gap-2">
+                    <i data-lucide="user" class="w-5 h-5"></i> Solo Alma
+                </button>
+                <button onclick="setDayTraining('facu')"
+                    class="w-full px-4 py-4 bg-[var(--bg-panel-alt)] text-[var(--accent-facu)] border-2 border-[var(--border-strong)] hover:border-[var(--accent-facu)] hover:-translate-y-1 hover:shadow-lg font-black uppercase transition-all flex items-center justify-center gap-2">
+                    <i data-lucide="user" class="w-5 h-5"></i> Solo Facu
+                </button>
+                <button onclick="setDayTraining('both')"
+                    class="w-full px-4 py-4 bg-[var(--bg-panel-alt)] text-[var(--accent-vigor)] border-2 border-[var(--border-strong)] hover:border-[var(--accent-vigor)] hover:-translate-y-1 hover:shadow-lg font-black uppercase transition-all flex items-center justify-center gap-2">
+                    <i data-lucide="users" class="w-5 h-5"></i> Ambos
+                </button>
+                <button onclick="setDayTraining('clear')"
+                    class="w-full px-4 py-4 bg-[#ff0055] text-white border-2 border-black hover:-translate-y-1 hover:shadow-lg font-black uppercase transition-all flex items-center justify-center gap-2 mt-4">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i> Borrar registro
+                </button>
+            </div>
+            <button onclick="closeDayModal()"
+                class="w-full mt-6 px-4 py-3 bg-transparent text-[var(--text-dim)] border-2 border-[var(--border-strong)] hover:text-white font-black uppercase transition-all">
+                Cancelar
+            </button>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 hidden">
+        <div
+            class="bg-slate-800 border border-slate-700 text-white px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3">
+            <i id="toast-icon" data-lucide="check-circle" class="w-6 h-6 text-emerald-400"></i>
+            <span id="toast-message" class="font-medium">Día registrado</span>
+        </div>
+    </div>
+
+    <!-- Debug Elements Removed -->
+
+    <div class="h-6 md:h-0"></div>
+
+    <!-- CONFIRMATION MODAL -->
+    <div id="confirm-modal"
+        class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/90 transition-all duration-300 opacity-0 transform scale-95">
+        <div
+            class="bg-slate-950 border border-slate-800 p-8 max-w-md w-[90vw] mx-auto text-center transition-all duration-300 shadow-2xl rounded-[32px] animate-pop relative">
+            <div class="p-8 text-center">
+                <div class="inline-flex p-4 bg-[#ff0055] border-2 border-black mb-6 shadow-lg mx-auto">
+                    <i data-lucide="triangle-alert" class="w-8 h-8 text-white"></i>
+                </div>
+                <h3 id="confirm-title" class="text-3xl font-black text-white mb-2 uppercase tracking-widest">¿Estás seguro?</h3>
+                <p id="confirm-message" class="text-[var(--text-dim)] font-bold text-sm mb-8 uppercase">Esta acción no se puede deshacer.</p>
+
+                <div class="flex gap-4">
+                    <button id="confirm-cancel-btn"
+                        class="flex-1 py-3 px-4 border-2 border-[var(--border-strong)] text-[var(--text-dim)] hover:text-white hover:-translate-y-1 hover:shadow-lg font-black uppercase transition-all">Cancelar</button>
+                    <button id="confirm-ok-btn"
+                        class="flex-1 py-3 px-4 bg-[#ff0055] text-white border-2 border-black hover:-translate-y-1 hover:shadow-lg font-black uppercase transition-all">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PERMISSION HELP MODAL -->
+    <div id="permission-modal"
+        class="hidden fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-sm transition-all duration-300 opacity-0 transform scale-95">
+        <div
+            class="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl animate-pop relative">
+
+            <!-- Header -->
+            <div class="bg-slate-800/50 p-4 border-b border-slate-700 flex justify-between items-center">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i data-lucide="bell-off" class="w-5 h-5 text-red-400"></i>
+                    Notificaciones Bloqueadas
+                </h3>
+                <button onclick="closePermissionModal()" class="text-slate-400 hover:text-white pb-1">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <!-- Content -->
+            <div class="p-6">
+                <p class="text-slate-300 text-sm mb-6 leading-relaxed">
+                    Para que el cronómetro funcione en segundo plano, debes permitir las notificaciones manualmente.
+                    <br><br>
+                    <strong>Sigue estos pasos según tu celular:</strong>
+                </p>
+
+                <!-- Tabs -->
+                <div class="flex gap-2 mb-4 bg-slate-800 p-1 rounded-lg">
+                    <button onclick="switchPermTab('android-chrome')" id="perm-tab-android-chrome"
+                        class="flex-1 py-1.5 text-[10px] md:text-xs font-bold rounded-md bg-indigo-500 text-white shadow-sm transition-all text-center leading-tight">
+                        Chrome / Web
+                    </button>
+                    <button onclick="switchPermTab('android-app')" id="perm-tab-android-app"
+                        class="flex-1 py-1.5 text-[10px] md:text-xs font-bold rounded-md text-slate-400 hover:bg-slate-700/50 transition-all text-center leading-tight">
+                        App / PWA
+                    </button>
+                    <button onclick="switchPermTab('ios')" id="perm-tab-ios"
+                        class="flex-1 py-1.5 text-[10px] md:text-xs font-bold rounded-md text-slate-400 hover:bg-slate-700/50 transition-all text-center leading-tight">
+                        iPhone
+                    </button>
+                </div>
+
+                <!-- Android Chrome Content -->
+                <div id="perm-content-android-chrome" class="text-sm text-slate-400 space-y-3">
+                    <div class="bg-red-900/20 p-3 rounded-lg border border-red-700/30 mb-2">
+                        <p class="text-xs text-red-300">
+                            <strong>SOLUCIÓN FINAL:</strong> Tu navegador ha bloqueado el sitio permanentemente. Debes
+                            borrar ese registro.
+                        </p>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <span
+                            class="bg-slate-800 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-indigo-400 flex-shrink-0">1</span>
+                        <p>Abre el menú de Chrome (3 puntitos) > <strong>Configuración</strong>.</p>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <span
+                            class="bg-slate-800 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-indigo-400 flex-shrink-0">2</span>
+                        <p>Ve a <strong>Configuración del sitio</strong> > <strong>Todos los sitios</strong>.</p>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <span
+                            class="bg-slate-800 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-indigo-400 flex-shrink-0">3</span>
+                        <p>Busca esta página ("Rutina Naty"), entra y toca <strong>"Borrar y restablecer"</strong> (Icono
+                            Papelera).</p>
+                    </div>
+                    <div class="mt-2 text-xs text-center text-slate-500">
+                        *Esto borrará el bloqueo y volverá a preguntar.
+                    </div>
+                </div>
+
+                <!-- Android App Content -->
+                <div id="perm-content-android-app" class="hidden text-sm text-slate-400 space-y-3">
+                    <div class="bg-indigo-900/20 p-3 rounded-lg border border-indigo-700/30 mb-2">
+                        <p class="text-xs text-indigo-300">
+                            <strong>Opción 2:</strong> Definitiva (Configuración de Android).
+                        </p>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <span
+                            class="bg-slate-800 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-indigo-400 flex-shrink-0">1</span>
+                        <p>Cierra la App y el navegador.</p>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <span
+                            class="bg-slate-800 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-indigo-400 flex-shrink-0">2</span>
+                        <p>Ve a <strong>Ajustes del Celular <i data-lucide="settings" class="w-4 h-4"></i></strong> > <strong>Aplicaciones</strong>.</p>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <span
+                            class="bg-slate-800 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-indigo-400 flex-shrink-0">3</span>
+                        <p>Busca <strong>Chrome</strong> (o "Gym Rutina" si la instalaste).</p>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <span
+                            class="bg-slate-800 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-indigo-400 flex-shrink-0">4</span>
+                        <p>Entra a <strong>Notificaciones</strong> y activa el interruptor.</p>
+                    </div>
+                </div>
+
+                <!-- iOS Content -->
+                <div id="perm-content-ios" class="hidden text-sm text-slate-400 space-y-3">
+                    <div class="bg-yellow-900/20 p-3 rounded-lg border border-yellow-700/30 mb-2">
+                        <p class="text-xs text-yellow-500">
+                            <strong>Nota:</strong> En iPhone, las notificaciones SOLO funcionan si agregas la app a la
+                            pantalla de inicio.
+                        </p>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <span
+                            class="bg-slate-800 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-indigo-400 flex-shrink-0">1</span>
+                        <p>Toca el botón <strong>Compartir</strong> (cuadrado con flecha) abajo al medio.</p>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <span
+                            class="bg-slate-800 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-indigo-400 flex-shrink-0">2</span>
+                        <p>Baja y selecciona <strong>"Agregar a Inicio"</strong>.</p>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <span
+                            class="bg-slate-800 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-indigo-400 flex-shrink-0">3</span>
+                        <p>Abre la app desde el nuevo icono en tu inicio y las notificaciones funcionarán.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="p-4 border-t border-slate-700/50 bg-slate-800/30">
+                <button onclick="location.reload()"
+                    class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/20 transition-all active:scale-[0.98]">
+                    Ya lo hice, recargar página
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACHIEVEMENT UNLOCK MODAL -->
+    <div id="achievement-modal"
+        class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div id="achievement-modal-content"
+            class="w-full max-w-sm transform scale-0 transition-transform duration-500 ease-out">
+            <div class="relative overflow-hidden rounded-3xl border-2 p-6 text-center" id="achievement-modal-card">
+                <!-- Glow Effect -->
+                <div class="absolute inset-0 opacity-30" id="achievement-modal-glow"></div>
+
+                <!-- Badge Icon -->
+                <div class="relative z-10 mb-4">
+                    <div class="mx-auto w-20 h-20 rounded-full flex items-center justify-center text-4xl animate-bounce"
+                        id="achievement-modal-icon-bg">
+                        <i id="achievement-modal-icon" class="w-10 h-10"></i>
+                    </div>
+                </div>
+
+                <!-- Tier Badge -->
+                <div class="relative z-10 mb-2">
+                    <span id="achievement-modal-tier"
+                        class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"></span>
+                </div>
+
+                <!-- Title -->
+                <h2 id="achievement-modal-title" class="relative z-10 text-2xl font-black text-white mb-2"></h2>
+
+                <!-- Description -->
+                <p id="achievement-modal-desc" class="relative z-10 text-sm text-slate-300 mb-4"></p>
+
+                <!-- User -->
+                <p class="relative z-10 text-xs text-slate-500 mb-6">
+                    Desbloqueado por <span id="achievement-modal-user" class="font-bold"></span>
+                </p>
+
+                <!-- Close Button -->
+                <button onclick="closeAchievementModal()"
+                    class="relative z-10 w-full py-3 rounded-xl font-bold text-white transition-all active:scale-95"
+                    id="achievement-modal-btn">
+                    ¡Genial!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STREAK RESCUE MODAL -->
+    <div id="rescue-modal"
+        class="fixed inset-0 z-[200] hidden items-center justify-center bg-black/80 backdrop-blur-sm transition-all duration-300">
+        <div class="bg-slate-900/90 border border-violet-500/50 rounded-2xl p-6 w-[90%] max-w-sm shadow-2xl transform transition-all scale-95 opacity-0 flex flex-col items-center text-center relative overflow-hidden"
+            id="rescue-modal-content">
+
+            <!-- Background Glow -->
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-violet-500 via-red-500 to-purple-600">
+            </div>
+            <div
+                class="absolute -top-10 -right-10 w-32 h-32 bg-violet-500/20 rounded-full blur-3xl pointer-events-none">
+            </div>
+
+            <div class="bg-violet-900/30 p-4 rounded-full mb-4 border border-violet-500/30 ring-4 ring-violet-500/10">
+                <i data-lucide="shield-alert" class="w-10 h-10 text-violet-400"></i>
+            </div>
+
+            <h3 class="text-xl font-bold text-white mb-2">¡Racha en Peligro!</h3>
+            <p class="text-slate-300 text-sm mb-6 leading-relaxed">
+                Olvidaste registrar tu entrenamiento de <span id="rescue-date"
+                    class="text-violet-400 font-bold">AYER</span>.
+                <br>
+                ¿Quieres usar un <span class="text-cyan-400 font-bold"><i data-lucide="shield-check"
+                        class="w-3 h-3 inline"></i> Protector</span> para salvar tu racha de <span
+                    id="rescue-streak-val" class="font-bold text-white">X</span> días?
+            </p>
+
+            <div class="flex flex-col gap-3 w-full">
+                <button id="btn-confirm-rescue"
+                    class="w-full py-3 bg-gradient-to-r from-orange-600 to-red-600 hover:from-violet-500 hover:to-red-500 text-white font-bold rounded-xl shadow-lg shadow-violet-900/20 active:scale-95 transition-all flex items-center justify-center gap-2">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                    Usar Protector (-1)
+                </button>
+                <button onclick="closeRescueModal()"
+                    class="w-full py-3 bg-slate-800 hover:bg-slate-700 text-slate-400 font-semibold rounded-xl border border-slate-700 active:scale-95 transition-all">
+                    No, perdí la racha
+                </button>
+            </div>
+
+            <p class="mt-4 text-[10px] text-slate-500">
+                Te quedan <span id="rescue-remaining" class="text-cyan-500 font-bold">X</span> protectores.
+            </p>
+        </div>
+    </div>
+    <!-- Routines Manager Modal -->
+    <div id="routines-manager-modal"
+        class="fixed inset-0 bg-black/90 z-[90] hidden items-center justify-center p-4 backdrop-blur-md transition-opacity duration-300">
+        <div class="bg-slate-900 border border-slate-700 rounded-3xl p-6 max-w-md w-full shadow-2xl relative flex flex-col">
+            <!-- Close Button -->
+            <button onclick="closeRoutinesManagerModal()"
+                class="absolute top-4 right-4 p-2 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white rounded-full transition-all z-10">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+
+            <div class="mb-6 text-center">
+                <div class="inline-flex items-center justify-center p-4 bg-emerald-500/10 rounded-full mb-3 ring-1 ring-emerald-500/30">
+                    <i data-lucide="folder-cog" class="w-8 h-8 text-emerald-400"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-1">Mis Rutinas</h3>
+                <p class="text-slate-400 text-xs">Administra, renombra o cambia tu rutina activa</p>
+            </div>
+
+            <!-- List of Routines -->
+            <div id="routines-list-container" class="space-y-3 max-h-64 overflow-y-auto mb-6 pr-1 scrollbar-thin">
+                <!-- Routines will be dynamically listed here -->
+            </div>
+
+            <div class="flex gap-3">
+                <button onclick="closeRoutinesManagerModal(); navigateTo('ai-routine');"
+                    class="flex-1 py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-xl shadow-lg shadow-cyan-600/20 transition-all text-sm flex items-center justify-center gap-2 active:scale-95">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i> Crear con IA
+                </button>
+                <button onclick="closeRoutinesManagerModal()"
+                    class="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold rounded-xl transition-all text-sm border border-slate-700 active:scale-95">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MANDATORY SESSION GATEKEEPER: WHO IS TRAINING TODAY -->
+    <div id="who-trains-gatekeeper"
+        class="fixed inset-0 z-[100] flex flex-col bg-slate-950 hidden items-center justify-center p-4">
+        <div class="gatekeeper-card w-full max-w-md bg-slate-900 border border-slate-800 shadow-2xl p-6 rounded-3xl animate-slide-up text-center flex flex-col justify-between">
+            
+            <!-- Compact Header -->
+            <div class="mb-3 sm:mb-4">
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-950 border border-slate-800 rounded-full mb-1.5 shadow-lg">
+                    <span class="w-2 h-2 rounded-full bg-[var(--accent-vigor)] animate-pulse"></span>
+                    <span class="text-[9px] font-mono font-black uppercase tracking-widest text-[var(--accent-vigor)]">INICIO DE SESIÓN</span>
+                </div>
+                
+                <h1 class="text-xl sm:text-2xl font-black text-white uppercase tracking-tight leading-tight font-mono">
+                    ¿QUIÉN ENTRENA HOY?
+                </h1>
+                <p class="text-[10px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider mt-0.5">
+                    Selecciona para adaptar los ejercicios
+                </p>
+            </div>
+
+            <!-- 3 Sleek Interactive Option Tiles -->
+            <div class="flex flex-col gap-2.5 sm:gap-3 my-auto">
+                
+                <!-- Option 1: Solo Facu -->
+                <button type="button" onclick="selectWhoTrainsToday('facu')"
+                    class="group relative w-full p-2.5 sm:p-3.5 bg-slate-950 border-2 border-[var(--accent-facu)]/50 hover:border-[var(--accent-facu)] rounded-xl shadow-lg hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-none transition-all flex items-center justify-between text-left">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-[var(--accent-facu)]/10 border border-[var(--accent-facu)] text-[var(--accent-facu)] flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                            <i data-lucide="user" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-base sm:text-lg font-black text-white font-mono leading-none group-hover:text-[var(--accent-facu)] transition-colors">
+                                    FACUNDO
+                                </span>
+                                <span class="text-[8px] font-black uppercase font-mono px-1.5 py-0.5 rounded bg-[var(--accent-facu)]/20 text-[var(--accent-facu)] border border-[var(--accent-facu)]/40">
+                                    SOLO
+                                </span>
+                            </div>
+                            <span class="text-[10px] sm:text-[11px] text-slate-400 font-medium block mt-0.5">
+                                Series y pesos individuales de Facu
+                            </span>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 rounded-lg bg-slate-900 group-hover:bg-[var(--accent-facu)] group-hover:text-black text-slate-400 border border-slate-800 group-hover:border-[var(--accent-facu)] flex items-center justify-center flex-shrink-0 transition-all shadow-lg">
+                        <i data-lucide="chevron-right" class="w-4 h-4 group-hover:translate-x-0.5 transition-transform"></i>
+                    </div>
+                </button>
+
+                <!-- Option 2: Solo Alma -->
+                <button type="button" onclick="selectWhoTrainsToday('alma')"
+                    class="group relative w-full p-2.5 sm:p-3.5 bg-slate-950 border-2 border-[var(--accent-alma)]/50 hover:border-[var(--accent-alma)] rounded-xl shadow-lg hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-none transition-all flex items-center justify-between text-left">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-[var(--accent-alma)]/10 border border-[var(--accent-alma)] text-[var(--accent-alma)] flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                            <i data-lucide="user" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-base sm:text-lg font-black text-white font-mono leading-none group-hover:text-[var(--accent-alma)] transition-colors">
+                                    ALMA
+                                </span>
+                                <span class="text-[8px] font-black uppercase font-mono px-1.5 py-0.5 rounded bg-[var(--accent-alma)]/20 text-[var(--accent-alma)] border border-[var(--accent-alma)]/40">
+                                    SOLO
+                                </span>
+                            </div>
+                            <span class="text-[10px] sm:text-[11px] text-slate-400 font-medium block mt-0.5">
+                                Series y pesos individuales de Alma
+                            </span>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 rounded-lg bg-slate-900 group-hover:bg-[var(--accent-alma)] group-hover:text-white text-slate-400 border border-slate-800 group-hover:border-[var(--accent-alma)] flex items-center justify-center flex-shrink-0 transition-all shadow-lg">
+                        <i data-lucide="chevron-right" class="w-4 h-4 group-hover:translate-x-0.5 transition-transform"></i>
+                    </div>
+                </button>
+
+                <!-- Option 3: Ambos (Dúo) -->
+                <button type="button" onclick="selectWhoTrainsToday('both')"
+                    class="group relative w-full p-2.5 sm:p-3.5 bg-slate-950 border-2 border-[var(--accent-vigor)] rounded-xl shadow-lg hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-none transition-all flex items-center justify-between text-left ring-1 ring-[var(--accent-vigor)]/30">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-[var(--accent-vigor)]/10 border border-[var(--accent-vigor)] text-[var(--accent-vigor)] flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                            <i data-lucide="users" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-base sm:text-lg font-black text-white font-mono leading-none group-hover:text-[var(--accent-vigor)] transition-colors">
+                                    AMBOS
+                                </span>
+                                <span class="text-[8px] font-black uppercase font-mono px-1.5 py-0.5 rounded bg-[var(--accent-vigor)] text-black border border-black shadow-lg">
+                                    DÚO
+                                </span>
+                            </div>
+                            <span class="text-[10px] sm:text-[11px] text-slate-400 font-medium block mt-0.5">
+                                Doble tracking y cronómetros separados
+                            </span>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 rounded-lg bg-[var(--accent-vigor)] text-black border border-black flex items-center justify-center flex-shrink-0 transition-all shadow-lg group-hover:bg-white">
+                        <i data-lucide="chevron-right" class="w-4 h-4 group-hover:translate-x-0.5 transition-transform"></i>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js" defer></script>
+</body>
+
+</html>

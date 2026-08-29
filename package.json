@@ -1,0 +1,36 @@
+{
+  "name": "rutina-gym",
+  "version": "1.0.0",
+  "description": "",
+  "main": "recovery_script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node build.js",
+    "start": "node server.js",
+    "cap:sync": "npm run build && npx cap sync",
+    "apk:build": "npm run cap:sync && cd android && gradlew assembleDebug",
+    "ios:sync": "npm run build && set CLOUD_API_URL=%CLOUD_API_URL% && npx cap sync ios",
+    "ios:open": "npx cap open ios",
+    "ios:build": "npm run ios:sync && cd ios && xcodebuild -workspace App/App.xcworkspace -scheme App -configuration Release"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/facurodriguez06/RutinaNaty.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/facurodriguez06/RutinaNaty/issues"
+  },
+  "homepage": "https://github.com/facurodriguez06/RutinaNaty#readme",
+  "dependencies": {
+    "@capacitor/android": "^8.3.4",
+    "@capacitor/core": "^8.3.4",
+    "@capacitor/ios": "^8.3.4"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.3.4"
+  }
+}
