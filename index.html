@@ -110,27 +110,27 @@
                     <span class="font-medium">ARMA TU RUTINA</span>
                 </button>
                 <button onclick="navigateTo('routine')"
-                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group active-nav-item">
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[var(--text-dim)] hover:bg-[var(--bg-panel-alt)] hover:text-[var(--text-main)] transition-all group active-nav-item">
                     <i data-lucide="dumbbell" class="w-5 h-5 group-hover:text-emerald-400 transition-colors"></i>
                     <span class="font-medium">Rutina</span>
                 </button>
                 <button onclick="navigateTo('history')"
-                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group">
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[var(--text-dim)] hover:bg-[var(--bg-panel-alt)] hover:text-[var(--text-main)] transition-all group">
                     <i data-lucide="calendar" class="w-5 h-5 group-hover:text-violet-400 transition-colors"></i>
                     <span class="font-medium">Historial</span>
                 </button>
                 <button onclick="navigateTo('stats')"
-                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group">
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[var(--text-dim)] hover:bg-[var(--bg-panel-alt)] hover:text-[var(--text-main)] transition-all group">
                     <i data-lucide="line-chart" class="w-5 h-5 group-hover:text-yellow-400 transition-colors"></i>
                     <span class="font-medium">Progreso</span>
                 </button>
                 <button onclick="navigateTo('achievements')"
-                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group">
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[var(--text-dim)] hover:bg-[var(--bg-panel-alt)] hover:text-[var(--text-main)] transition-all group">
                     <i data-lucide="trophy" class="w-5 h-5 group-hover:text-fuchsia-400 transition-colors"></i>
                     <span class="font-medium">Logros</span>
                 </button>
                 <button onclick="toggleSidebar(); openShopModal('naty')"
-                    class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group">
+                    class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-[var(--text-dim)] hover:bg-[var(--bg-panel-alt)] hover:text-[var(--text-main)] transition-all group">
                     <div class="flex items-center gap-3">
                         <i data-lucide="shopping-bag" class="w-5 h-5 text-emerald-400 group-hover:scale-110 transition-transform"></i>
                         <span class="font-medium">Tienda</span>
@@ -145,7 +145,7 @@
                     <span class="font-bold">Mantra de Hoy</span>
                 </button>
                 <button onclick="navigateTo('water')"
-                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group">
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[var(--text-dim)] hover:bg-[var(--bg-panel-alt)] hover:text-[var(--text-main)] transition-all group">
                     <div class="relative">
                         <i data-lucide="droplets" class="w-5 h-5 group-hover:text-cyan-400 transition-colors"></i>
                         <span id="sidebar-water-badge"
@@ -154,26 +154,26 @@
                     <span class="font-medium">Hidratación</span>
                 </button>
                 <button onclick="openRoutinesManagerModal()"
-                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group">
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[var(--text-dim)] hover:bg-[var(--bg-panel-alt)] hover:text-[var(--text-main)] transition-all group">
                     <i data-lucide="folder-cog" class="w-5 h-5 group-hover:text-blue-400 transition-colors"></i>
                     <span class="font-medium">Mis Rutinas</span>
                 </button>
                 <div class="my-4 border-t border-slate-800/50"></div>
                 <button onclick="openCalculatorModal()"
-                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group">
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[var(--text-dim)] hover:bg-[var(--bg-panel-alt)] hover:text-[var(--text-main)] transition-all group">
                     <i data-lucide="calculator" class="w-5 h-5 group-hover:text-violet-400 transition-colors"></i>
                     <span class="font-medium">Calculadora</span>
                 </button>
                 <button onclick="openProfileModal()"
-                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group">
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[var(--text-dim)] hover:bg-[var(--bg-panel-alt)] hover:text-[var(--text-main)] transition-all group">
                     <i data-lucide="user-cog" class="w-5 h-5 group-hover:text-pink-400 transition-colors"></i>
                     <span class="font-medium">Perfil</span>
                 </button>
             </nav>
 
-            <div class="mt-auto pt-4 border-t border-slate-800/50">
+            <div class="mt-auto pt-4 border-t border-[var(--border-strong)]">
                 <button id="theme-toggle-sidebar" onclick="toggleTheme()"
-                    class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition-all border border-slate-800 bg-slate-950/30">
+                    class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-[var(--text-dim)] hover:bg-[var(--bg-panel-alt)] hover:text-[var(--text-main)] transition-all border border-[var(--border-strong)] bg-[var(--bg-input)]">
                     <span class="text-sm font-medium">Tema</span>
                     <i id="theme-icon-sidebar" data-lucide="moon" class="w-4 h-4"></i>
                 </button>
@@ -298,11 +298,11 @@
 
                         <!-- Right: Live Session Volume -->
                         <div class="flex items-center gap-2">
-                            <div class="flex items-center gap-2 bg-slate-950/60 border border-slate-800 px-3 py-1.5 rounded-2xl" title="Tonelaje total levantado por Naty hoy">
+                            <div class="flex items-center gap-2 bg-[var(--bg-input)] border border-[var(--border-strong)] px-3 py-1.5 rounded-2xl" title="Tonelaje total levantado por Naty hoy">
                                 <i data-lucide="dumbbell" class="w-4 h-4 text-violet-400"></i>
-                                <span class="text-xs text-slate-400 font-semibold">Volumen:</span>
-                                <span id="session-vol-naty" class="font-mono font-black text-white text-sm">0</span>
-                                <span class="text-[10px] font-bold text-slate-400 uppercase">kg</span>
+                                <span class="text-xs text-[var(--text-dim)] font-semibold">Volumen:</span>
+                                <span id="session-vol-naty" class="font-mono font-black text-[var(--text-main)] text-sm">0</span>
+                                <span class="text-[10px] font-bold text-[var(--text-muted)] uppercase">kg</span>
                             </div>
                         </div>
                     </div>

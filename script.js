@@ -5243,19 +5243,19 @@ function renderTimerCard(ex) {
               ${state.isCompleted ? '<i data-lucide="check-circle" class="w-5 h-5 text-emerald-400 absolute -top-1 -right-1 drop-shadow-lg"></i>' : ""}
           </div>
           <div>
-              <h4 class="font-bold text-slate-200 text-lg leading-tight md:mb-1">
+              <h4 class="font-bold text-[var(--text-main)] text-lg leading-tight md:mb-1">
                   ${ex.title}
                   ${state.isCompleted ? '<span class="text-xs text-emerald-400 ml-2 font-bold uppercase">(Completado)</span>' : ""}
                   ${state.isSkipped ? '<span class="text-xs text-red-400 ml-2 font-bold uppercase">(Saltado)</span>' : ""}
               </h4>
-              <p class="text-xs text-slate-500 font-medium">${ex.desc}</p>
+              <p class="text-xs text-[var(--text-dim)] font-medium">${ex.desc}</p>
           </div>
       </div>
 
       <!-- Timer Controls -->
-      <div class="flex items-center gap-4 ml-auto w-full md:w-auto justify-between md:justify-end bg-slate-950/50 p-2 rounded-xl border border-slate-800/50">
+      <div class="flex items-center gap-4 ml-auto w-full md:w-auto justify-between md:justify-end bg-[var(--bg-input)] p-2 rounded-xl border border-[var(--border-strong)]">
           <!-- Digital Display -->
-          <div id="warmup-timer-display-${ex.id}" class="font-mono text-2xl font-bold tracking-widest ${state.isRunning ? `text-${ex.color}-400` : "text-slate-400"} w-24 text-center">
+          <div id="warmup-timer-display-${ex.id}" class="font-mono text-2xl font-bold tracking-widest ${state.isRunning ? `text-${ex.color}-400` : "text-[var(--text-dim)]"} w-24 text-center">
               ${mins}:${secs}
           </div>
 
@@ -5263,7 +5263,7 @@ function renderTimerCard(ex) {
               <button onclick="toggleWarmupTimer('${ex.id}')" ${state.isSkipped ? "disabled" : ""} class="p-2 rounded-lg ${state.isRunning ? "bg-fuchsia-500/20 text-fuchsia-400 hover:bg-fuchsia-500/30" : "bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30"} transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
                   <i data-lucide="${state.isRunning ? "pause" : "play"}" class="w-5 h-5 fill-current"></i>
               </button>
-              <button onclick="resetWarmupTimer('${ex.id}')" class="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition-all active:scale-95">
+              <button onclick="resetWarmupTimer('${ex.id}')" class="p-2 rounded-lg bg-[var(--bg-card)] border border-[var(--border-strong)] text-[var(--text-dim)] hover:text-[var(--text-main)] hover:bg-[var(--bg-panel-alt)] transition-all active:scale-95">
                   <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
               </button>
                <button onclick="skipWarmupTimer('${ex.id}')" class="p-2 rounded-lg bg-red-900/20 text-red-400 hover:bg-red-900/40 transition-all active:scale-95" title="Saltar">
@@ -5605,18 +5605,18 @@ function renderContent(skipAnimations = false) {
               
               <!-- Reps & Weight in clean pills -->
               <div class="flex items-center gap-2">
-                  <div class="flex items-center bg-slate-950/60 border border-slate-800/80 rounded-xl px-2.5 py-1">
+                  <div class="flex items-center bg-[var(--bg-input)] border border-[var(--border-strong)] rounded-xl px-2.5 py-1">
                       <input type="number" value="${repsNaty}" placeholder="${targetRepsPlaceholder}" data-set-key="${setKey}" data-user="naty"
-                          class="reps-input w-10 text-center font-bold text-white text-sm outline-none m-0 p-0" onclick="event.stopPropagation()">
-                      <span class="text-[11px] font-semibold text-slate-400 ml-1">reps</span>
+                          class="reps-input w-10 text-center font-bold text-[var(--text-main)] bg-transparent text-sm outline-none m-0 p-0" onclick="event.stopPropagation()">
+                      <span class="text-[11px] font-semibold text-[var(--text-muted)] ml-1">reps</span>
                   </div>
                   
-                  <span class="text-slate-600 font-bold">×</span>
+                  <span class="text-[var(--text-muted)] font-bold">×</span>
                   
-                  <div class="flex items-center bg-slate-950/60 border border-slate-800/80 rounded-xl px-2.5 py-1">
+                  <div class="flex items-center gap-2 bg-[var(--bg-input)] border border-[var(--border-strong)] rounded-xl px-2.5 py-1">
                       <input type="number" value="${weightNaty}" placeholder="0" data-set-key="${setKey}" data-user="naty"
-                          class="weight-input w-11 text-center font-bold text-white text-sm outline-none m-0 p-0" onclick="event.stopPropagation()">
-                      <span class="text-[11px] font-semibold text-slate-400 ml-1">kg</span>
+                          class="weight-input w-12 text-center font-bold text-[var(--text-main)] bg-transparent text-sm outline-none m-0 p-0" onclick="event.stopPropagation()">
+                      <span class="text-[11px] font-semibold text-[var(--text-muted)] ml-1 tracking-wider uppercase">kg</span>
                   </div>
               </div>
           </div>
@@ -5664,9 +5664,9 @@ function renderContent(skipAnimations = false) {
         
         <!-- Objective & Quick Actions Bar -->
         <div class="px-4 sm:px-5 pb-3 flex items-center justify-between gap-2 flex-wrap">
-            <div class="text-xs font-semibold text-slate-300 flex items-center gap-1.5 bg-slate-900/60 border border-slate-800 px-3 py-1 rounded-full">
+            <div class="text-xs font-semibold text-[var(--text-dim)] flex items-center gap-1.5 bg-[var(--bg-input)] border border-[var(--border-strong)] px-3 py-1 rounded-full">
                 <i data-lucide="target" class="w-3.5 h-3.5 text-emerald-400"></i>
-                <span>Objetivo: <strong class="text-white">${numSets} series × ${exercise.reps} reps</strong></span>
+                <span>Objetivo: <strong class="text-[var(--text-main)]">${numSets} series × ${exercise.reps} reps</strong></span>
             </div>
             
             <button onclick="toggleExerciseComplete('${activeTab}', ${idx}, ${numSets}, ${isExerciseCompleted})" 
