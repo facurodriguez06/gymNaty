@@ -603,21 +603,21 @@
 
                         <div class="grid grid-cols-2 gap-4 relative z-10">
                             <div
-                                class="bg-slate-950/50 p-3 rounded-xl border border-slate-800 text-center group hover:border-emerald-500/30 transition-colors">
-                                <p class="text-[10px] text-slate-400 uppercase font-bold mb-1">Volumen Mes</p>
+                                class="bg-[var(--bg-input)] p-3 rounded-xl border border-[var(--border-strong)] text-center group hover:border-emerald-500/30 transition-colors">
+                                <p class="text-[10px] text-[var(--text-dim)] uppercase font-bold mb-1">Volumen Mes</p>
                                 <div class="flex justify-center items-end gap-1">
                                     <span id="month-volume"
-                                        class="text-2xl font-bold text-white tabular-nums group-hover:text-emerald-400 transition-colors">0</span>
-                                    <span class="text-[10px] text-slate-500 mb-1">Kg</span>
+                                        class="text-2xl font-bold text-[var(--text-main)] tabular-nums group-hover:text-emerald-400 transition-colors">0</span>
+                                    <span class="text-[10px] text-[var(--text-muted)] mb-1">Kg</span>
                                 </div>
                             </div>
                             <div
-                                class="bg-slate-950/50 p-3 rounded-xl border border-slate-800 text-center group hover:border-yellow-500/30 transition-colors">
-                                <p class="text-[10px] text-slate-400 uppercase font-bold mb-1">Volumen Total</p>
+                                class="bg-[var(--bg-input)] p-3 rounded-xl border border-[var(--border-strong)] text-center group hover:border-yellow-500/30 transition-colors">
+                                <p class="text-[10px] text-[var(--text-dim)] uppercase font-bold mb-1">Volumen Total</p>
                                 <div class="flex justify-center items-end gap-1">
                                     <span id="total-naty-volume"
-                                        class="text-2xl font-bold text-white tabular-nums group-hover:text-yellow-400 transition-colors">0</span>
-                                    <span class="text-[10px] text-slate-500 mb-1">t</span>
+                                        class="text-2xl font-bold text-[var(--text-main)] tabular-nums group-hover:text-yellow-400 transition-colors">0</span>
+                                    <span class="text-[10px] text-[var(--text-muted)] mb-1">t</span>
                                 </div>
                             </div>
                         </div>
@@ -793,7 +793,7 @@
                     <div class="p-4 border-t border-slate-800 bg-slate-950">
                         <form id="ai-chat-form" onsubmit="event.preventDefault(); sendAIChatMessage();" class="flex gap-2 items-end">
                             <textarea id="ai-chat-input" rows="1"
-                                class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/30 outline-none transition-all placeholder:text-slate-600 resize-none overflow-hidden"
+                                class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-[var(--text-main)] text-sm focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/30 outline-none transition-all placeholder:text-slate-600 resize-none overflow-hidden"
                                 placeholder="Escribe tu respuesta aquí..." style="max-height: 120px;"></textarea>
                             <button type="submit" 
                                 class="p-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl shadow-lg shadow-cyan-600/20 active:scale-95 transition-all flex items-center justify-center flex-shrink-0">
@@ -860,7 +860,7 @@
                     Saltar
                 </button>
                 <button id="timer-add-btn"
-                    class="px-5 py-2.5 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white text-sm font-bold rounded-full shadow-md shadow-violet-500/20 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer">
+                    class="px-5 py-2.5 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-[var(--text-main)] text-sm font-bold rounded-full shadow-md shadow-violet-500/20 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer">
                     <i data-lucide="plus" class="w-4 h-4"></i>
                     +30s
                 </button>
@@ -966,7 +966,7 @@
             </button>
 
             <div class="mb-4">
-                <h3 id="hist-modal-title" class="text-xl font-bold text-white mb-1">Historial</h3>
+                <h3 id="hist-modal-title" class="text-xl font-bold text-[var(--text-main)] mb-1">Historial</h3>
                 <p class="text-slate-400 text-xs uppercase tracking-wider font-semibold">Progreso de Cargas</p>
             </div>
 
@@ -1067,29 +1067,29 @@
             </button>
 
             <!-- Header -->
-            <div class="mb-5 text-center">
-                <div class="inline-flex items-center justify-center p-3.5 bg-gradient-to-br from-emerald-500/20 to-teal-500/10 rounded-2xl mb-2.5 border border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
-                    <i data-lucide="gem" class="w-8 h-8 text-emerald-400 animate-pulse"></i>
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center p-4 bg-emerald-500/10 rounded-full mb-3 ring-2 ring-emerald-500/20">
+                    <i data-lucide="gem" class="w-10 h-10 text-emerald-400"></i>
                 </div>
-                <h3 class="text-2xl font-black text-white tracking-tight">Tienda Vital</h3>
+                <h3 class="text-2xl font-black text-[var(--text-main)] tracking-tight">Tienda Vital</h3>
                 
                 <!-- Live Balance Pill -->
-                <div class="mt-2.5 inline-flex items-center gap-2 bg-slate-950 border border-slate-800 px-4 py-1.5 rounded-full shadow-inner">
+                <div class="mt-2.5 inline-flex items-center gap-2 bg-[var(--bg-input)] border border-[var(--border-strong)] px-4 py-1.5 rounded-full shadow-inner">
                     <i data-lucide="gem" class="w-4 h-4 text-emerald-400"></i>
-                    <span class="text-xs text-slate-400 font-bold uppercase">Balance:</span>
+                    <span class="text-xs text-[var(--text-dim)] font-bold uppercase">Balance:</span>
                     <span id="shop-user-gems" class="text-base font-black font-mono text-emerald-300">0</span>
                     <span class="text-xs text-emerald-400 font-bold">Gemas</span>
                 </div>
             </div>
 
             <!-- Earning Tips Card -->
-            <div class="bg-gradient-to-r from-violet-950/40 via-indigo-950/30 to-slate-900 border border-violet-500/20 rounded-2xl p-3.5 mb-5 flex items-start gap-3 text-xs">
+            <div class="bg-[var(--bg-input)] border border-[var(--border-strong)] shadow-inner rounded-2xl p-3.5 mb-5 flex items-start gap-3 text-xs">
                 <div class="p-2 rounded-xl bg-violet-500/15 text-violet-300 shrink-0 mt-0.5">
                     <i data-lucide="sparkles" class="w-4 h-4"></i>
                 </div>
                 <div>
-                    <h4 class="font-bold text-violet-200 mb-0.5">¿Cómo ganas gemas?</h4>
-                    <p class="text-slate-400 text-[11px] leading-relaxed">
+                    <h4 class="font-bold text-[var(--text-main)] mb-0.5">¿Cómo ganas gemas?</h4>
+                    <p class="text-[var(--text-dim)] text-[11px] leading-relaxed">
                         <strong class="text-emerald-400">+100 💎</strong> por entrenar · 
                         <strong class="text-sky-400">+25 💎</strong> por meta de agua · 
                         <strong class="text-violet-400">+5 💎</strong> por cada serie completada.
@@ -1100,14 +1100,14 @@
             <!-- Store Items -->
             <div class="space-y-3.5">
                 <!-- Item 1: 1x Freeze -->
-                <div class="bg-slate-950/70 p-4 rounded-2xl border border-slate-800 hover:border-cyan-500/40 transition-all flex items-center justify-between gap-3 group">
+                <div class="bg-[var(--bg-panel-alt)] p-4 rounded-2xl border border-[var(--border-strong)] hover:border-cyan-500/40 transition-all flex items-center justify-between gap-3 group">
                     <div class="flex items-center gap-3.5">
                         <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-[0_0_15px_rgba(6,182,212,0.15)]">
                             <i data-lucide="shield-check" class="w-6 h-6 text-cyan-400"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-white text-sm">1x Protector de Racha</h4>
-                            <p class="text-[11px] text-slate-400 leading-tight mt-0.5">Salva 1 día que no puedas entrenar.</p>
+                            <h4 class="font-bold text-[var(--text-main)] text-sm">1x Protector de Racha</h4>
+                            <p class="text-[11px] text-[var(--text-dim)] leading-tight mt-0.5">Salva 1 día que no puedas entrenar.</p>
                         </div>
                     </div>
                     <button onclick="buyFreezePack(1, 300)" id="shop-buy-btn-1"
@@ -1117,7 +1117,7 @@
                 </div>
 
                 <!-- Item 2: 2x Pack Freeze (Discount) -->
-                <div class="bg-slate-950/70 p-4 rounded-2xl border border-violet-500/30 hover:border-violet-500/60 transition-all flex items-center justify-between gap-3 group relative overflow-hidden">
+                <div class="bg-[var(--bg-panel-alt)] p-4 rounded-2xl border border-violet-500/30 hover:border-violet-500/60 transition-all flex items-center justify-between gap-3 group relative overflow-hidden">
                     <div class="absolute top-0 right-0 bg-gradient-to-l from-violet-600 to-indigo-600 text-white text-[9px] font-black uppercase px-2 py-0.5 rounded-bl-lg tracking-wider">
                         Ahorra 100 💎
                     </div>
@@ -1126,8 +1126,8 @@
                             <i data-lucide="shield-plus" class="w-6 h-6 text-violet-400"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-white text-sm">2x Pack Dúo</h4>
-                            <p class="text-[11px] text-slate-400 leading-tight mt-0.5">2 escudos para máxima tranquilidad.</p>
+                            <h4 class="font-bold text-[var(--text-main)] text-sm">2x Pack Dúo</h4>
+                            <p class="text-[11px] text-[var(--text-dim)] leading-tight mt-0.5">2 escudos para máxima tranquilidad.</p>
                         </div>
                     </div>
                     <button onclick="buyFreezePack(2, 500)" id="shop-buy-btn-2"
@@ -1146,8 +1146,8 @@
                             <i data-lucide="award" class="w-6 h-6 text-amber-400"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-white text-sm">3x Escudo Dorado</h4>
-                            <p class="text-[11px] text-slate-400 leading-tight mt-0.5">3 escudos para proteger todo el mes.</p>
+                            <h4 class="font-bold text-[var(--text-main)] text-sm">3x Escudo Dorado</h4>
+                            <p class="text-[11px] text-[var(--text-dim)] leading-tight mt-0.5">3 escudos para proteger todo el mes.</p>
                         </div>
                     </div>
                     <button onclick="buyFreezePack(3, 700)" id="shop-buy-btn-3"
@@ -1215,7 +1215,7 @@
                     class="inline-flex items-center justify-center p-4 bg-violet-500/10 rounded-full mb-3 ring-1 ring-violet-500/30">
                     <i data-lucide="user-cog" class="w-8 h-8 text-violet-400"></i>
                 </div>
-                <h3 class="text-xl font-bold text-white mb-1">Configuración de Perfil</h3>
+                <h3 class="text-xl font-bold text-[var(--text-main)] mb-1">Configuración de Perfil</h3>
                 <p class="text-slate-400 text-xs">Ajusta tus datos para recomendaciones precisas</p>
             </div>
 
@@ -1589,8 +1589,8 @@
                 <div class="inline-flex items-center justify-center p-4 bg-emerald-500/10 rounded-full mb-3 ring-1 ring-emerald-500/30">
                     <i data-lucide="folder-cog" class="w-8 h-8 text-emerald-400"></i>
                 </div>
-                <h3 class="text-xl font-bold text-white mb-1">Mis Rutinas</h3>
-                <p class="text-slate-400 text-xs">Administra, renombra o cambia tu rutina activa</p>
+                <h3 class="text-xl font-bold text-[var(--text-main)] mb-1">Mis Rutinas</h3>
+                <p class="text-[var(--text-dim)] text-xs">Administra, renombra o cambia tu rutina activa</p>
             </div>
 
             <!-- List of Routines -->

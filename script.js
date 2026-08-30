@@ -5596,10 +5596,10 @@ function renderContent(skipAnimations = false) {
       const targetRepsPlaceholder = exercise.reps ? exercise.reps.replace(/[^0-9-]/g, '').split('-')[0] || "10" : "10";
 
       setRowsHTML += `
-      <div class="flex items-center justify-between p-2.5 sm:p-3 rounded-2xl transition-all duration-200 border ${setData.naty ? 'bg-violet-950/20 border-violet-500/40 shadow-[0_0_15px_rgba(139,92,246,0.1)]' : 'bg-slate-900/60 border-slate-800/80 hover:border-slate-700'}">
+      <div class="flex items-center justify-between p-2.5 sm:p-3 rounded-2xl transition-all duration-200 border ${setData.naty ? 'bg-violet-950/20 border-violet-500/40 shadow-[0_0_15px_rgba(139,92,246,0.1)]' : 'bg-[var(--bg-panel-alt)] border-[var(--border-strong)] hover:border-violet-500/30'}">
           <!-- Left: Set Number & Inputs -->
           <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-xl ${setData.naty ? 'bg-violet-600 text-white font-black' : 'bg-slate-800 text-slate-400 font-bold'} text-xs flex items-center justify-center shrink-0 font-mono transition-colors">
+              <div class="w-8 h-8 rounded-xl ${setData.naty ? 'bg-violet-600 text-white font-black' : 'bg-[var(--bg-input)] text-[var(--text-dim)] border border-[var(--border-strong)] font-bold'} text-xs flex items-center justify-center shrink-0 font-mono transition-colors">
                   ${s + 1}
               </div>
               
@@ -5623,7 +5623,7 @@ function renderContent(skipAnimations = false) {
           
           <!-- Right: Check Action -->
           <button data-set-key="${setKey}" data-user="naty" data-exercise-name="${exercise.name}" data-rest-time="${restTime}"
-              class="set-btn shrink-0 w-11 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer ${setData.naty ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-500/30 active:scale-95' : 'bg-slate-800/80 text-slate-400 hover:text-white hover:bg-slate-700'}">
+              class="set-btn shrink-0 w-11 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer ${setData.naty ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-500/30 active:scale-95' : 'bg-[var(--bg-input)] text-[var(--text-dim)] border border-[var(--border-strong)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card)]'}">
               <i data-lucide="${setData.naty ? 'check' : 'check'}" class="w-4 h-4"></i>
           </button>
       </div>
@@ -7627,8 +7627,8 @@ function renderRoutinesList() {
     const card = document.createElement("div");
     card.className = `p-4 rounded-xl border transition-all flex items-center justify-between gap-3 ${
       isActive 
-        ? "bg-slate-800/80 border-cyan-500/50 shadow-md ring-1 ring-cyan-500/20" 
-        : "bg-slate-900 border-slate-700 hover:bg-slate-800/40"
+        ? "bg-[var(--bg-input)] border-cyan-500 shadow-md ring-1 ring-cyan-500/20" 
+        : "bg-[var(--bg-panel-alt)] border-[var(--border-strong)] hover:bg-[var(--bg-card)]"
     }`;
     
     // Left: Active state radio & Name
