@@ -332,19 +332,6 @@ function updateWhoTrainsUI() {
   }
 }
 
-function checkPromptWhoTrainsToday() {
-  // Gatekeeper: Always require user to pick who trains upon launching the web app
-  if (!sessionTraineeSelected) {
-    openWhoTrainsModal();
-  } else {
-    const appContent = document.getElementById("app-content");
-    if (appContent) {
-      appContent.classList.remove("hidden");
-    }
-  }
-  updateThemeColor();
-  updateWhoTrainsUI();
-}
 
 window.selectWhoTrainsToday = selectWhoTrainsToday;
 window.openWhoTrainsModal = openWhoTrainsModal;
@@ -7618,13 +7605,13 @@ function dismissSplashScreen() {
     setTimeout(() => {
       splash.style.display = "none";
       try { splash.remove(); } catch (e) {}
-      if (typeof checkPromptWhoTrainsToday === "function") {
-        checkPromptWhoTrainsToday();
+      if (typeof initializeUI === "function") {
+        initializeUI();
       }
     }, 400);
   } else {
-    if (typeof checkPromptWhoTrainsToday === "function") {
-      checkPromptWhoTrainsToday();
+    if (typeof initializeUI === "function") {
+      initializeUI();
     }
   }
 }
@@ -8401,14 +8388,11 @@ function updateStopwatchControls() {
 }
 
 function updateLiveVolumeUI() {
-  const volFacu = calculateSessionVolume("facu");
-  const volAlma = calculateSessionVolume("alma");
+  const volNaty = calculateSessionVolume("naty");
   
-  const elFacu = document.getElementById("session-vol-facu");
-  const elAlma = document.getElementById("session-vol-alma");
+  const elNaty = document.getElementById("session-vol-naty");
   
-  if (elFacu) elFacu.textContent = volFacu.toLocaleString();
-  if (elAlma) elAlma.textContent = volAlma.toLocaleString();
+  if (elNaty) elNaty.textContent = volNaty.toLocaleString();
 }
 
 function calculateSessionVolume(user) {
@@ -8676,3 +8660,16 @@ window.removeExerciseSet = function(tabId, exerciseIndex) {
     }
   }
 };
+
+
+function initializeUI() {
+  // Hardcode Naty
+  sessionTraineeSelected = "naty";
+  activeFullModalUser = "naty";
+  
+  // Render
+  renderTabs();
+  renderDay(activeTab);
+  updateSessionVolumes();
+  renderAdvancedStats();
+}
