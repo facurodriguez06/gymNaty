@@ -23,405 +23,208 @@ function safeCreateIcons() {
 const DEFAULT_ROUTINE = [
   {
     day: "Lunes",
-    title: "Juntos - Pierna y Glúteo",
+    title: "Día 1: Tren Inferior (Cuádriceps)",
     exercises: [
       {
-        name: "Sentadilla (Barra o Hack)",
+        name: "Sentadilla libre con barra",
         image: "./assets/exercises/squat.jpg",
-        sets: "3",
-        reps: "8-10",
-        rir: "RIR 2",
-        notes:
-          "El rey. Facu: pies ancho de hombros. Alma: un pelín más abierto. Prioricen profundidad. Descanso: 3 min.",
-        muscles: {
-          primary: ["quads", "glutes"],
-          secondary: ["hamstrings", "lower_back"],
-        },
-      },
-      {
-        name: "Hip Thrust (Máquina o Barra)",
-        image: "./assets/exercises/hip_thrust.jpg",
         sets: "4",
-        reps: "10-12",
-        rir: "RIR 1",
-        notes:
-          "Contracción máxima de glúteo arriba (1 seg). Mentón pegado al pecho. Descanso: 2 min.",
-        muscles: { primary: ["glutes"], secondary: ["hamstrings"] },
+        reps: "5 - 8",
+        rir: "Fuerza máxima",
+        notes: "Descanso: 3 min.",
+        muscles: { primary: ["quads", "glutes"], secondary: ["hamstrings", "lower_back"] }
       },
       {
-        name: "Prensa de Piernas",
+        name: "Prensa de piernas",
         image: "./assets/exercises/leg_press.jpg",
         sets: "3",
-        reps: "12-15",
-        rir: "RIR 1",
-        notes:
-          "Enfoque cuádriceps. Pies zona media. Bajar controlado (3 seg). Descanso: 90 seg.",
-        muscles: { primary: ["quads"], secondary: ["glutes", "hamstrings"] },
+        reps: "10 - 12",
+        rir: "Hipertrofia",
+        notes: "Descanso: 2 min.",
+        muscles: { primary: ["quads"], secondary: ["glutes", "hamstrings"] }
       },
       {
-        name: "Sillón de Aductores (Máquina)",
-        image: "./assets/exercises/adductor.jpg",
+        name: "Zancadas (Lunges) con mancuernas",
+        image: "./assets/exercises/squat.jpg",
         sets: "3",
-        reps: "15-20",
-        rir: "RIR 1",
-        notes:
-          "Facu: Rango medio (no abras todo por el pubis). Alma: Rango completo. Sostengan 1 seg al cerrar. Descanso: 60 seg.",
-        muscles: { primary: ["adductors"], secondary: [] },
+        reps: "10 por pierna",
+        rir: "Hipertrofia / Estabilidad",
+        notes: "Descanso: 1.5 min.",
+        muscles: { primary: ["quads", "glutes"], secondary: ["hamstrings"] }
       },
       {
-        name: "Sillón de Cuádriceps (Extensiones)",
+        name: "Sillón de cuádriceps (Extensiones)",
         image: "./assets/exercises/leg_extension.jpg",
         sets: "3",
-        reps: "15-20",
-        rir: "RIR 0",
-        notes:
-          "Bombeo final. Aguanta 1 seg arriba con piernas rectas. Descanso: 60 seg.",
-        muscles: { primary: ["quads"], secondary: [] },
+        reps: "12 - 15",
+        rir: "Aislamiento",
+        notes: "Descanso: 1 min.",
+        muscles: { primary: ["quads"], secondary: [] }
       },
       {
-        name: "Curl Femoral (Máquina)",
-        image: "./assets/exercises/leg_curl.jpg",
-        sets: "3",
-        reps: "12-15",
-        rir: "RIR 0",
-        notes:
-          "Isquios. No despeguen la cadera del asiento. Controlen la bajada. Descanso: 60 seg.",
-        muscles: { primary: ["hamstrings"], secondary: ["calves"] },
-      },
-      {
-        name: "Gemelos en Máquina (Pantorrillas)",
+        name: "Elevación de talones (Gemelos)",
         image: "./assets/exercises/calf_raise.jpg",
         sets: "4",
-        reps: "15-20",
-        rir: "RIR 0",
-        notes: "Talón bien abajo, punta bien arriba. Descanso: 45 seg.",
-        muscles: { primary: ["calves"], secondary: [] },
-      },
-    ],
+        reps: "15 - 20",
+        rir: "Hipertrofia",
+        notes: "Descanso: 1 min.",
+        muscles: { primary: ["calves"], secondary: [] }
+      }
+    ]
   },
   {
     day: "Martes",
-    title: "Solo Facundo - Empuje PESADO",
+    title: "Día 2: Tren Superior (Empujes)",
     exercises: [
       {
-        name: "Press de Banca Plano (Barra)",
+        name: "Press de banca plano (Barra o manc)",
         image: "./assets/exercises/bench_press.jpg",
         sets: "4",
-        reps: "6-8",
-        rir: "RIR 2",
-        notes:
-          "Carga pesada. Pies anclados al piso. Retracción escapular. Descanso: 3 min.",
-        muscles: { primary: ["chest"], secondary: ["triceps", "shoulders"] },
+        reps: "5 - 8",
+        rir: "Fuerza máxima",
+        notes: "Descanso: 3 min.",
+        muscles: { primary: ["chest"], secondary: ["triceps", "shoulders"] }
       },
       {
-        name: "Press Declinado (Barra o Manc)",
-        image: "./assets/exercises/decline_press.jpg",
-        sets: "3",
-        reps: "8-10",
-        rir: "RIR 2",
-        notes:
-          "Nuevo. Enfoca la línea inferior del pecho. Menos estrés en hombros. Descanso: 2-3 min.",
-        muscles: { primary: ["chest"], secondary: ["triceps"] },
-      },
-      {
-        name: "Press Inclinado (Máquina)",
-        image: "./assets/exercises/incline_press.jpg",
-        sets: "3",
-        reps: "10-12",
-        rir: "RIR 1",
-        notes:
-          "Completa el desarrollo del pecho superior. Movimiento controlado. Descanso: 2 min.",
-        muscles: { primary: ["chest"], secondary: ["triceps", "shoulders"] },
-      },
-      {
-        name: "Fondos (Dips) en Paralelas",
-        image: "./assets/exercises/dips.jpg",
-        sets: "3",
-        reps: "Fallo",
-        rir: "RIR 0",
-        notes:
-          "Al fallo. Inclina el torso. Si puedes lastrarte (agregar peso), hazlo. Descanso: 90 seg.",
-        muscles: { primary: ["chest", "triceps"], secondary: ["shoulders"] },
-      },
-      {
-        name: "Elevaciones Laterales (Manc)",
-        image: "./assets/exercises/lateral_raise_db.jpg",
+        name: "Remo con barra o mancuernas",
+        image: "./assets/exercises/tbar_row.jpg",
         sets: "4",
-        reps: "15-20",
-        rir: "RIR 0",
-        notes:
-          "Codos semiflexionados. Hazlas estrictas, sin impulsarte con las piernas. Descanso: 60 seg.",
-        muscles: { primary: ["shoulders"], secondary: ["traps"] },
+        reps: "8 - 10",
+        rir: "Fuerza y amplitud",
+        notes: "Descanso: 2 min.",
+        muscles: { primary: ["back", "biceps"], secondary: ["rear_delts"] }
       },
       {
-        name: "Aperturas (Peck Deck)",
-        image: "./assets/exercises/chest_fly.jpg",
-        sets: "3",
-        reps: "15-20",
-        rir: "RIR 0",
-        notes:
-          "Bombeo final de pecho. Estira al máximo, aprieta al centro. Descanso: 60 seg.",
-        muscles: { primary: ["chest"], secondary: [] },
-      },
-      {
-        name: "Extensiones Tríceps (Polea)",
-        image: "./assets/exercises/tricep_pushdown.jpg",
-        sets: "3",
-        reps: "12-15",
-        rir: "RIR 0",
-        notes: "Barra recta o V. Codos pegados a costillas. Descanso: 60 seg.",
-        muscles: { primary: ["triceps"], secondary: [] },
-      },
-      {
-        name: "Extensión Unilateral (Manc/Polea)",
-        image: "./assets/exercises/tricep_single_arm.jpg",
-        sets: "3",
-        reps: "12-15",
-        rir: "RIR 0",
-        notes:
-          "Nuevo. Agarre supino (palma arriba) a una mano. Aisla la cabeza interna. Descanso: 45 seg.",
-        muscles: { primary: ["triceps"], secondary: [] },
-      },
-    ],
-  },
-  {
-    day: "Miércoles",
-    title: "Juntos - Tren Superior",
-    exercises: [
-      {
-        name: "Jalón al Pecho (Agarre Ancho)",
-        image: "./assets/exercises/lat_pulldown_wide.jpg",
-        sets: "3",
-        reps: "10-12",
-        rir: "RIR 2",
-        notes: "Dorsal ancho. Pecho arriba, sin balanceo. Descanso: 2 min.",
-        muscles: { primary: ["lats"], secondary: ["biceps", "forearms"] },
-      },
-      {
-        name: "Press Militar (Máquina)",
+        name: "Press militar con mancuernas (Hombros)",
         image: "./assets/exercises/military_press.jpg",
         sets: "3",
-        reps: "10-12",
-        rir: "RIR 1",
-        notes: "Hombros fuertes. Espalda apoyada firmemente. Descanso: 90 seg.",
-        muscles: { primary: ["shoulders"], secondary: ["triceps"] },
+        reps: "8 - 12",
+        rir: "Hipertrofia",
+        notes: "Descanso: 2 min.",
+        muscles: { primary: ["shoulders"], secondary: ["triceps"] }
       },
       {
-        name: "Remo en Polea Baja",
-        image: "./assets/exercises/seated_cable_row.jpg",
+        name: "Jalón al pecho en polea alta",
+        image: "./assets/exercises/lat_pulldown_wide.jpg",
         sets: "3",
-        reps: "12-15",
-        rir: "RIR 1",
-        notes:
-          "Densidad de espalda. Codos rozan las costillas. Descanso: 90 seg.",
-        muscles: { primary: ["lats", "traps"], secondary: ["biceps"] },
+        reps: "10 - 12",
+        rir: "Hipertrofia",
+        notes: "Descanso: 1.5 min.",
+        muscles: { primary: ["back"], secondary: ["biceps"] }
       },
       {
-        name: "Press Pecho Plano (Mancuernas)",
-        image: "./assets/exercises/dumbbell_bench_press.jpg",
+        name: "Tríceps en polea alta (Cuerda)",
+        image: "./assets/exercises/tricep_pushdown.jpg",
         sets: "3",
-        reps: "10-12",
-        rir: "RIR 2",
-        notes: "Estiramiento profundo del pectoral. Descanso: 2 min.",
-        muscles: { primary: ["chest"], secondary: ["triceps", "shoulders"] },
-      },
-      {
-        name: "Elevaciones Laterales (Polea o Mancuernas)",
-        image: "./assets/exercises/lateral_raise_cable.jpg",
-        sets: "3",
-        reps: "15-20",
-        rir: "RIR 0",
-        notes: "Deltoides lateral. Controlen la bajada. Descanso: 60 seg.",
-        muscles: { primary: ["shoulders"], secondary: ["traps"] },
-      },
-      {
-        name: "Curl de Bíceps con Barra (Z o Recta)",
-        image: "./assets/exercises/barbell_curl.jpg",
-        sets: "3",
-        reps: "12-15",
-        rir: "RIR 0",
-        notes:
-          "Nuevo. Brazos. Codos fijos, solo muevan antebrazos. Descanso: 60 seg.",
-        muscles: { primary: ["biceps"], secondary: ["forearms"] },
-      },
-    ],
+        reps: "12 - 15",
+        rir: "Aislamiento",
+        notes: "Descanso: 1 min.",
+        muscles: { primary: ["triceps"], secondary: [] }
+      }
+    ]
   },
   {
     day: "Jueves",
-    title: "Solo Facundo - Tracción VOLUMEN",
+    title: "Día 3: Tren Inferior (Glúteos)",
     exercises: [
       {
-        name: "Jalón al Pecho (Agarre Neutro)",
-        image: "./assets/exercises/lat_pulldown_neutral.jpg",
+        name: "Peso muerto (Convencional o Sumo)",
+        image: "./assets/exercises/romanian_deadlift.jpg",
         sets: "4",
-        reps: "8-10",
-        rir: "RIR 1",
-        notes:
-          "Agarre cerrado/triángulo. Jala con fuerza explosiva, sube controlado. Descanso: 2 min.",
-        muscles: { primary: ["lats", "biceps"], secondary: ["forearms"] },
+        reps: "5 - 8",
+        rir: "Fuerza máxima",
+        notes: "Descanso: 3 min.",
+        muscles: { primary: ["glutes", "hamstrings", "lower_back"], secondary: ["quads"] }
       },
       {
-        name: "Remo en Máquina (o T-Bar)",
-        image: "./assets/exercises/tbar_row.jpg",
+        name: "Hip Thrust (Empuje de cadera)",
+        image: "./assets/exercises/hip_thrust.jpg",
         sets: "4",
-        reps: "8-10",
-        rir: "RIR 1",
-        notes:
-          "Serie extra. Carga pesado. Apoya el pecho para cuidar tu lumbar. Descanso: 2 min.",
-        muscles: {
-          primary: ["lats", "traps"],
-          secondary: ["biceps", "lower_back"],
-        },
+        reps: "8 - 12",
+        rir: "Hipertrofia de glúteo",
+        notes: "Descanso: 2 min.",
+        muscles: { primary: ["glutes"], secondary: ["hamstrings"] }
       },
       {
-        name: "Encogimientos (Shrugs) con Mancuernas",
-        image: "./assets/exercises/shrugs.jpg",
-        sets: "4",
-        reps: "12-15",
-        rir: "RIR 1",
-        notes:
-          "Nuevo. Sube los hombros a las orejas. Aguanta 2 seg arriba. Descanso: 90 seg.",
-        muscles: { primary: ["traps"], secondary: [] },
-      },
-      {
-        name: "Pull-Over en Polea Alta",
-        image: "./assets/exercises/pullover.jpg",
+        name: "Sentadilla Búlgara con mancuernas",
+        image: "./assets/exercises/squat.jpg",
         sets: "3",
-        reps: "15-20",
-        rir: "RIR 0",
-        notes:
-          "Aislamiento puro del dorsal. Mantén tensión constante. Descanso: 60 seg.",
-        muscles: { primary: ["lats"], secondary: ["chest"] },
+        reps: "8 - 10 x pierna",
+        rir: "Hipertrofia unilateral",
+        notes: "Descanso: 2 min.",
+        muscles: { primary: ["quads", "glutes"], secondary: ["hamstrings"] }
       },
       {
-        name: "Vuelos Posteriores (Pájaros)",
-        image: "./assets/exercises/rear_delt_fly.jpg",
+        name: "Curl femoral (Acostada o sentada)",
+        image: "./assets/exercises/leg_curl.jpg",
         sets: "3",
-        reps: "15-20",
-        rir: "RIR 0",
-        notes:
-          "Hombro posterior. No juntes las escápulas, aisla el deltoides. Descanso: 60 seg.",
-        muscles: { primary: ["shoulders"], secondary: ["traps"] },
+        reps: "12 - 15",
+        rir: "Aislamiento",
+        notes: "Descanso: 1.5 min.",
+        muscles: { primary: ["hamstrings"], secondary: ["calves"] }
       },
       {
-        name: "Curl Predicador (Máquina)",
-        image: "./assets/exercises/preacher_curl.jpg",
+        name: "Plancha abdominal (Plank)",
+        image: "./assets/exercises/back.jpg",
         sets: "3",
-        reps: "10-12",
-        rir: "RIR 0",
-        notes:
-          "Banco Scott. Estira todo el brazo. El bíceps crece en la bajada. Descanso: 60 seg.",
-        muscles: { primary: ["biceps"], secondary: [] },
-      },
-      {
-        name: "Curl Martillo (Mancuernas)",
-        image: "./assets/exercises/hammer_curl.jpg",
-        sets: "3",
-        reps: "10-12",
-        rir: "RIR 0",
-        notes: "Pesado. Palmas enfrentadas. Descanso: 60 seg.",
-        muscles: { primary: ["biceps", "forearms"], secondary: [] },
-      },
-      {
-        name: "Curl de Muñeca (Barra tras espalda)",
-        image: "./assets/exercises/wrist_curl.jpg",
-        sets: "3",
-        reps: "15-20",
-        rir: "RIR 0",
-        notes:
-          "Nuevo. Barra detrás de los glúteos. Enrolla solo con las muñecas. Descanso: 45 seg.",
-        muscles: { primary: ["forearms"], secondary: [] },
-      },
-    ],
+        reps: "45 - 60 seg",
+        rir: "Estabilidad del Core",
+        notes: "Descanso: 1 min.",
+        muscles: { primary: ["core"], secondary: ["shoulders"] }
+      }
+    ]
   },
   {
     day: "Viernes",
-    title: "Juntos - Full Body - VERSIÓN FINAL CON BONUS",
+    title: "Día 4: Tren Superior (Tracciones)",
     exercises: [
       {
-        name: "Peso Muerto Rumano (Manc/Barra)",
-        image: "./assets/exercises/romanian_deadlift.jpg",
-        sets: "3",
-        reps: "10-12",
-        rir: "RIR 2",
-        notes:
-          "Cadera atrás. Rodillas semi-rígidas. La barra baja pegada a las piernas. Descanso: 2 min.",
-        muscles: {
-          primary: ["hamstrings", "glutes"],
-          secondary: ["lower_back"],
-        },
-      },
-      {
-        name: "Press de Pecho (Máquina)",
-        image: "./assets/exercises/machine_chest_press.jpg",
-        sets: "3",
-        reps: "12-15",
-        rir: "RIR 0",
-        notes:
-          "Empuje seguro. Enfócate en el pecho, no en los hombros. Descanso: 90 seg.",
-        muscles: { primary: ["chest", "triceps"], secondary: ["shoulders"] },
-      },
-      {
-        name: "Sillón de Cuádriceps (Leg Ext.)",
-        image: "./assets/exercises/leg_extension.jpg",
-        sets: "3",
-        reps: "15-20",
-        rir: "RIR 0",
-        notes: "Aguanta 1 seg arriba. Quema, pero sirve. Descanso: 60 seg.",
-        muscles: { primary: ["quads"], secondary: [] },
-      },
-      {
-        name: "Sillón de Aductores (Máquina)",
-        image: "./assets/exercises/adductor.jpg",
-        sets: "3",
-        reps: "15-20",
-        rir: "RIR 2",
-        notes:
-          "Facu: Peso liviano (bombeo), altas repes. ¡Cuida el pubis! Alma: Dale intensidad normal. Descanso: 60 seg.",
-        muscles: { primary: ["adductors"], secondary: [] },
-      },
-      {
-        name: "Patada de Glúteo en Máquina",
-        image: "./assets/exercises/glute_kickback.jpg",
+        name: "Jalón al pecho con agarre estrecho / neutro",
+        image: "./assets/exercises/lat_pulldown_neutral.jpg",
         sets: "4",
-        reps: "12-15",
-        rir: "RIR 0",
-        notes:
-          "Pecho apoyado. Empuja con el talón. Sin arquear la espalda baja. Descanso: 60 seg.",
-        muscles: { primary: ["glutes"], secondary: ["hamstrings"] },
+        reps: "8 - 10",
+        rir: "Fuerza / Hipertrofia",
+        notes: "Descanso: 2 min.",
+        muscles: { primary: ["back"], secondary: ["biceps"] }
       },
       {
-        name: "Face Pull (Polea Alta)",
-        image: "./assets/exercises/face_pull.jpg",
+        name: "Press Inclinado con mancuernas (Pecho alto)",
+        image: "./assets/exercises/incline_press.jpg",
         sets: "3",
-        reps: "15-20",
-        rir: "RIR 1",
-        notes:
-          "Salud de hombros. Cuerda a la frente, codos arriba y atrás. Descanso: 60 seg.",
-        muscles: { primary: ["shoulders", "traps"], secondary: [] },
+        reps: "8 - 12",
+        rir: "Hipertrofia",
+        notes: "Descanso: 2 min.",
+        muscles: { primary: ["chest"], secondary: ["shoulders", "triceps"] }
       },
       {
-        name: "Copa Tríceps (Mancuerna a 2 manos)",
-        image: "./assets/exercises/overhead_triceps.jpg",
+        name: "Remo gironda (Polea baja sentada)",
+        image: "./assets/exercises/seated_cable_row.jpg",
         sets: "3",
-        reps: "12-15",
-        rir: "RIR 0",
-        notes:
-          "Sentado. Cabeza larga del tríceps. Codos cerrados apuntando al techo. Descanso: 60 seg.",
-        muscles: { primary: ["triceps"], secondary: [] },
+        reps: "10 - 12",
+        rir: "Hipertrofia",
+        notes: "Descanso: 1.5 min.",
+        muscles: { primary: ["back"], secondary: ["biceps"] }
       },
       {
-        name: "BONUS A ELECCIÓN (Ver abajo)",
-        image: "./assets/exercises/concentration_curl.jpg",
-        sets: "3",
-        reps: "12-15",
-        rir: "RIR 0",
-        notes:
-          "Alma: Curl Manc. Alternado (Bíceps). Facu: Press Inclinado Manc. (Pecho Superior). Descanso: 60 seg.",
-        muscles: { primary: ["biceps", "chest"], secondary: [] },
+        name: "Elevaciones laterales para hombros",
+        image: "./assets/exercises/lateral_raise_db.jpg",
+        sets: "4",
+        reps: "12 - 15",
+        rir: "Aislamiento",
+        notes: "Descanso: 1 min.",
+        muscles: { primary: ["shoulders"], secondary: [] }
       },
-    ],
-  },
+      {
+        name: "Curl de bíceps con mancuernas",
+        image: "./assets/exercises/biceps.jpg",
+        sets: "3",
+        reps: "12 - 15",
+        rir: "Aislamiento",
+        notes: "Descanso: 1 min.",
+        muscles: { primary: ["biceps"], secondary: ["forearms"] }
+      }
+    ]
+  }
 ];
 
 let routinesList = [];
@@ -1563,7 +1366,7 @@ const timerState = {
 };
 
 let globalTimerInterval = null;
-let activeFullModalUser = null; // 'facu', 'alma', or null
+let activeFullModalUser = 'naty'; // 'facu', 'alma', or null
 let savedScrollY = 0;
 
 // --- CALENDAR STATE ---
