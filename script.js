@@ -337,7 +337,6 @@ window.selectWhoTrainsToday = selectWhoTrainsToday;
 window.openWhoTrainsModal = openWhoTrainsModal;
 window.closeWhoTrainsModal = closeWhoTrainsModal;
 window.updateWhoTrainsUI = updateWhoTrainsUI;
-window.checkPromptWhoTrainsToday = checkPromptWhoTrainsToday;
 
 // Data Migration for legacy users (preserves weights & progress under routine-1)
 function migrateLegacyData() {
