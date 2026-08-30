@@ -2008,18 +2008,10 @@ function renderCalendar() {
     let icon = "";
 
     if (history && !history.deleted) {
-      if (history.alma && history.naty) {
-        bgClass = "bg-emerald-500/20";
-        borderClass = "border-emerald-500";
-        icon = '<i data-lucide="users" class="w-3 h-3 text-emerald-400"></i>';
-      } else if (history.alma) {
-        bgClass = "bg-pink-500/20";
-        borderClass = "border-pink-500";
-        icon = '<i data-lucide="user" class="w-3 h-3 text-pink-400"></i>';
-      } else if (history.naty) {
+      if (history.naty) {
         bgClass = "bg-blue-500/20";
         borderClass = "border-blue-500";
-        icon = '<i data-lucide="user" class="w-3 h-3 text-blue-400"></i>';
+        icon = '<i data-lucide="check" class="w-3.5 h-3.5 text-blue-400"></i>';
       }
     }
 
@@ -2032,19 +2024,8 @@ function renderCalendar() {
           '<div class="w-1.5 h-1.5 rounded-full bg-blue-500" title="Naty: Meta cumplida"></div>';
       } else if (history.water.naty > 0) {
         waterIndicators +=
-          '<div class="w-1.5 h-1.5 rounded-full bg-slate-600" title="Naty: ' +
+          '<div class="w-1.5 h-1.5 rounded-full bg-slate-500" title="Naty: ' +
           history.water.naty +
-          'ml"></div>';
-      }
-
-      // Alma Water Dot
-      if (history.water.alma >= (history.water.almaGoal || 2700)) {
-        waterIndicators +=
-          '<div class="w-1.5 h-1.5 rounded-full bg-pink-500" title="Alma: Meta cumplida"></div>';
-      } else if (history.water.alma > 0) {
-        waterIndicators +=
-          '<div class="w-1.5 h-1.5 rounded-full bg-slate-600" title="Alma: ' +
-          history.water.alma +
           'ml"></div>';
       }
     }
@@ -2058,18 +2039,8 @@ function renderCalendar() {
           '<div class="w-1.5 h-1.5 rounded-full bg-blue-500" title="Naty: Meta cumplida"></div>';
       } else if (waterState.naty > 0) {
         waterIndicators +=
-          '<div class="w-1.5 h-1.5 rounded-full bg-slate-600" title="Naty: ' +
+          '<div class="w-1.5 h-1.5 rounded-full bg-slate-500" title="Naty: ' +
           waterState.naty +
-          'ml"></div>';
-      }
-
-      if (waterState.alma >= (waterState.almaGoal || 2700)) {
-        waterIndicators +=
-          '<div class="w-1.5 h-1.5 rounded-full bg-pink-500" title="Alma: Meta cumplida"></div>';
-      } else if (waterState.alma > 0) {
-        waterIndicators +=
-          '<div class="w-1.5 h-1.5 rounded-full bg-slate-600" title="Alma: ' +
-          waterState.alma +
           'ml"></div>';
       }
     }
@@ -2079,12 +2050,12 @@ function renderCalendar() {
       : "";
 
     grid.innerHTML += `
-                    <div class="aspect-square p-1 ${bgClass} border ${borderClass} rounded-lg flex flex-col items-center justify-center ${todayRing} transition-colors cursor-pointer" 
+                    <div class="min-h-[3rem] p-1 ${bgClass} border ${borderClass} rounded-lg flex flex-col items-center justify-center ${todayRing} transition-colors cursor-pointer" 
                          onclick="toggleDayModal('${dateKey}')">
                         <span class="text-sm font-medium ${
                           isToday ? "text-emerald-400" : "text-slate-300"
                         }">${day}</span>
-                        <div class="flex gap-1 items-center justify-center mt-1">
+                        <div class="flex gap-1 items-center justify-center mt-0.5">
                             ${icon}
                             ${waterIndicators ? `<div class="flex gap-0.5">${waterIndicators}</div>` : ""}
                         </div>
