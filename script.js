@@ -45,7 +45,7 @@ const DEFAULT_ROUTINE = [
       },
       {
         name: "Zancadas (Lunges) con mancuernas",
-        image: "./assets/exercises/squat.jpg",
+        image: "./assets/exercises/lunges.jpg",
         sets: "3",
         reps: "10 por pierna",
         rir: "Hipertrofia / Estabilidad",
@@ -156,7 +156,7 @@ const DEFAULT_ROUTINE = [
       },
       {
         name: "Subidas al cajón (Step-ups)",
-        image: "./assets/exercises/squat.jpg",
+        image: "./assets/exercises/step_ups.jpg",
         sets: "3",
         reps: "8 - 10 por pierna",
         rir: "Hipertrofia unilateral",
@@ -174,7 +174,7 @@ const DEFAULT_ROUTINE = [
       },
       {
         name: "Plancha abdominal (Plank)",
-        image: "./assets/exercises/back.jpg",
+        image: "./assets/exercises/plank.jpg",
         sets: "3",
         reps: "45 - 60 seg",
         rir: "Estabilidad del Core",
@@ -252,8 +252,8 @@ let completedSets = {};
 let setWeights = {};
 let setReps = {};
 let lastLocalUpdates = {};
-let whoTrainsToday = localStorage.getItem("gymWhoTrainsToday") || "both"; // 'both', 'facu', 'alma'
-let sessionTraineeSelected = false;
+let whoTrainsToday = "naty"; // Exclusively Naty
+let sessionTraineeSelected = "naty";
 
 function openWhoTrainsModal() {
   const modal = document.getElementById("who-trains-gatekeeper");
@@ -283,7 +283,7 @@ function closeWhoTrainsModal() {
 }
 
 function selectWhoTrainsToday(who) {
-  if (who !== "facu" && who !== "alma" && who !== "both") {
+  if (who !== "naty" && who !== "alma" && who !== "both") {
     who = "both";
   }
   whoTrainsToday = who;
@@ -302,7 +302,7 @@ function selectWhoTrainsToday(who) {
 }
 
 function updateThemeColor() {
-  document.body.classList.remove('theme-facu', 'theme-alma', 'theme-both');
+  document.body.classList.remove('theme-naty', 'theme-alma', 'theme-both');
   document.body.classList.add(`theme-${whoTrainsToday}`);
 }
 
@@ -310,9 +310,9 @@ function updateWhoTrainsUI() {
   const headerLabel = document.getElementById("header-who-label");
   const headerBadge = document.getElementById("header-who-badge");
   if (headerLabel && headerBadge) {
-    if (whoTrainsToday === "facu") {
-      headerLabel.textContent = "Facu";
-      headerBadge.className = "flex items-center gap-1.5 px-2.5 py-1 bg-slate-950 border-2 border-[var(--accent-facu)] rounded-lg text-xs font-mono font-black uppercase text-[var(--accent-facu)] shadow-[2px_2px_0px_#000]";
+    if (whoTrainsToday === "naty") {
+      headerLabel.textContent = "Naty";
+      headerBadge.className = "flex items-center gap-1.5 px-2.5 py-1 bg-slate-950 border-2 border-[var(--accent-naty)] rounded-lg text-xs font-mono font-black uppercase text-[var(--accent-naty)] shadow-[2px_2px_0px_#000]";
     } else if (whoTrainsToday === "alma") {
       headerLabel.textContent = "Alma";
       headerBadge.className = "flex items-center gap-1.5 px-2.5 py-1 bg-slate-950 border-2 border-[var(--accent-alma)] rounded-lg text-xs font-mono font-black uppercase text-[var(--accent-alma)] shadow-[2px_2px_0px_#000]";
@@ -322,13 +322,13 @@ function updateWhoTrainsUI() {
     }
   }
 
-  const volFacuBadge = document.querySelector(".user-volume-badge.facu");
+  const volNatyBadge = document.querySelector(".user-volume-badge.naty");
   const volAlmaBadge = document.querySelector(".user-volume-badge.alma");
-  if (volFacuBadge) {
-    volFacuBadge.style.display = whoTrainsToday === "alma" ? "none" : "inline-flex";
+  if (volNatyBadge) {
+    volNatyBadge.style.display = whoTrainsToday === "alma" ? "none" : "inline-flex";
   }
   if (volAlmaBadge) {
-    volAlmaBadge.style.display = whoTrainsToday === "facu" ? "none" : "inline-flex";
+    volAlmaBadge.style.display = whoTrainsToday === "naty" ? "none" : "inline-flex";
   }
 }
 
@@ -381,8 +381,10 @@ const EXERCISE_IMAGES_MAP = {
   "Fondos (Dips) en Paralelas": "./assets/exercises/dips.jpg",
 
   "Extensiones Tríceps (Polea)": "./assets/exercises/tricep_pushdown.jpg",
+  "Tríceps en polea alta": "./assets/exercises/tricep_pushdown.jpg",
   "Extensión Unilateral (Manc/Polea)": "./assets/exercises/tricep_single_arm.jpg",
   "Copa Tríceps (Mancuerna a 2 manos)": "./assets/exercises/overhead_triceps.jpg",
+  "Extensión de tríceps tras nuca": "./assets/exercises/overhead_triceps.jpg",
 
   "Jalón al Pecho (Agarre Ancho)": "./assets/exercises/lat_pulldown_wide.jpg",
   "Jalón al Pecho (Agarre Neutro)": "./assets/exercises/lat_pulldown_neutral.jpg",
@@ -398,9 +400,15 @@ const EXERCISE_IMAGES_MAP = {
   "Encogimientos (Shrugs) con Mancuernas": "./assets/exercises/shrugs.jpg",
 
   "Curl de Bíceps con Barra (Z o Recta)": "./assets/exercises/barbell_curl.jpg",
+  "Curl de Bíceps con Mancuernas": "./assets/exercises/biceps.jpg",
+  "Curl de bíceps con mancuernas": "./assets/exercises/biceps.jpg",
   "Curl Predicador (Máquina)": "./assets/exercises/preacher_curl.jpg",
   "Curl Martillo (Mancuernas)": "./assets/exercises/hammer_curl.jpg",
   "Curl de Muñeca (Barra tras espalda)": "./assets/exercises/wrist_curl.jpg",
+  "Zancadas (Lunges) con mancuernas": "./assets/exercises/lunges.jpg",
+  "Subidas al cajón (Step-ups)": "./assets/exercises/step_ups.jpg",
+  "Plancha abdominal (Plank)": "./assets/exercises/plank.jpg",
+  "Bicicleta Estática": "./assets/exercises/bike.jpg",
   "BONUS A ELECCIÓN (Ver abajo)": "./assets/exercises/concentration_curl.jpg"
 };
 
@@ -409,16 +417,16 @@ function getExerciseImage(exercise) {
   if (EXERCISE_IMAGES_MAP[name]) {
     return EXERCISE_IMAGES_MAP[name];
   }
-  if (exercise && exercise.image && exercise.image !== "./assets/exercises/squat.jpg") {
-    return exercise.image;
-  }
   const cleanName = name.toLowerCase().trim();
   for (const [key, path] of Object.entries(EXERCISE_IMAGES_MAP)) {
     if (cleanName.includes(key.toLowerCase()) || key.toLowerCase().includes(cleanName)) {
       return path;
     }
   }
-  return (exercise && exercise.image) ? exercise.image : "./assets/exercises/squat.jpg";
+  if (exercise && exercise.image && exercise.image !== "./assets/exercises/squat.jpg") {
+    return exercise.image;
+  }
+  return "./assets/exercises/squat.jpg";
 }
 
 function initializeRoutines() {
@@ -457,7 +465,7 @@ function initializeRoutines() {
   routineData = activeRoutine.data;
 }
 
-const PRIMARY_FACU_ID = "197ab9a4-e3e6-40d3-8b61-55b3da6c1085";
+const PRIMARY_NATY_ID = "197ab9a4-e3e6-40d3-8b61-55b3da6c1085";
 const PRIMARY_ALMA_ID = "197ab9a4-e3e6-40d3-8b61-55b3da6c108a";
 
 const SUPABASE_DEFAULT_URL = "https://jbypylccjrkzwvleprxt.supabase.co";
@@ -494,7 +502,7 @@ async function directSupabaseFetch(path, options = {}) {
 function getCloudUserId() {
   let userId = localStorage.getItem("gymCloudUserId");
   if (!userId || userId.startsWith("gym-user-") || userId === "test-user-id") {
-    userId = PRIMARY_FACU_ID;
+    userId = PRIMARY_NATY_ID;
     localStorage.setItem("gymCloudUserId", userId);
   }
   return userId;
@@ -670,7 +678,7 @@ function buildCloudPayload() {
   const profile = [
     {
       id: getCloudUserId(),
-      display_name: "Facu",
+      display_name: "Naty",
     },
     {
       id: getAlmaUserId(),
@@ -702,7 +710,7 @@ function buildCloudPayload() {
     user_id: getCloudUserId(),
     date_key,
     routine_id: activeRoutineId || null,
-    facu_trained: !!entry?.facu,
+    naty_trained: !!entry?.naty,
     alma_trained: !!entry?.alma,
     deleted: !!entry?.deleted,
     water: entry?.water || null,
@@ -710,7 +718,7 @@ function buildCloudPayload() {
     completed_sets: entry?.completed_sets || null,
   }));
 
-  const facu = gamification.facu || {};
+  const naty = gamification.naty || {};
   const alma = gamification.alma || {};
 
   return {
@@ -722,13 +730,13 @@ function buildCloudPayload() {
     gamification: [
       {
         user_id: getCloudUserId(),
-        points: facu.points || 0,
-        streak: facu.streak || 0,
-        freezes: facu.freezes || 0,
-        frozen_days: facu.frozenDays || [],
-        achievements: facu.achievements || [],
-        last_reset: facu.lastReset || 0,
-        last_rescue_prompt_date: facu.lastRescuePromptDate || null,
+        points: naty.points || 0,
+        streak: naty.streak || 0,
+        freezes: naty.freezes || 0,
+        frozen_days: naty.frozenDays || [],
+        achievements: naty.achievements || [],
+        last_reset: naty.lastReset || 0,
+        last_rescue_prompt_date: naty.lastRescuePromptDate || null,
       },
       {
         user_id: getAlmaUserId(),
@@ -744,8 +752,8 @@ function buildCloudPayload() {
     water_state: [
       {
         user_id: getCloudUserId(),
-        current_water_ml: waterState.facu || 0,
-        goal_ml: waterState.facuGoal || 2500,
+        current_water_ml: waterState.naty || 0,
+        goal_ml: waterState.natyGoal || 2500,
         last_updated_date: waterState.date || new Date().toDateString(),
       },
       {
@@ -779,14 +787,14 @@ function loadActiveRoutineStateFromHistory(triggerTimers = false) {
         if (key.endsWith("_ts")) return; // Skip timestamp keys
         
         if (!mergedSets[key]) {
-          mergedSets[key] = { facu: false, alma: false };
+          mergedSets[key] = { naty: false, alma: false };
         }
         if (!mergedSets[key + "_ts"]) {
-          mergedSets[key + "_ts"] = { facu: 0, alma: 0 };
+          mergedSets[key + "_ts"] = { naty: 0, alma: 0 };
         }
         
         if (typeof cloudSets[key] === "object" && cloudSets[key] !== null) {
-          ["facu", "alma"].forEach((u) => {
+          ["naty", "alma"].forEach((u) => {
             const localUpdateKey = `${key}-${u}`;
             if (Date.now() - (lastLocalUpdates[localUpdateKey] || 0) < 6000) {
               return; // Skip syncing this set from cloud
@@ -844,14 +852,14 @@ function loadActiveRoutineStateFromHistory(triggerTimers = false) {
         if (key.endsWith("_ts")) return; // Skip timestamp keys
         
         if (!mergedWeights[key]) {
-          mergedWeights[key] = { facu: "", alma: "" };
+          mergedWeights[key] = { naty: "", alma: "" };
         }
         if (!mergedWeights[key + "_ts"]) {
-          mergedWeights[key + "_ts"] = { facu: 0, alma: 0 };
+          mergedWeights[key + "_ts"] = { naty: 0, alma: 0 };
         }
         
         if (typeof cloudWeights[key] === "object" && cloudWeights[key] !== null) {
-          ["facu", "alma"].forEach((u) => {
+          ["naty", "alma"].forEach((u) => {
             const localUpdateKey = `${key}-${u}-weight`;
             if (Date.now() - (lastLocalUpdates[localUpdateKey] || 0) < 6000) {
               return; // Skip syncing this weight from cloud
@@ -902,7 +910,7 @@ function updateDOMInPlace() {
         btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
       } else {
         btn.className = `${baseClass} bg-[var(--bg-base)] text-[var(--text-dim)] border-[var(--border-strong)] hover:border-[var(--accent-${user})] hover:text-[var(--accent-${user})]`;
-        btn.textContent = user === "facu" ? "F" : "A";
+        btn.textContent = user === "naty" ? "F" : "A";
       }
     }
   });
@@ -938,9 +946,9 @@ function updateDOMInPlace() {
     let exerciseCompletedChecks = 0;
     for (let s = 0; s < numSets; s++) {
       const setKey = `${activeTab}-${idx}-${s}`;
-      const setData = completedSets[setKey] || { facu: false, alma: false };
-      if (whoTrainsToday === "both" || whoTrainsToday === "facu") {
-        if (setData.facu) { completedSetsCount++; exerciseCompletedChecks++; }
+      const setData = completedSets[setKey] || { naty: false, alma: false };
+      if (whoTrainsToday === "both" || whoTrainsToday === "naty") {
+        if (setData.naty) { completedSetsCount++; exerciseCompletedChecks++; }
       }
       if (whoTrainsToday === "both" || whoTrainsToday === "alma") {
         if (setData.alma) { completedSetsCount++; exerciseCompletedChecks++; }
@@ -1044,12 +1052,12 @@ function updateDOMInPlace() {
 function applyCloudState(state, triggerTimers = false) {
   if (!state) return false;
 
-  const facuProfile = (state.profiles || []).find(p => p.id === PRIMARY_FACU_ID || p.display_name === "Facu") || state.profiles?.[0];
-  if (facuProfile?.id) {
-    localStorage.setItem("gymCloudUserId", facuProfile.id);
+  const natyProfile = (state.profiles || []).find(p => p.id === PRIMARY_NATY_ID || p.display_name === "Naty") || state.profiles?.[0];
+  if (natyProfile?.id) {
+    localStorage.setItem("gymCloudUserId", natyProfile.id);
   }
-  if (facuProfile?.display_name) {
-    localStorage.setItem("gymUserDisplayName", facuProfile.display_name);
+  if (natyProfile?.display_name) {
+    localStorage.setItem("gymUserDisplayName", natyProfile.display_name);
   }
 
   if (Array.isArray(state.routines) && state.routines.length) {
@@ -1084,7 +1092,7 @@ function applyCloudState(state, triggerTimers = false) {
         // First row for this date: copy exactly
         merged[row.date_key] = {
           alma: !!row.alma_trained,
-          facu: !!row.facu_trained,
+          naty: !!row.naty_trained,
           deleted: !!row.deleted,
           weights: row.weights || {},
           water: row.water || {},
@@ -1094,7 +1102,7 @@ function applyCloudState(state, triggerTimers = false) {
         // Secondary row (legacy): merge
         const existing = merged[row.date_key];
         existing.alma = existing.alma || !!row.alma_trained;
-        existing.facu = existing.facu || !!row.facu_trained;
+        existing.naty = existing.naty || !!row.naty_trained;
         existing.deleted = existing.deleted || !!row.deleted;
         
         // Merge weights using timestamps
@@ -1106,13 +1114,13 @@ function applyCloudState(state, triggerTimers = false) {
             const cloudTs = row.weights[k + "_ts"] || {};
             
             if (!existing.weights[k]) {
-              existing.weights[k] = { facu: "", alma: "" };
+              existing.weights[k] = { naty: "", alma: "" };
             }
             if (!existing.weights[k + "_ts"]) {
-              existing.weights[k + "_ts"] = { facu: 0, alma: 0 };
+              existing.weights[k + "_ts"] = { naty: 0, alma: 0 };
             }
             
-            ["facu", "alma"].forEach((u) => {
+            ["naty", "alma"].forEach((u) => {
               const existingVal = existing.weights[k][u];
               const existingTs = existing.weights[k + "_ts"][u] || 0;
               const currentCloudVal = cloudVal[u];
@@ -1130,7 +1138,7 @@ function applyCloudState(state, triggerTimers = false) {
         
         // Merge water
         if (row.water && typeof row.water === "object") {
-          if (row.water.facu) existing.water.facu = row.water.facu;
+          if (row.water.naty) existing.water.naty = row.water.naty;
           if (row.water.alma) existing.water.alma = row.water.alma;
         }
         
@@ -1143,13 +1151,13 @@ function applyCloudState(state, triggerTimers = false) {
             const cloudTs = row.completed_sets[k + "_ts"] || {};
             
             if (!existing.completed_sets[k]) {
-              existing.completed_sets[k] = { facu: false, alma: false };
+              existing.completed_sets[k] = { naty: false, alma: false };
             }
             if (!existing.completed_sets[k + "_ts"]) {
-              existing.completed_sets[k + "_ts"] = { facu: 0, alma: 0 };
+              existing.completed_sets[k + "_ts"] = { naty: 0, alma: 0 };
             }
             
-            ["facu", "alma"].forEach((u) => {
+            ["naty", "alma"].forEach((u) => {
               const existingVal = existing.completed_sets[k][u];
               const existingTs = existing.completed_sets[k + "_ts"][u] || 0;
               const currentCloudVal = cloudVal[u];
@@ -1175,7 +1183,7 @@ function applyCloudState(state, triggerTimers = false) {
     // Ensure today's record in trainingHistory has our current local state
     const today = getDateKey(new Date());
     if (!trainingHistory[today]) {
-      trainingHistory[today] = { alma: false, facu: false, weights: {}, completed_sets: {} };
+      trainingHistory[today] = { alma: false, naty: false, weights: {}, completed_sets: {} };
     }
     trainingHistory[today].completed_sets = completedSets;
     trainingHistory[today].weights = {
@@ -1191,26 +1199,26 @@ function applyCloudState(state, triggerTimers = false) {
   }
 
   if (Array.isArray(state.gamification) && state.gamification.length) {
-    const facuId = getCloudUserId();
+    const natyId = getCloudUserId();
     const almaId = getAlmaUserId();
     
     // Match exact user_id or pick primary record with highest points / achievements
-    const facuG = state.gamification.find((r) => r.user_id === facuId || r.user_id === PRIMARY_FACU_ID) ||
+    const natyG = state.gamification.find((r) => r.user_id === natyId || r.user_id === PRIMARY_NATY_ID) ||
                   state.gamification.filter(r => r.user_id && !r.user_id.endsWith("a")).sort((a,b) => (b.points||0) - (a.points||0))[0];
 
     const almaG = state.gamification.find((r) => r.user_id === almaId || r.user_id === PRIMARY_ALMA_ID) ||
                   state.gamification.filter(r => r.user_id && r.user_id.endsWith("a")).sort((a,b) => (b.points||0) - (a.points||0))[0];
 
-    if (facuG) {
-      gamification.facu = {
-        ...gamification.facu,
-        points: facuG.points ?? gamification.facu.points,
-        streak: facuG.streak ?? gamification.facu.streak,
-        freezes: facuG.freezes ?? gamification.facu.freezes,
-        frozenDays: facuG.frozen_days || facuG.frozenDays || gamification.facu.frozenDays || [],
-        achievements: Array.from(new Set([...(gamification.facu.achievements || []), ...(facuG.achievements || [])])),
-        lastReset: facuG.last_reset || gamification.facu.lastReset || 0,
-        lastRescuePromptDate: facuG.last_rescue_prompt_date || gamification.facu.lastRescuePromptDate || null,
+    if (natyG) {
+      gamification.naty = {
+        ...gamification.naty,
+        points: natyG.points ?? gamification.naty.points,
+        streak: natyG.streak ?? gamification.naty.streak,
+        freezes: natyG.freezes ?? gamification.naty.freezes,
+        frozenDays: natyG.frozen_days || natyG.frozenDays || gamification.naty.frozenDays || [],
+        achievements: Array.from(new Set([...(gamification.naty.achievements || []), ...(natyG.achievements || [])])),
+        lastReset: natyG.last_reset || gamification.naty.lastReset || 0,
+        lastRescuePromptDate: natyG.last_rescue_prompt_date || gamification.naty.lastRescuePromptDate || null,
       };
     }
     
@@ -1230,15 +1238,15 @@ function applyCloudState(state, triggerTimers = false) {
   }
 
   if (Array.isArray(state.water_state) && state.water_state.length) {
-    const facuId = getCloudUserId();
+    const natyId = getCloudUserId();
     const almaId = getAlmaUserId();
     
-    const facuW = state.water_state.find((r) => r.user_id === facuId || r.user_id === PRIMARY_FACU_ID) ||
+    const natyW = state.water_state.find((r) => r.user_id === natyId || r.user_id === PRIMARY_NATY_ID) ||
                   state.water_state.find(r => !r.user_id.endsWith("a"));
-    if (facuW) {
-      waterState.facu = facuW.current_water_ml || 0;
-      waterState.facuGoal = facuW.goal_ml || 2500;
-      waterState.date = facuW.last_updated_date || waterState.date;
+    if (natyW) {
+      waterState.naty = natyW.current_water_ml || 0;
+      waterState.natyGoal = natyW.goal_ml || 2500;
+      waterState.date = natyW.last_updated_date || waterState.date;
     }
     
     const almaW = state.water_state.find((r) => r.user_id === almaId || r.user_id === PRIMARY_ALMA_ID) ||
@@ -1324,20 +1332,12 @@ if (lastVisit !== todayStr) {
 
 loadActiveRoutineState();
 
-// Try cloud sync on boot, fallback remains localStorage
-syncFromCloud().then(() => {
-  if (typeof updateGamificationUI === "function") updateGamificationUI();
-  if (typeof renderAquaFlow === "function") renderAquaFlow();
-  if (typeof renderContent === "function") renderContent();
-  if (typeof renderCalendar === "function") renderCalendar();
-  if (typeof updateStreakDisplay === "function") updateStreakDisplay();
-  if (typeof updateDOMInPlace === "function") updateDOMInPlace();
-  if (typeof updateHeaderStats === "function") updateHeaderStats();
-});
+// Cloud sync is managed exclusively in init() to prevent race conditions
+
 
 // --- TIMER STATE ---
 const timerState = {
-  facu: {
+  naty: {
     endTime: null,
     totalSeconds: 0,
     currentSeconds: 0,
@@ -1370,7 +1370,7 @@ const timerState = {
 };
 
 let globalTimerInterval = null;
-let activeFullModalUser = 'naty'; // 'facu', 'alma', or null
+let activeFullModalUser = 'naty'; // 'naty', 'alma', or null
 let savedScrollY = 0;
 
 // --- CALENDAR STATE ---
@@ -1402,7 +1402,7 @@ async function loadFromCloud() {
 
 // --- GAMIFICATION STATE ---
 let gamification = JSON.parse(localStorage.getItem("gymGamification")) || {
-  facu: {
+  naty: {
     points: 0,
     streak: 0,
     freezes: 0,
@@ -1423,7 +1423,7 @@ let gamification = JSON.parse(localStorage.getItem("gymGamification")) || {
 };
 
 // Ensure structure integrity if updating from older version
-["facu", "alma"].forEach((u) => {
+["naty", "alma"].forEach((u) => {
   if (!gamification[u])
     gamification[u] = {
       points: 0,
@@ -1446,6 +1446,13 @@ let gamification = JSON.parse(localStorage.getItem("gymGamification")) || {
   if (!gamification[u].achievements) gamification[u].achievements = [];
   if (gamification[u].streak === undefined) gamification[u].streak = 0;
 });
+
+// Clean up unearned achievements if no workouts have been performed yet
+const hasWorkouts = Object.values(trainingHistory || {}).some((d) => d && d.naty);
+if (!hasWorkouts && gamification && gamification.naty) {
+  gamification.naty.achievements = [];
+  localStorage.setItem("gymGamification", JSON.stringify(gamification));
+}
 
 // Optimization: Update Render immediately with local data (don't wait for cloud/init)
 if (typeof updateGamificationUI === "function") {
@@ -1497,31 +1504,8 @@ async function seedCloudIfEmpty() {
   return seeded;
 }
 
-// Load from cloud on startup
-loadFromCloud().then(() => {
-  if (currentView === "history") {
-    renderCalendar();
-    updateStats();
-  }
-  // Refresh Gamification UI (Streaks, Points)
-  if (typeof updateGamificationUI === "function") {
-    updateGamificationUI();
-  }
+// Startup cloud loading is coordinated in init() to prevent flickering
 
-  // Refresh Achievements Logic
-  if (typeof checkAchievements === "function") {
-    checkAchievements();
-  }
-
-  // Refresh Charts/Achievements Views if active
-  if (currentView === "stats" && typeof renderCharts === "function")
-    renderCharts();
-  if (
-    currentView === "achievements" &&
-    typeof renderAchievements === "function"
-  )
-    renderAchievements();
-});
 
 // --- THEME STATE ---
 let currentTheme = localStorage.getItem("gymTheme") || "dark";
@@ -1736,31 +1720,38 @@ let scrollPosition = 0;
 function toggleSidebar() {
   const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("sidebar-overlay");
+  if (!sidebar) return;
   const isOpen = !sidebar.classList.contains("-translate-x-full");
 
   if (isOpen) {
     sidebar.classList.add("-translate-x-full");
-    overlay.classList.remove("opacity-100");
-    setTimeout(() => overlay.classList.add("hidden"), 300);
-    // Unlock body scroll (restore position)
-    document.body.style.position = "";
-    document.body.style.top = "";
-    document.body.style.width = "";
-    window.scrollTo(0, scrollPosition);
+    if (overlay) {
+      overlay.classList.remove("opacity-100");
+      setTimeout(() => overlay.classList.add("hidden"), 300);
+    }
   } else {
-    // Save scroll position before locking
-    scrollPosition = window.pageYOffset;
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollPosition}px`;
-    document.body.style.width = "100%";
-
-    overlay.classList.remove("hidden");
-    setTimeout(() => overlay.classList.add("opacity-100"), 10);
+    if (overlay) {
+      overlay.classList.remove("hidden");
+      setTimeout(() => overlay.classList.add("opacity-100"), 10);
+    }
     sidebar.classList.remove("-translate-x-full");
   }
 }
 
+function closeSidebarIfOpen() {
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("sidebar-overlay");
+  if (sidebar && !sidebar.classList.contains("-translate-x-full")) {
+    sidebar.classList.add("-translate-x-full");
+    if (overlay) {
+      overlay.classList.remove("opacity-100");
+      setTimeout(() => overlay.classList.add("hidden"), 300);
+    }
+  }
+}
+
 function navigateTo(view) {
+  closeSidebarIfOpen();
   currentView = view;
 
   // Hide all main views
@@ -1783,8 +1774,14 @@ function navigateTo(view) {
   } else if (view === "history") {
     const historyView = document.getElementById("history-view");
     if (historyView) historyView.classList.remove("hidden");
-    renderCalendar();
-    updateStats();
+    try {
+      renderCalendar();
+      updateStats();
+    } catch(err) {
+      if (historyView) {
+        historyView.innerHTML = `<div style="color:red; padding:20px; font-weight:bold;">Error: ${err.message}<br/>${err.stack}</div>`;
+      }
+    }
   } else if (view === "water") {
     const waterView = document.getElementById("view-water");
     if (waterView) {
@@ -1847,7 +1844,7 @@ function markDayCompleted(who) {
   const today = getDateKey(new Date());
 
   if (!trainingHistory[today]) {
-    trainingHistory[today] = { alma: false, facu: false, weights: {} };
+    trainingHistory[today] = { alma: false, naty: false, weights: {} };
   }
 
   // Ensure weights object exists if migrating from old data
@@ -1866,19 +1863,23 @@ function markDayCompleted(who) {
   const POINTS_PER_WORKOUT = 100;
   let pointsMsg = "";
 
+  // Track previous streak for celebration popup
+  const prevNatyStreak = gamification.naty ? (gamification.naty.streak || 0) : 0;
+  const prevAlmaStreak = gamification.alma ? (gamification.alma.streak || 0) : 0;
+
   if (who === "alma") {
     trainingHistory[today].alma = true;
     gamification.alma.points += POINTS_PER_WORKOUT;
     pointsMsg = ` (+${POINTS_PER_WORKOUT} pts)`;
-  } else if (who === "facu") {
-    trainingHistory[today].facu = true;
-    gamification.facu.points += POINTS_PER_WORKOUT;
+  } else if (who === "naty") {
+    trainingHistory[today].naty = true;
+    gamification.naty.points += POINTS_PER_WORKOUT;
     pointsMsg = ` (+${POINTS_PER_WORKOUT} pts)`;
   } else if (who === "both") {
     trainingHistory[today].alma = true;
-    trainingHistory[today].facu = true;
+    trainingHistory[today].naty = true;
     gamification.alma.points += POINTS_PER_WORKOUT;
-    gamification.facu.points += POINTS_PER_WORKOUT;
+    gamification.naty.points += POINTS_PER_WORKOUT;
     pointsMsg = ` (+${POINTS_PER_WORKOUT} pts c/u)`;
   }
 
@@ -1889,6 +1890,16 @@ function markDayCompleted(who) {
   updateGamificationUI();
   saveToCloud();
 
+  // Trigger Duolingo-style streak celebration if streak increased
+  const newNatyStreak = gamification.naty ? (gamification.naty.streak || 0) : 0;
+  const newAlmaStreak = gamification.alma ? (gamification.alma.streak || 0) : 0;
+
+  if ((who === "naty" || who === "both") && newNatyStreak > prevNatyStreak) {
+    setTimeout(() => showStreakCelebration("naty", newNatyStreak), 400);
+  } else if (who === "alma" && newAlmaStreak > prevAlmaStreak) {
+    setTimeout(() => showStreakCelebration("alma", newAlmaStreak), 400);
+  }
+
   // Show toast notification
   const iconType = who === "both" ? "users" : "user";
   const iconColor =
@@ -1898,7 +1909,7 @@ function markDayCompleted(who) {
         ? "text-pink-400"
         : "text-blue-400";
   const name =
-    who === "both" ? "Alma y Facu" : who === "alma" ? "Alma" : "Facu";
+    who === "both" ? "Alma y Naty" : who === "alma" ? "Alma" : "Naty";
   showToast(iconType, iconColor, `¡Día registrado para ${name}!${pointsMsg}`);
 
   if (currentView === "history") {
@@ -1933,10 +1944,18 @@ function changeMonth(delta) {
   updateStats();
 }
 
+function prevMonth() {
+  changeMonth(-1);
+}
+
+function nextMonth() {
+  changeMonth(1);
+}
+
 // --- CALENDAR RENDERER ---
 function renderCalendar() {
   const grid = document.getElementById("calendar-grid");
-  const monthLabel = document.getElementById("calendar-month");
+  const monthLabel = document.getElementById("calendar-month") || document.getElementById("current-month-year");
 
   const monthNames = [
     "Enero",
@@ -1952,8 +1971,11 @@ function renderCalendar() {
     "Noviembre",
     "Diciembre",
   ];
-  monthLabel.textContent = `${monthNames[calendarMonth]} ${calendarYear}`;
+  if (monthLabel) {
+    monthLabel.textContent = `${monthNames[calendarMonth]} ${calendarYear}`;
+  }
 
+  if (!grid) return;
   grid.innerHTML = "";
 
   const firstDay = new Date(calendarYear, calendarMonth, 1);
@@ -1979,14 +2001,14 @@ function renderCalendar() {
     const isToday = dateKey === todayKey;
 
     // Check both
-    const history = trainingHistory[dateKey] || trainingHistory[legacyKey];
+    const history = (trainingHistory || {})[dateKey] || (trainingHistory || {})[legacyKey];
 
     let bgClass = "bg-slate-800/50 hover:bg-slate-800";
     let borderClass = "border-transparent";
     let icon = "";
 
-    if (history) {
-      if (history.alma && history.facu) {
+    if (history && !history.deleted) {
+      if (history.alma && history.naty) {
         bgClass = "bg-emerald-500/20";
         borderClass = "border-emerald-500";
         icon = '<i data-lucide="users" class="w-3 h-3 text-emerald-400"></i>';
@@ -1994,7 +2016,7 @@ function renderCalendar() {
         bgClass = "bg-pink-500/20";
         borderClass = "border-pink-500";
         icon = '<i data-lucide="user" class="w-3 h-3 text-pink-400"></i>';
-      } else if (history.facu) {
+      } else if (history.naty) {
         bgClass = "bg-blue-500/20";
         borderClass = "border-blue-500";
         icon = '<i data-lucide="user" class="w-3 h-3 text-blue-400"></i>';
@@ -2004,14 +2026,14 @@ function renderCalendar() {
     // Water indicators
     let waterIndicators = "";
     if (history && history.water) {
-      // Facu Water Dot
-      if (history.water.facu >= (history.water.facuGoal || 3500)) {
+      // Naty Water Dot
+      if (history.water.naty >= (history.water.natyGoal || 3500)) {
         waterIndicators +=
-          '<div class="w-1.5 h-1.5 rounded-full bg-blue-500" title="Facu: Meta cumplida"></div>';
-      } else if (history.water.facu > 0) {
+          '<div class="w-1.5 h-1.5 rounded-full bg-blue-500" title="Naty: Meta cumplida"></div>';
+      } else if (history.water.naty > 0) {
         waterIndicators +=
-          '<div class="w-1.5 h-1.5 rounded-full bg-slate-600" title="Facu: ' +
-          history.water.facu +
+          '<div class="w-1.5 h-1.5 rounded-full bg-slate-600" title="Naty: ' +
+          history.water.naty +
           'ml"></div>';
       }
 
@@ -2031,13 +2053,13 @@ function renderCalendar() {
     if (isToday && waterState) {
       // Reset to re-calc based on live waterState if it's today
       waterIndicators = "";
-      if (waterState.facu >= (waterState.facuGoal || 3500)) {
+      if (waterState.naty >= (waterState.natyGoal || 3500)) {
         waterIndicators +=
-          '<div class="w-1.5 h-1.5 rounded-full bg-blue-500" title="Facu: Meta cumplida"></div>';
-      } else if (waterState.facu > 0) {
+          '<div class="w-1.5 h-1.5 rounded-full bg-blue-500" title="Naty: Meta cumplida"></div>';
+      } else if (waterState.naty > 0) {
         waterIndicators +=
-          '<div class="w-1.5 h-1.5 rounded-full bg-slate-600" title="Facu: ' +
-          waterState.facu +
+          '<div class="w-1.5 h-1.5 rounded-full bg-slate-600" title="Naty: ' +
+          waterState.naty +
           'ml"></div>';
       }
 
@@ -2069,6 +2091,7 @@ function renderCalendar() {
                     </div>
                 `;
   }
+  safeCreateIcons();
 }
 
 function getVolumeHistory(user, days) {
@@ -2110,18 +2133,18 @@ function toggleDayModal(dateKey) {
 
   let status = "Sin registro";
   if (history) {
-    if (history.alma && history.facu) status = "Ambos entrenaron";
+    if (history.alma && history.naty) status = "Ambos entrenaron";
     else if (history.alma) status = "Solo Alma";
-    else if (history.facu) status = "Solo Facu";
+    else if (history.naty) status = "Solo Naty";
   }
 
   // Water status
   let waterStatus = "";
   if (history && history.water) {
-    const facuWater = history.water.facu || 0;
+    const natyWater = history.water.naty || 0;
     const almaWater = history.water.alma || 0;
 
-    if (facuWater > 0 || almaWater > 0) {
+    if (natyWater > 0 || almaWater > 0) {
       waterStatus = `<div class="mt-3 pt-3 border-t border-slate-700">
         <div class="flex items-center gap-2 mb-2">
           <i data-lucide="droplets" class="w-4 h-4 text-sky-400"></i>
@@ -2129,10 +2152,10 @@ function toggleDayModal(dateKey) {
         </div>
         <div class="flex gap-4 text-sm">
           ${
-            facuWater > 0
+            natyWater > 0
               ? `<div class="flex items-center gap-1">
             <span><i data-lucide="user" class="w-4 h-4 text-sky-400"></i></span>
-            <span class="${facuWater >= 2500 ? "text-emerald-400" : "text-sky-300"}">${facuWater >= 2500 ? "✅ Meta" : facuWater + "ml"}</span>
+            <span class="${natyWater >= 2500 ? "text-emerald-400" : "text-sky-300"}">${natyWater >= 2500 ? "✅ Meta" : natyWater + "ml"}</span>
           </div>`
               : ""
           }
@@ -2166,21 +2189,21 @@ let selectedDateKey = null;
 
 // Persistent User Data (Weights, Heights, Ages)
 let userProfile = JSON.parse(localStorage.getItem("gymUserProfile")) || {
-  facu: { weight: 80, height: 175, age: 23 },
+  naty: { weight: 80, height: 175, age: 23 },
   alma: { weight: 60, height: 165, age: 23 },
 };
 
 // Ensure fields exist (migration from old data)
-if (!userProfile.facu.height) userProfile.facu.height = 175;
+if (!userProfile.naty.height) userProfile.naty.height = 175;
 if (!userProfile.alma.height) userProfile.alma.height = 165;
-if (!userProfile.facu.age) userProfile.facu.age = 23;
+if (!userProfile.naty.age) userProfile.naty.age = 23;
 if (!userProfile.alma.age) userProfile.alma.age = 23;
 
 // Water State
 let waterState = JSON.parse(localStorage.getItem("water_tracker_state")) || {
-  facu: 0,
+  naty: 0,
   alma: 0,
-  facuGoal: 2500,
+  natyGoal: 2500,
   almaGoal: 2000,
   history: [],
   date: new Date().toDateString(),
@@ -2188,7 +2211,7 @@ let waterState = JSON.parse(localStorage.getItem("water_tracker_state")) || {
 
 // Reset if new day
 if (waterState.date !== new Date().toDateString()) {
-  waterState.facu = 0;
+  waterState.naty = 0;
   waterState.alma = 0;
   waterState.history = [];
   waterState.date = new Date().toDateString();
@@ -2288,21 +2311,21 @@ function calculateSmartWaterGoal(user) {
 
 function initAquaFlow() {
   // Calculate smart goals based on profile and conditions
-  waterState.facuGoal = calculateSmartWaterGoal("facu");
+  waterState.natyGoal = calculateSmartWaterGoal("naty");
   waterState.almaGoal = calculateSmartWaterGoal("alma");
   saveWaterState();
 
   renderAquaFlow();
-  startBubbleEngine("facu");
+  startBubbleEngine("naty");
   startBubbleEngine("alma");
 
   // Set Slider Values
-  const sliderFacu = document.getElementById("goal-input-facu");
+  const sliderNaty = document.getElementById("goal-input-naty");
   const sliderAlma = document.getElementById("goal-input-alma");
-  if (sliderFacu) {
-    sliderFacu.value = waterState.facuGoal;
-    sliderFacu.addEventListener("input", (e) => {
-      waterState.facuGoal = parseInt(e.target.value);
+  if (sliderNaty) {
+    sliderNaty.value = waterState.natyGoal;
+    sliderNaty.addEventListener("input", (e) => {
+      waterState.natyGoal = parseInt(e.target.value);
       saveWaterState();
       renderAquaFlow();
     });
@@ -2324,7 +2347,7 @@ function calculateAndRenderWaterGoal() {
 }
 
 function renderAquaFlow() {
-  renderUserWater("facu");
+  renderUserWater("naty");
   renderUserWater("alma");
 }
 
@@ -2362,12 +2385,12 @@ function renderUserWater(user) {
 }
 
 // Override addWater to handle new signature
-// Old: addWater(amount) -> implied Facu? No, original app didn't specify user clearly in addWater,
+// Old: addWater(amount) -> implied Naty? No, original app didn't specify user clearly in addWater,
 // actually the previous code had specific buttons? Let's check.
-// The new HTML uses addWater('facu', 250).
+// The new HTML uses addWater('naty', 250).
 
 // We need to keep a compatible signature or update all calls.
-// The HTML calls `addWater('facu', 250)`, so we update global addWater.
+// The HTML calls `addWater('naty', 250)`, so we update global addWater.
 
 // Override addWater to handle new signature
 // Override addWater to handle new signature
@@ -2401,17 +2424,29 @@ function addWater(user, amount) {
   try {
     const todayKey = getDateKey(new Date());
     if (!trainingHistory[todayKey]) {
-      trainingHistory[todayKey] = { alma: false, facu: false, weights: {} };
+      trainingHistory[todayKey] = { alma: false, naty: false, weights: {} };
     }
     if (!trainingHistory[todayKey].water) {
       trainingHistory[todayKey].water = {};
     }
-    trainingHistory[todayKey].water.facu = waterState.facu;
+    trainingHistory[todayKey].water.naty = waterState.naty;
     trainingHistory[todayKey].water.alma = waterState.alma;
     localStorage.setItem("gymTrainingHistory", JSON.stringify(trainingHistory));
 
     // TRIGGER CLOUD SYNC IMMEDIATELY
     saveToCloud();
+
+    // Reward +25 gems first time goal reached today
+    if (oldPercent < 1 && waterState[user] >= goal && user === "naty") {
+      if (!gamification.naty) gamification.naty = { points: 0, streak: 0, freezes: 0 };
+      gamification.naty.points = (gamification.naty.points || 0) + 25;
+      saveToCloud();
+      updateGamificationUI();
+      if (typeof showToast === "function") {
+        showToast("droplet", "text-sky-400", "¡Meta de agua completada! +25 💎");
+      }
+      if (typeof triggerConfetti === "function") triggerConfetti();
+    }
   } catch (e) {
     console.error("Error syncing water:", e);
   }
@@ -2419,6 +2454,7 @@ function addWater(user, amount) {
   // Visuals
   try {
     if (amount > 0) {
+      animateStream(user);
       animateShake(user);
 
       // Check Goal
@@ -2462,12 +2498,12 @@ function renderWaterHistory() {
     const item = document.createElement("div");
     item.className =
       "flex justify-between items-center bg-slate-800/50 p-2 rounded-lg text-xs";
-    const color = entry.user === "facu" ? "text-blue-400" : "text-pink-400";
-    const icon = entry.user === "facu" ? `<i data-lucide="user" class="w-4 h-4 inline-block text-sky-400"></i>` : `<i data-lucide="user" class="w-4 h-4 inline-block text-pink-400"></i>`;
+    const color = entry.user === "naty" ? "text-blue-400" : "text-pink-400";
+    const icon = entry.user === "naty" ? `<i data-lucide="user" class="w-4 h-4 inline-block text-sky-400"></i>` : `<i data-lucide="user" class="w-4 h-4 inline-block text-pink-400"></i>`;
     item.innerHTML = `
             <span class="flex items-center gap-2 ${color}">
                 <span>${icon}</span>
-                <span class="font-bold">${entry.user === "facu" ? "Facu" : "Alma"}</span>
+                <span class="font-bold">${entry.user === "naty" ? "Naty" : "Alma"}</span>
             </span>
             <span class="text-white font-mono">${entry.amount > 0 ? "+" : ""}${entry.amount}ml</span>
             <span class="text-slate-500">${entry.time}</span>
@@ -2497,8 +2533,8 @@ function resetDay(user) {
   renderWaterHistory();
 
   // Show friendly toast instead of browser alert
-  const userName = user === "facu" ? "Facu" : "Alma";
-  const iconColor = user === "facu" ? "text-blue-400" : "text-pink-400";
+  const userName = user === "naty" ? "Naty" : "Alma";
+  const iconColor = user === "naty" ? "text-blue-400" : "text-pink-400";
   showToast("rotate-ccw", iconColor, `Consumo de ${userName} reiniciado`);
 }
 
@@ -2608,16 +2644,13 @@ function triggerConfetti() {
 
 // --- PROFILE MODAL FUNCTIONS ---
 function openProfileModal() {
-  document.getElementById("profile-weight-facu").value =
-    userProfile.facu.weight;
-  document.getElementById("profile-weight-alma").value =
-    userProfile.alma.weight;
-  document.getElementById("profile-height-facu").value =
-    userProfile.facu.height;
-  document.getElementById("profile-height-alma").value =
-    userProfile.alma.height;
-  document.getElementById("profile-age-facu").value = userProfile.facu.age;
-  document.getElementById("profile-age-alma").value = userProfile.alma.age;
+  const wEl = document.getElementById("profile-weight-naty");
+  const hEl = document.getElementById("profile-height-naty");
+  const aEl = document.getElementById("profile-age-naty");
+
+  if (wEl) wEl.value = userProfile.naty.weight;
+  if (hEl) hEl.value = userProfile.naty.height;
+  if (aEl) aEl.value = userProfile.naty.age;
 
   const apiKeyInput = document.getElementById("profile-gemini-key");
   if (apiKeyInput) {
@@ -2632,12 +2665,14 @@ function openProfileModal() {
   refreshCloudStatus();
 
   const modal = document.getElementById("profile-modal");
+  if (!modal) return;
   modal.classList.remove("hidden");
   modal.classList.add("flex");
 
   setTimeout(() => {
     modal.classList.remove("opacity-0");
-    modal.querySelector("div").classList.remove("scale-95");
+    const inner = modal.querySelector("div");
+    if (inner) inner.classList.remove("scale-95");
   }, 10);
 
   safeCreateIcons();
@@ -2645,8 +2680,10 @@ function openProfileModal() {
 
 function closeProfileModal() {
   const modal = document.getElementById("profile-modal");
+  if (!modal) return;
   modal.classList.add("opacity-0");
-  modal.querySelector("div").classList.add("scale-95");
+  const inner = modal.querySelector("div");
+  if (inner) inner.classList.add("scale-95");
   setTimeout(() => {
     modal.classList.add("hidden");
     modal.classList.remove("flex");
@@ -2654,19 +2691,13 @@ function closeProfileModal() {
 }
 
 function saveProfile() {
-  const wFacu = document.getElementById("profile-weight-facu").value;
-  const wAlma = document.getElementById("profile-weight-alma").value;
-  const hFacu = document.getElementById("profile-height-facu").value;
-  const hAlma = document.getElementById("profile-height-alma").value;
-  const aFacu = document.getElementById("profile-age-facu").value;
-  const aAlma = document.getElementById("profile-age-alma").value;
+  const wEl = document.getElementById("profile-weight-naty");
+  const hEl = document.getElementById("profile-height-naty");
+  const aEl = document.getElementById("profile-age-naty");
 
-  if (wFacu) userProfile.facu.weight = parseInt(wFacu);
-  if (wAlma) userProfile.alma.weight = parseInt(wAlma);
-  if (hFacu) userProfile.facu.height = parseInt(hFacu);
-  if (hAlma) userProfile.alma.height = parseInt(hAlma);
-  if (aFacu) userProfile.facu.age = parseInt(aFacu);
-  if (aAlma) userProfile.alma.age = parseInt(aAlma);
+  if (wEl && wEl.value) userProfile.naty.weight = parseInt(wEl.value);
+  if (hEl && hEl.value) userProfile.naty.height = parseInt(hEl.value);
+  if (aEl && aEl.value) userProfile.naty.age = parseInt(aEl.value);
 
   localStorage.setItem("gymUserProfile", JSON.stringify(userProfile));
 
@@ -2684,8 +2715,7 @@ function saveProfile() {
   scheduleCloudSync();
 
   // Recalculate water goals based on new profile
-  waterState.facuGoal = calculateSmartWaterGoal("facu");
-  waterState.almaGoal = calculateSmartWaterGoal("alma");
+  waterState.natyGoal = calculateSmartWaterGoal("naty");
   saveWaterState();
 
   renderAquaFlow();
@@ -2693,7 +2723,7 @@ function saveProfile() {
   showToast(
     "user-cog",
     "text-violet-400",
-    "Perfil actualizado - metas de agua recalculadas",
+    "Perfil actualizado - meta de agua recalculada",
   );
 }
 
@@ -2701,44 +2731,37 @@ function saveProfile() {
 function renderAdvancedStats() {
   const now = new Date();
 
-  // 1. Weekly Progress (Mon-Sun) - KEPT AS FREQUENCY (Goal: Facu 5, Alma 3)
+  // 1. Weekly Progress (Mon-Sun) - Goal: Naty 4 days (Mon, Tue, Wed, Fri)
   const day = now.getDay(); // 0 (Sun) - 6 (Sat)
   const diff = now.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
-  const monday = new Date(now.setDate(diff));
+  const monday = new Date(now.getFullYear(), now.getMonth(), diff);
 
-  let almaWeekCount = 0;
-  let facuWeekCount = 0;
+  let natyWeekCount = 0;
 
   // Iterate 7 days from Monday
   for (let i = 0; i < 7; i++) {
     const d = new Date(monday);
     d.setDate(monday.getDate() + i);
     const k = getDateKey(d);
-    if (trainingHistory[k]) {
-      if (trainingHistory[k].alma) almaWeekCount++;
-      if (trainingHistory[k].facu) facuWeekCount++;
+    if ((trainingHistory || {})[k] && (trainingHistory || {})[k].naty) {
+      natyWeekCount++;
     }
   }
 
   // Update Week UI
-  const weekAlmaEl = document.getElementById("week-alma-current");
-  const weekFacuEl = document.getElementById("week-facu-current");
-  if (weekAlmaEl) weekAlmaEl.textContent = almaWeekCount;
-  if (weekFacuEl) weekFacuEl.textContent = facuWeekCount;
+  const weekNatyEl = document.getElementById("week-naty-current");
+  if (weekNatyEl) weekNatyEl.textContent = natyWeekCount;
 
-  const almaPct = Math.min(100, (almaWeekCount / 3) * 100);
-  const facuPct = Math.min(100, (facuWeekCount / 5) * 100);
+  const natyPct = Math.min(100, (natyWeekCount / 4) * 100);
 
-  const weekAlmaBar = document.getElementById("week-alma-bar");
-  const weekFacuBar = document.getElementById("week-facu-bar");
-  if (weekAlmaBar) weekAlmaBar.style.width = `${almaPct}%`;
-  if (weekFacuBar) weekFacuBar.style.width = `${facuPct}%`;
+  const weekNatyBar = document.getElementById("week-naty-bar");
+  if (weekNatyBar) weekNatyBar.style.width = `${natyPct}%`;
 
   // Badge status
   const weekBadge = document.getElementById("week-status-badge");
   if (weekBadge) {
-    if (almaWeekCount >= 3 && facuWeekCount >= 5) {
-      weekBadge.textContent = "¡Objetivo Cumplido!";
+    if (natyWeekCount >= 4) {
+      weekBadge.textContent = "¡Meta Semanal Cumplida!";
       weekBadge.className =
         "px-2 py-1 rounded-md bg-emerald-500/20 text-xs font-bold text-emerald-400 border border-emerald-500/50";
     } else {
@@ -2751,120 +2774,72 @@ function renderAdvancedStats() {
   // 2. Month & Year Totals - VOLUME BASED (Kg)
   let monthVolume = 0;
   let yearVolume = 0; // In Tonnes likely, or High Kg
-  let totalAlmaYearVol = 0;
-  let totalFacuYearVol = 0;
+  let totalNatyYearVol = 0;
 
   const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
   const currentYearKey = `${now.getFullYear()}`;
   const AVG_REPS = 10; // Placeholder for volume calc
 
-  Object.keys(trainingHistory).forEach((key) => {
+  Object.keys(trainingHistory || {}).forEach((key) => {
     // Check if entry belongs to current month/year
     const isMonth = key.startsWith(currentMonthKey);
     const isYear = key.startsWith(currentYearKey);
 
-    if (!isYear) return; // optimization: stats are only for this year currently
+    if (!isYear) return;
 
-    const dayWeights = trainingHistory[key].weights || {};
-
-    // Sum volume for this day
-    let dayVolAlma = 0;
-    let dayVolFacu = 0;
+    const dayWeights = (trainingHistory[key] && trainingHistory[key].weights) ? trainingHistory[key].weights : {};
+    let dayVolNaty = 0;
 
     Object.entries(dayWeights).forEach(([wKey, val]) => {
       if (wKey.endsWith("_ts")) return; // Skip timestamp keys
-      if (val.facu) dayVolFacu += (parseFloat(val.facu) || 0) * AVG_REPS;
-      if (val.alma) dayVolAlma += (parseFloat(val.alma) || 0) * AVG_REPS;
+      if (val && val.naty) dayVolNaty += (parseFloat(val.naty) || 0) * AVG_REPS;
     });
 
-    // Add to aggregators
     if (isMonth) {
-      monthVolume += dayVolAlma + dayVolFacu;
+      monthVolume += dayVolNaty;
     }
     if (isYear) {
-      yearVolume += dayVolAlma + dayVolFacu;
-      totalAlmaYearVol += dayVolAlma;
-      totalFacuYearVol += dayVolFacu;
+      yearVolume += dayVolNaty;
+      totalNatyYearVol += dayVolNaty;
     }
   });
 
   // Render Volume Stats
-  // Month: Kg
   const monthEl = document.getElementById("month-volume");
   if (monthEl) monthEl.textContent = monthVolume.toLocaleString("es-AR");
 
-  // Year: Tonnes (divide by 1000)
   const yearEl = document.getElementById("year-volume");
   if (yearEl) yearEl.textContent = (yearVolume / 1000).toFixed(1);
 
-  // Individual Year Totals: Tonnes
-  const almaYearEl = document.getElementById("total-alma-volume");
-  if (almaYearEl)
-    almaYearEl.textContent = (totalAlmaYearVol / 1000).toFixed(1) + " t";
-
-  const facuYearEl = document.getElementById("total-facu-volume");
-  if (facuYearEl)
-    facuYearEl.textContent = (totalFacuYearVol / 1000).toFixed(1) + " t";
+  const natyYearEl = document.getElementById("total-naty-volume");
+  if (natyYearEl)
+    natyYearEl.textContent = (totalNatyYearVol / 1000).toFixed(1) + " t";
 }
 
 // Hook into existing updateStats
-const originalUpdateStats = updateStats;
-updateStats = function () {
-  originalUpdateStats(); // Call original
-  renderAdvancedStats(); // Update new stats
-  fetchWeather(); // Ensure weather is refreshing
-};
-
-// Initialize on Load
-onReady(() => {
-  fetchWeather(); // Get weather immediately
-  setInterval(fetchWeather, 30 * 60 * 1000); // Refresh every 30 minutes
-  calculateAndRenderWaterGoal(); // Render water based on stored/default
-});
 function setDayTraining(who) {
   if (!selectedDateKey) return;
 
   if (who === "clear") {
     trainingHistory[selectedDateKey] = {
       alma: false,
-      facu: false,
+      naty: false,
       deleted: true,
       weights: {},
       completed_sets: {},
       water: {}
     };
     showToast("trash-2", "text-red-400", "¡Registro eliminado!");
-  } else if (who === "alma") {
-    trainingHistory[selectedDateKey] = {
-      alma: true,
-      facu: false,
-      deleted: false,
-      weights: trainingHistory[selectedDateKey]?.weights || {},
-      reps: trainingHistory[selectedDateKey]?.reps || {},
-      completed_sets: trainingHistory[selectedDateKey]?.completed_sets || {},
-      water: trainingHistory[selectedDateKey]?.water || {}
-    };
-    showToast("user", "text-pink-400", "¡Día registrado para Alma!");
-  } else if (who === "facu") {
+  } else {
     trainingHistory[selectedDateKey] = {
       alma: false,
-      facu: true,
+      naty: true,
       deleted: false,
       weights: trainingHistory[selectedDateKey]?.weights || {},
       completed_sets: trainingHistory[selectedDateKey]?.completed_sets || {},
       water: trainingHistory[selectedDateKey]?.water || {}
     };
-    showToast("user", "text-blue-400", "¡Día registrado para Facu!");
-  } else if (who === "both") {
-    trainingHistory[selectedDateKey] = {
-      alma: true,
-      facu: true,
-      deleted: false,
-      weights: trainingHistory[selectedDateKey]?.weights || {},
-      completed_sets: trainingHistory[selectedDateKey]?.completed_sets || {},
-      water: trainingHistory[selectedDateKey]?.water || {}
-    };
-    showToast("users", "text-emerald-400", "¡Día registrado para ambos!");
+    showToast("check-circle", "text-emerald-400", "¡Día registrado para Naty!");
   }
 
   if (typeof updateGamificationUI === "function") {
@@ -2878,37 +2853,37 @@ function setDayTraining(who) {
 
 function closeDayModal() {
   const modal = document.getElementById("day-modal");
-  modal.classList.add("hidden");
-  modal.classList.remove("flex");
+  if (modal) {
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  }
   selectedDateKey = null;
 }
 
 function updateStats() {
-  let almaCount = 0;
-  let facuCount = 0;
-  let bothCount = 0;
-  let totalDays = 0;
+  let natyCount = 0;
 
   // Count for current month only
-  Object.keys(trainingHistory).forEach((dateKey) => {
+  Object.keys(trainingHistory || {}).forEach((dateKey) => {
     const [year, month] = dateKey.split("-").map(Number);
     if (year === calendarYear && month === calendarMonth + 1) {
       const h = trainingHistory[dateKey];
-      if (h.alma) almaCount++;
-      if (h.facu) facuCount++;
-      if (h.alma && h.facu) bothCount++;
-      if (h.alma || h.facu) totalDays++;
+      if (h && h.naty && !h.deleted) natyCount++;
     }
   });
 
-  document.getElementById("stat-alma").innerHTML =
-    `${almaCount} <span class="text-sm text-slate-500">días</span>`;
-  document.getElementById("stat-facu").innerHTML =
-    `${facuCount} <span class="text-sm text-slate-500">días</span>`;
-  document.getElementById("stat-both").innerHTML =
-    `${bothCount} <span class="text-sm text-slate-500">días</span>`;
-  document.getElementById("stat-total").innerHTML =
-    `${totalDays} <span class="text-sm text-slate-500">días</span>`;
+  const natyStreak = gamification?.naty?.streak || 0;
+  const natyPoints = gamification?.naty?.points || 0;
+
+  const statNaty = document.getElementById("stat-naty");
+  const statTotal = document.getElementById("stat-total");
+  const statBoth = document.getElementById("stat-both");
+
+  if (statNaty) statNaty.innerHTML = `${natyCount} <span class="text-xs text-slate-500">totales</span>`;
+  if (statTotal) statTotal.innerHTML = `${natyStreak} <span class="text-xs text-slate-500">días</span>`;
+  if (statBoth) statBoth.innerHTML = `${natyPoints}`;
+
+  renderAdvancedStats();
 }
 
 // --- HELPER: Parse rest time from notes ---
@@ -2987,9 +2962,9 @@ function createTimerArtworkBlob(user, timeStr, exerciseName) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return "favicon.svg";
 
-    const isFacu = user === "facu";
-    const primaryColor = isFacu ? "#00f0ff" : "#ff0055";
-    const userName = isFacu ? "FACU" : "ALMA";
+    const isNaty = user === "naty";
+    const primaryColor = isNaty ? "#00f0ff" : "#ff0055";
+    const userName = isNaty ? "NATY" : "ALMA";
 
     // Deep Dark Background
     ctx.fillStyle = "#020617";
@@ -3036,19 +3011,22 @@ function createTimerArtworkBlob(user, timeStr, exerciseName) {
 // Native iOS Live Activity Plugin Bridge (Capacitor)
 let _liveActivityPluginCache = null;
 function getLiveActivityPlugin() {
+  if (!window.Capacitor) return null;
+  const platform = window.Capacitor.getPlatform ? window.Capacitor.getPlatform() : (window.Capacitor.platform || "");
+  if (platform !== "ios") return null; // Live Activity is exclusive to iOS Dynamic Island
   if (_liveActivityPluginCache) return _liveActivityPluginCache;
-  if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.LiveActivity) {
+  if (window.Capacitor.Plugins && window.Capacitor.Plugins.LiveActivity) {
     _liveActivityPluginCache = window.Capacitor.Plugins.LiveActivity;
     return _liveActivityPluginCache;
   }
-  if (window.Capacitor && window.Capacitor.registerPlugin) {
+  if (window.Capacitor.registerPlugin) {
     _liveActivityPluginCache = window.Capacitor.registerPlugin("LiveActivity");
     return _liveActivityPluginCache;
   }
   return null;
 }
 
-function enableBackgroundMode(exerciseName, duration, user = "facu") {
+function enableBackgroundMode(exerciseName, duration, user = "naty") {
   // Background audio keepalive for standard web browsers
   if (window.Capacitor && (window.Capacitor.isNativePlatform ? window.Capacitor.isNativePlatform() : window.Capacitor.platform === "ios")) {
     return;
@@ -3069,27 +3047,30 @@ function disableBackgroundMode() {
 // --- CHARTS LOGIC ---
 function renderCharts() {
   const container = document.getElementById("charts-container");
+  if (!container) return;
   container.innerHTML = "";
 
-  ["facu", "alma"].forEach((user) => {
+  ["naty"].forEach((user) => {
     const dataPoints = getVolumeHistory(user, 14); // Last 14 days
     const chartHTML = generateSVGLineChart(
       dataPoints,
-      user === "facu" ? "var(--accent-facu)" : "var(--accent-alma)",
+      "var(--accent-naty)",
       user,
     );
 
     const card = document.createElement("div");
-    card.className = "bg-slate-950 border-2 border-slate-800 p-6 shadow-[4px_4px_0px_#000] relative overflow-hidden transition-all duration-300 hover:shadow-[6px_6px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5";
+    card.className = "bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl relative overflow-hidden transition-all duration-300";
     card.innerHTML = `
-        <h3 class="text-sm font-bold uppercase tracking-wider mb-4 flex items-center gap-2" style="color: ${user === "facu" ? "var(--accent-facu)" : "var(--accent-alma)"}">
-            ${user === "facu" ? "Volumen de Facu" : "Volumen de Alma"}
+        <h3 class="text-sm font-bold uppercase tracking-wider mb-4 flex items-center gap-2 text-cyan-400">
+            <i data-lucide="trending-up" class="w-4 h-4 text-cyan-400"></i>
+            Volumen de Naty
             <span class="text-xs text-slate-500 font-normal normal-case tracking-normal">(Últimos 14 días)</span>
         </h3>
         ${chartHTML}
       `;
     container.appendChild(card);
   });
+  safeCreateIcons();
 }
 
 function getVolumeHistory(user, days) {
@@ -3327,32 +3308,22 @@ function showTimer(user, exerciseName, seconds, options = {}) {
   requestWakeLock();
   enableBackgroundMode(exerciseName, seconds, user);
 
-  // Native Live Activity for Dynamic Island (Capacitor iOS)
+  // Native Live Activity for Dynamic Island (Capacitor iOS only)
   const LiveActivity = getLiveActivityPlugin();
-  const capInfo = "Capacitor=" + !!window.Capacitor +
-    " isNative=" + (window.Capacitor?.isNativePlatform ? window.Capacitor.isNativePlatform() : "N/A") +
-    " Plugins=" + (window.Capacitor?.Plugins ? Object.keys(window.Capacitor.Plugins).join(",") : "none") +
-    " registerPlugin=" + !!(window.Capacitor?.registerPlugin);
-  if (window.Capacitor?.Plugins?.LiveActivity) {
-    window.Capacitor.Plugins.LiveActivity.startRestTimer({
+  if (LiveActivity) {
+    LiveActivity.startRestTimer({
       exerciseName: exerciseName,
-      userName: user === "facu" ? "Facu" : (user === "session" ? "Session" : "Alma"),
+      userName: user === "naty" ? "Naty" : (user === "session" ? "Session" : "Alma"),
       seconds: seconds,
       isStopwatch: isStopwatch,
       startTime: timerState[user].startTime ? timerState[user].startTime : -1
     }).then(result => {
       if (!result || !result.success) {
-        console.error("[LA] Error: ", result?.message || "unknown");
-      } else {
-        console.log("[LA] OK! id=", result.id);
+        console.warn("[LA] startRestTimer info: ", result?.message || "unknown");
       }
     }).catch(e => {
-      alert("[LA] Exception (startRestTimer): " + JSON.stringify(e));
-      console.error("[LA] Exception: ", e);
+      console.warn("[LA] LiveActivity startRestTimer skipped: ", e);
     });
-  } else {
-    console.warn("[LA] Plugin NOT found.", capInfo);
-    // Don't alert here to avoid spamming the user when they test in the browser
   }
 }
 
@@ -3363,7 +3334,7 @@ function startGlobalTimerIfNeeded() {
     const now = Date.now();
     let anyoneActive = false;
 
-    ["facu", "alma", "session"].forEach((user) => {
+    ["naty", "alma", "session"].forEach((user) => {
       const state = timerState[user];
       if (!state || !state.active) return;
       anyoneActive = true;
@@ -3393,7 +3364,7 @@ function startGlobalTimerIfNeeded() {
     } else {
       updateTimerDisplay();
 
-      const mainUser = activeFullModalUser || (timerState.facu.active ? "facu" : (timerState.alma.active ? "alma" : "session"));
+      const mainUser = activeFullModalUser || (timerState.naty.active ? "naty" : (timerState.alma.active ? "alma" : "session"));
       const state = timerState[mainUser];
 
       if (state && state.active) {
@@ -3409,7 +3380,7 @@ function startGlobalTimerIfNeeded() {
             timeStr = `${mins}:${secs.toString().padStart(2, "0")}`;
         }
         
-        const userName = mainUser === "facu" ? "Facu" : (mainUser === "session" ? "Session" : "Alma");
+        const userName = mainUser === "naty" ? "Naty" : (mainUser === "session" ? "Session" : "Alma");
 
         // Update document tab title
         document.title = `⏱️ ${timeStr} | ${state.exerciseName} - VITAL`;
@@ -3443,16 +3414,16 @@ function handleTimerComplete(user) {
   // End Native iOS Live Activity
   const LiveActivity = getLiveActivityPlugin();
   if (LiveActivity) {
-    LiveActivity.endRestTimer({ userName: user === "facu" ? "Facu" : "Alma" }).catch(() => {});
+    LiveActivity.endRestTimer({ userName: user === "naty" ? "Naty" : "Alma" }).catch(() => {});
   }
 
-  document.title = `¡TIEMPO! - ${state.exerciseName} (${user === "facu" ? "Facu" : "Alma"})`;
+  document.title = `¡TIEMPO! - ${state.exerciseName} (${user === "naty" ? "Naty" : "Alma"})`;
 
   // Notifications
   if ("Notification" in window && Notification.permission === "granted") {
     const title = "¡Tiempo Terminado!";
     const options = {
-      body: `Descanso finalizado para ${state.exerciseName} (${user === "facu" ? "Facu" : "Alma"})`,
+      body: `Descanso finalizado para ${state.exerciseName} (${user === "naty" ? "Naty" : "Alma"})`,
       icon: "favicon.svg",
       vibrate: [200, 100, 200, 100, 200],
       tag: `timer-end-${user}`,
@@ -3491,7 +3462,7 @@ function handleNotifications() {
     let urgentUser = null;
     let minTime = Infinity;
 
-    ["facu", "alma"].forEach((user) => {
+    ["naty", "alma"].forEach((user) => {
       if (
         timerState[user].active &&
         timerState[user].currentSeconds < minTime
@@ -3510,7 +3481,7 @@ function handleNotifications() {
             const mins = Math.floor(state.currentSeconds / 60);
             const secs = state.currentSeconds % 60;
             reg.showNotification(
-              `Descansando (${urgentUser === "facu" ? "Facu" : "Alma"}): ${mins}:${secs.toString().padStart(2, "0")}`,
+              `Descansando (${urgentUser === "naty" ? "Naty" : "Alma"}): ${mins}:${secs.toString().padStart(2, "0")}`,
               {
                 body: state.exerciseName,
                 icon: "favicon.svg",
@@ -3536,7 +3507,7 @@ function renderTimerUI() {
   miniContainer.innerHTML = "";
 
   // Check if anyone is active
-  const anyActive = timerState.facu.active || timerState.alma.active || (timerState.session && timerState.session.active);
+  const anyActive = timerState.naty.active || timerState.alma.active || (timerState.session && timerState.session.active);
 
   if (!anyActive) {
     modal.classList.add("hidden");
@@ -3564,13 +3535,13 @@ function renderTimerUI() {
     const state = timerState[user];
 
     // Colors based on user
-    const colorClass = user === "facu" ? "text-blue-400" : "text-pink-400";
-    const borderClass = user === "facu" ? "border-blue-500" : "border-pink-500";
+    const colorClass = user === "naty" ? "text-blue-400" : "text-pink-400";
+    const borderClass = user === "naty" ? "border-blue-500" : "border-pink-500";
 
     // Update static elements of modal if needed (titles, colors)
     // We'll update dynamic values in updateTimerDisplay
     document.getElementById("timer-exercise-name").textContent =
-      `${state.exerciseName} (${user === "facu" ? "Facu" : (user === "session" ? "Session" : "Alma")})`;
+      `${state.exerciseName} (${user === "naty" ? "Naty" : (user === "session" ? "Session" : "Alma")})`;
 
     // Just ensure the container looks right for the user?
     // Optionally trigger a color update or just keep it emerald/neutral.
@@ -3583,7 +3554,7 @@ function renderTimerUI() {
   }
 
   // Render Bubbles (for anyone minimized or NOT the active full screen)
-  ["facu", "alma", "session"].forEach((user) => {
+  ["naty", "alma", "session"].forEach((user) => {
     const state = timerState[user];
     if (state.active && (state.minimized || user !== activeFullModalUser)) {
       // Render Bubble
@@ -3597,8 +3568,8 @@ function renderTimerUI() {
 
 function createMiniTimerBubble(user, state) {
   const div = document.createElement("div");
-  const textColor = user === "facu" ? "text-sky-400" : "text-pink-400";
-  const ringColor = user === "facu" ? "text-sky-500" : "text-pink-500";
+  const textColor = user === "naty" ? "text-sky-400" : "text-pink-400";
+  const ringColor = user === "naty" ? "text-sky-500" : "text-pink-500";
 
   // Vital Aesthetic for minimized bubble: solid #09090b bg, subtle border, rounded-[24px]
   div.className = `bg-slate-950 border border-slate-800 rounded-[24px] p-3 pr-5 shadow-2xl cursor-pointer hover:scale-105 hover:bg-slate-900 transition-all duration-200 pointer-events-auto flex items-center gap-3`;
@@ -3623,7 +3594,7 @@ function createMiniTimerBubble(user, state) {
                     class="${ringColor} transition-all duration-1000 ease-linear drop-shadow-[0_0_8px_rgba(currentColor,0.5)]" />
             </svg>
              <div class="absolute inset-0 flex items-center justify-center">
-                 ${state.isStopwatch ? `<i data-lucide="timer" class="w-5 h-5 text-emerald-500"></i>` : `<span class="text-[12px] font-black uppercase text-slate-300">${user === "facu" ? "F" : "A"}</span>`}
+                 ${state.isStopwatch ? `<i data-lucide="timer" class="w-5 h-5 text-emerald-500"></i>` : `<span class="text-[12px] font-black uppercase text-slate-300">${user === "naty" ? "F" : "A"}</span>`}
              </div>
         </div>
         <div class="text-left flex flex-col justify-center">
@@ -3636,6 +3607,7 @@ function createMiniTimerBubble(user, state) {
 function updateTimerDisplay() {
   if (
     activeFullModalUser &&
+    timerState[activeFullModalUser] &&
     timerState[activeFullModalUser].active &&
     !timerState[activeFullModalUser].minimized
   ) {
@@ -3658,86 +3630,32 @@ function updateTimerDisplay() {
         timeStr = `${mins}:${secs.toString().padStart(2, "0")}`;
     }
 
-    // Optimization: Don't touch DOM if text matches
-    if (display.textContent !== timeStr) {
+    if (display && display.textContent !== timeStr) {
       display.textContent = timeStr;
-      secondsLeft.textContent = displaySeconds;
+      if (secondsLeft) secondsLeft.textContent = displaySeconds;
 
-      if (state.isStopwatch) {
-          // Hide ring for stopwatches
-          if (ring) ring.parentElement.classList.add('hidden');
-      } else {
-          if (ring) ring.parentElement.classList.remove('hidden');
-          const circumference = 364.42;
+      if (!state.isStopwatch && ring && state.totalSeconds > 0) {
+          const circumference = 502.65;
           const progress = Math.max(0, displaySeconds / state.totalSeconds);
-          if (ring) ring.style.strokeDashoffset = circumference * (1 - progress);
+          ring.style.strokeDashoffset = circumference * (1 - progress);
       }
     }
 
-    // Low time warning colors
-    const timerIcon = document.querySelector("#timer-full .lucide-timer");
-    const addBtn = document.getElementById("timer-add-btn");
-    const modal = document.getElementById("timer-full");
-    const bgFlash = document.getElementById("timer-bg-flash");
-
-    // Check if we are already in the correct state to avoid thrashing classList
-    const isWarning = displaySeconds <= 10;
-    const currentIsWarning = ring.dataset.state === "warning";
-
-    if (isWarning && !currentIsWarning) {
-      // ENTER WARNING STATE
-      ring.dataset.state = "warning";
-      ring.style.stroke = "#ff0055"; // accent-alma
-      display.className =
-        "text-[8rem] leading-none font-mono font-black mb-4 tabular-nums timer-text-anim drop-shadow-[4px_4px_0_rgba(0,0,0,1)] timer-warning-text animate-brutal-pulse";
-
-      if (modal) {
-        modal.classList.remove("border-[var(--border-strong)]");
-        modal.classList.add("border-[#ff0055]");
-      }
-      if (bgFlash) {
-        bgFlash.classList.add("animate-flash-bg");
-      }
-      if (timerIcon) {
-        timerIcon.classList.remove("text-[var(--text-main)]", "animate-float");
-        timerIcon.classList.add("text-[#ff0055]", "animate-brutal-pulse");
-      }
-      if (addBtn) {
-        addBtn.classList.remove("bg-[var(--accent-vigor)]");
-        addBtn.classList.add("bg-[#ff0055]", "text-white");
-      }
-    } else if (!isWarning && currentIsWarning) {
-      // EXIT WARNING STATE
-      ring.dataset.state = "normal";
-      ring.style.stroke = "var(--accent-vigor)";
-      display.className =
-        "text-[8rem] leading-none font-mono font-black text-[var(--accent-vigor)] mb-4 tabular-nums timer-text-anim drop-shadow-[4px_4px_0_rgba(0,0,0,1)]";
-
-      if (modal) {
-        modal.classList.add("border-[var(--border-strong)]");
-        modal.classList.remove("border-[#ff0055]");
-      }
-      if (bgFlash) {
-        bgFlash.classList.remove("animate-flash-bg");
-      }
-      if (timerIcon) {
-        timerIcon.classList.add("text-[var(--text-main)]", "animate-float");
-        timerIcon.classList.remove("text-[#ff0055]", "animate-brutal-pulse");
-      }
-      if (addBtn) {
-        addBtn.classList.add("bg-[var(--accent-vigor)]");
-        addBtn.classList.remove("bg-[#ff0055]", "text-white");
-      }
-    } else if (!currentIsWarning && !isWarning) {
-      // Ensure default state if no state set (first run)
-      if (!ring.dataset.state) {
-        ring.dataset.state = "normal";
+    // Low time warning colors (< 10s)
+    const isWarning = displaySeconds <= 10 && displaySeconds > 0 && !state.isStopwatch;
+    if (ring) {
+      if (isWarning) {
+        ring.style.stroke = "#f43f5e";
+        if (display) display.className = "text-5xl font-mono font-black text-rose-400 tabular-nums tracking-tight animate-pulse";
+      } else {
+        ring.style.stroke = "#8b5cf6";
+        if (display) display.className = "text-5xl font-mono font-black text-white tabular-nums tracking-tight";
       }
     }
   }
 
   // Update Minis
-  ["facu", "alma", "session"].forEach((user) => {
+  ["naty", "alma", "session"].forEach((user) => {
     const displayMini = document.getElementById(`mini-display-${user}`);
     const ringMini = document.getElementById(`mini-ring-${user}`);
     const container = displayMini?.closest("div.bg-slate-900"); // Get the bubble container
@@ -3798,7 +3716,7 @@ function updateTimerDisplay() {
 function hideTimer(user) {
   const LiveActivity = getLiveActivityPlugin();
   if (LiveActivity) {
-    LiveActivity.endRestTimer({ userName: user === "facu" ? "Facu" : (user === "session" ? "Session" : "Alma"), dismissImmediately: true }).catch(e => alert("Error (endRestTimer): " + JSON.stringify(e)));
+    LiveActivity.endRestTimer({ userName: user === "naty" ? "Naty" : (user === "session" ? "Session" : "Alma"), dismissImmediately: true }).catch(e => console.warn("[LA] endRestTimer: ", e));
   }
 
   if (user) {
@@ -3809,7 +3727,7 @@ function hideTimer(user) {
     if (activeFullModalUser === user) {
       // If there are other active users, we could expand one.
       // For simplicity, we just clear the full screen if the active one is hidden.
-      const others = ["facu", "alma", "session"].filter(u => u !== user);
+      const others = ["naty", "alma", "session"].filter(u => u !== user);
       const nextUser = others.find(u => timerState[u].active && !timerState[u].minimized);
 
       if (nextUser) {
@@ -4626,7 +4544,7 @@ function getTotalLiftedVolume(user) {
   Object.values(trainingHistory).forEach((day) => {
     if (day.weights) {
       // weights keys are "dayIndex-exIndex-setIndex"
-      // values are like { facu: 50, alma: 30 }
+      // values are like { naty: 50, alma: 30 }
       Object.entries(day.weights).forEach(([wKey, weightObj]) => {
         if (wKey.endsWith("_ts")) return; // Skip timestamp keys
         if (weightObj[user]) {
@@ -4644,11 +4562,11 @@ function getTotalLiftedVolume(user) {
   return total;
 }
 
-// Count days where BOTH Facu and Alma trained together
+// Count days where BOTH Naty and Alma trained together
 function getDuoWorkouts() {
   let count = 0;
   Object.values(trainingHistory).forEach((day) => {
-    if (day.facu && day.alma) count++;
+    if (day.naty && day.alma) count++;
   });
   return count;
 }
@@ -4698,41 +4616,34 @@ function getDailyVolume(user, date = new Date()) {
 }
 
 function checkAchievements() {
-  // Guard: Don't check on initial load (requested by user)
-  // Only check when triggered by explicit actions (which happen usually > 2s after load)
   if (Date.now() - appStartTime < 5000) {
-    console.log("🚫 Skipping achievement check on startup");
     return;
   }
 
-  // Logic to unlock achievements
-  // We store unlocked IDs in gamification[user].achievements = ["id1", "id2"]
-  ["facu", "alma"].forEach((user) => {
-    if (!gamification[user].achievements) gamification[user].achievements = [];
+  const user = "naty";
+  if (!gamification[user]) gamification[user] = { points: 0, streak: 0, freezes: 0, achievements: [] };
+  if (!gamification[user].achievements) gamification[user].achievements = [];
 
-    let newUnlock = false;
-    achievementsConfig.forEach((ach) => {
-      if (!gamification[user].achievements.includes(ach.id)) {
-        // Safety check for condition
-        try {
-          if (ach.condition(user)) {
-            gamification[user].achievements.push(ach.id);
-            newUnlock = true;
-            // Use the new enhanced modal instead of simple toast
-            showAchievementModal(ach, user);
-            triggerConfetti();
-          }
-        } catch (e) {
-          console.warn("Achievement check error", e);
+  let newUnlock = false;
+  achievementsConfig.forEach((ach) => {
+    if (!gamification[user].achievements.includes(ach.id)) {
+      try {
+        if (typeof ach.condition === "function" && ach.condition(user)) {
+          gamification[user].achievements.push(ach.id);
+          newUnlock = true;
+          showAchievementModal(ach, user);
+          triggerConfetti();
         }
+      } catch (e) {
+        console.warn("Achievement check error", e);
       }
-    });
-
-    if (newUnlock) {
-      localStorage.setItem("gymGamification", JSON.stringify(gamification));
-      saveToCloud(); // Sync achievements
     }
   });
+
+  if (newUnlock) {
+    localStorage.setItem("gymGamification", JSON.stringify(gamification));
+    saveToCloud();
+  }
 }
 
 // --- ACHIEVEMENT MODAL FUNCTIONS ---
@@ -4797,8 +4708,8 @@ function showAchievementModal(achievement, user) {
   tier.textContent = achievement.tier || "Común";
   title.textContent = achievement.title;
   desc.textContent = achievement.desc;
-  userName.innerHTML = user === "facu" ? `<i data-lucide="user" class="w-5 h-5 inline-block text-sky-400"></i> Facu` : `<i data-lucide="user" class="w-5 h-5 inline-block text-pink-400"></i> Alma`; setTimeout(() => lucide.createIcons(), 50);
-  userName.className = `font-bold ${user === "facu" ? "text-blue-400" : "text-pink-400"}`;
+  userName.innerHTML = user === "naty" ? `<i data-lucide="user" class="w-5 h-5 inline-block text-sky-400"></i> Naty` : `<i data-lucide="user" class="w-5 h-5 inline-block text-pink-400"></i> Alma`; setTimeout(() => lucide.createIcons(), 50);
+  userName.className = `font-bold ${user === "naty" ? "text-blue-400" : "text-pink-400"}`;
 
   // Show modal with animation
   modal.classList.remove("hidden");
@@ -4826,85 +4737,7 @@ function closeAchievementModal() {
   }, 300);
 }
 
-// --- ACHIEVEMENTS RENDERER ---
-function renderAchievements() {
-  const container = document.getElementById("achievements-grid");
-  if (!container) return;
 
-  container.innerHTML = "";
-
-  const TIER_COLORS = {
-    Común: "border-slate-700 bg-slate-800/50",
-    Raro: "border-blue-500/50 bg-blue-900/20 shadow-[0_0_15px_rgba(59,130,246,0.3)]",
-    Épico:
-      "border-purple-500/50 bg-purple-900/20 shadow-[0_0_20px_rgba(168,85,247,0.4)]",
-    Legendario:
-      "border-fuchsia-400/50 bg-fuchsia-900/20 shadow-[0_0_25px_rgba(251,191,36,0.5)]",
-  };
-
-  const TIER_TEXT_COLORS = {
-    Común: "text-slate-400",
-    Raro: "text-blue-400",
-    Épico: "text-purple-400",
-    Legendario: "text-fuchsia-400",
-  };
-
-  achievementsConfig.forEach((ach) => {
-    // Ensure data integrity
-    if (!gamification.facu.achievements) gamification.facu.achievements = [];
-    if (!gamification.alma.achievements) gamification.alma.achievements = [];
-
-    const facuHas = gamification.facu.achievements.includes(ach.id);
-    const almaHas = gamification.alma.achievements.includes(ach.id);
-    const isUnlocked = facuHas || almaHas;
-
-    const tierAttr = ach.tier || "Común";
-    const tierClass = TIER_COLORS[tierAttr];
-    const tierTextClass = TIER_TEXT_COLORS[tierAttr];
-
-    const card = document.createElement("div");
-    // Opacity logic: if unlocked simple opacity. If locked, dim.
-    const opacityClass = isUnlocked ? "opacity-100" : "opacity-40 grayscale";
-
-    card.className = `relative p-4 rounded-xl border flex flex-col items-center text-center transition-all duration-300 group hover:scale-105 ${tierClass} ${opacityClass}`;
-
-    card.innerHTML = `
-            <div class="absolute top-2 right-2 text-[10px] uppercase font-bold tracking-wider ${tierTextClass}">${tierAttr}</div>
-            
-            <div class="p-3 rounded-full bg-slate-950/50 mb-3 ${isUnlocked ? "shadow-inner" : ""}">
-                <i data-lucide="${ach.icon}" class="w-8 h-8 ${isUnlocked ? tierTextClass : "text-slate-600"}"></i>
-            </div>
-            
-            <h4 class="text-sm font-bold text-white mb-1 leading-tight">${ach.title}</h4>
-            <p class="text-[10px] text-slate-400 leading-snug mb-3 min-h-[2.5em] flex items-center justify-center">${ach.desc}</p>
-            
-            <div class="mt-auto w-full flex justify-center gap-3 border-t border-slate-700/50 pt-2">
-                 <div class="flex items-center gap-1 ${facuHas ? "opacity-100" : "opacity-30"}" title="Facu">
-                    <i data-lucide="user" class="w-4 h-4 text-sky-400"></i>
-                    ${facuHas ? '<i data-lucide="check" class="w-3 h-3 text-emerald-400"></i>' : '<i data-lucide="lock" class="w-3 h-3 text-slate-600"></i>'}
-                 </div>
-                 <div class="flex items-center gap-1 ${almaHas ? "opacity-100" : "opacity-30"}" title="Alma">
-                    <i data-lucide="user" class="w-4 h-4 text-pink-400"></i>
-                    ${almaHas ? '<i data-lucide="check" class="w-3 h-3 text-emerald-400"></i>' : '<i data-lucide="lock" class="w-3 h-3 text-slate-600"></i>'}
-                 </div>
-            </div>
-        `;
-    container.appendChild(card);
-  });
-
-  if (window.lucide) safeCreateIcons();
-
-  // Update Counts header (Unique badges unlocked)
-  const totalCount = document.getElementById("achievements-count");
-  if (totalCount) {
-    const unlockedUnique = achievementsConfig.filter(
-      (a) =>
-        gamification.facu.achievements.includes(a.id) ||
-        gamification.alma.achievements.includes(a.id),
-    ).length;
-    totalCount.textContent = `${unlockedUnique} / ${achievementsConfig.length}`;
-  }
-}
 
 // --- MUSCLE MAP GENERATOR ---
 const getMuscleMapSVG = (primary = [], secondary = []) => {
@@ -5135,9 +4968,9 @@ const getMuscleMapSVG = (primary = [], secondary = []) => {
 
 // DATA MIGRATION: Check for old 'gymTrainingHistory' vs 'gymRoutineHistory' mismatch if needed
 // (If trainingHistory is empty, try to see if there's other data? No, just ensure variable exists)
-if (Object.keys(trainingHistory).length === 0) {
+if (Object.keys(trainingHistory || {}).length === 0) {
   const s = localStorage.getItem("gymTrainingHistory");
-  if (s) trainingHistory = JSON.parse(s);
+  if (s) trainingHistory = JSON.parse(s) || {};
 
   const oldKeys = Object.keys(localStorage).filter((k) =>
     k.startsWith("gym_history_"),
@@ -5228,10 +5061,50 @@ function init() {
 
   renderTabs();
   renderContent();
+  renderCalendar();
+  updateStats();
   safeCreateIcons();
 
   // Check Achievements on startup
   if (typeof checkAchievements === "function") checkAchievements();
+
+  // Safely dismiss HTML loader exactly once
+  let loaderDismissed = false;
+  function hideAppLoader() {
+    if (loaderDismissed) return;
+    loaderDismissed = true;
+    
+    const loader = document.getElementById("app-initial-loader");
+    
+    // Open Daily Motivation modal directly underneath the loader before fade-out
+    if (typeof checkAndShowDailyMotivation === "function") {
+      checkAndShowDailyMotivation();
+    }
+
+    if (loader) {
+      loader.classList.add("opacity-0");
+      setTimeout(() => {
+        try { loader.remove(); } catch (e) { loader.style.display = "none"; }
+      }, 500);
+    }
+  }
+
+  // Load cloud data and dismiss loader safely
+  Promise.race([
+    loadFromCloud().catch(() => {}),
+    new Promise((resolve) => setTimeout(resolve, 800)) // Wait at most 800ms
+  ]).then(() => {
+    if (typeof updateGamificationUI === "function") updateGamificationUI();
+    if (typeof checkAchievements === "function") checkAchievements();
+    if (typeof initWeather === "function") initWeather();
+    renderTabs();
+    renderContent();
+    renderCalendar();
+    updateStats();
+    safeCreateIcons();
+    
+    hideAppLoader();
+  });
 
   // --- POLLING FOR LIVE SYNC ---
   // Check cloud every 30 seconds
@@ -5450,7 +5323,7 @@ function toggleWarmupTimer(id) {
     
     const LiveActivity = getLiveActivityPlugin();
     if (LiveActivity) {
-      LiveActivity.endRestTimer({ userName: "Facu" }).catch(e => alert("Error pausing (Facu): " + JSON.stringify(e)));
+      LiveActivity.endRestTimer({ userName: "Naty" }).catch(e => alert("Error pausing (Naty): " + JSON.stringify(e)));
       LiveActivity.endRestTimer({ userName: "Alma" }).catch(e => alert("Error pausing (Alma): " + JSON.stringify(e)));
     }
   } else {
@@ -5460,7 +5333,7 @@ function toggleWarmupTimer(id) {
     state.endTime = Date.now() + (state.time * 1000);
     
     requestWakeLock();
-    enableBackgroundMode("Calentamiento", state.time, whoTrainsToday === "alma" ? "alma" : "facu");
+    enableBackgroundMode("Calentamiento", state.time, whoTrainsToday === "alma" ? "alma" : "naty");
     
     state.interval = setInterval(() => {
       const now = Date.now();
@@ -5479,8 +5352,7 @@ function toggleWarmupTimer(id) {
         
         const LiveActivity = getLiveActivityPlugin();
         if (LiveActivity) {
-          LiveActivity.endRestTimer({ userName: "Facu" }).catch(e => alert("Error finishing (Facu): " + JSON.stringify(e)));
-          LiveActivity.endRestTimer({ userName: "Alma" }).catch(e => alert("Error finishing (Alma): " + JSON.stringify(e)));
+          LiveActivity.endRestTimer({ userName: "Naty" }).catch(e => console.warn("[LA] end (Naty):", e));
         }
         
         // Play sound? or visual cue
@@ -5489,30 +5361,18 @@ function toggleWarmupTimer(id) {
           showToast("check-circle", "text-emerald-400", "¡Tiempo completado!");
         } catch (e) {}
       }
-      // Force Re-render of Content to update timers
-      // Warning: This re-renders EVERYTHING which might be heavy.
-      // Improvement: Just update the specific DOM elements?
-      // Given the app structure, re-rendering renderContent() is the pattern,
-      // but it might reset scroll or inputs if not careful.
-      // HOWEVER, renderContent() re-builds the list.
-      // Let's see if we can just update the specific timer card to avoid full re-render flicker.
-      // Ideally we would select the card by ID.
-      // For now, let's call renderContent() but be mindful of cursor focus.
-      // Actually, re-rendering the whole content while a timer ticks every second is bad performance.
-      // Let's do a targeted update.
       updateTimerDOM(id);
     }, 1000);
     
     const LiveActivity = getLiveActivityPlugin();
     if (LiveActivity) {
-      // We don't have warmupExercises in scope, just hardcode for bike or fallback to Activación
       const exName = id === "bike" ? "Bicicleta Estática" : "Activación";
       
       LiveActivity.startRestTimer({
         exerciseName: exName,
-        userName: whoTrainsToday === "alma" ? "Alma" : "Facu",
+        userName: whoTrainsToday === "alma" ? "Alma" : "Naty",
         seconds: state.time
-      }).catch(e => alert("Error iniciando Dynamic Island: " + JSON.stringify(e)));
+      }).catch(e => console.warn("[LA] start:", e));
     }
   }
 
@@ -5536,8 +5396,7 @@ function resetWarmupTimer(id) {
   
   const LiveActivity = getLiveActivityPlugin();
   if (LiveActivity) {
-    LiveActivity.endRestTimer({ userName: "Facu" }).catch(e => alert("Error reset (Facu): " + JSON.stringify(e)));
-    LiveActivity.endRestTimer({ userName: "Alma" }).catch(e => alert("Error reset (Alma): " + JSON.stringify(e)));
+    LiveActivity.endRestTimer({ userName: "Naty" }).catch(e => console.warn("[LA] reset:", e));
   }
   
   renderContent();
@@ -5560,8 +5419,7 @@ function skipWarmupTimer(id) {
 
   const LiveActivity = getLiveActivityPlugin();
   if (LiveActivity) {
-    LiveActivity.endRestTimer({ userName: "Facu" }).catch(e => alert("Error skip (Facu): " + JSON.stringify(e)));
-    LiveActivity.endRestTimer({ userName: "Alma" }).catch(e => alert("Error skip (Alma): " + JSON.stringify(e)));
+    LiveActivity.endRestTimer({ userName: "Naty" }).catch(e => console.warn("[LA] skip:", e));
   }
 
   renderContent();
@@ -5595,22 +5453,18 @@ window.toggleWarmupTimer = toggleWarmupTimer;
 window.resetWarmupTimer = resetWarmupTimer;
 window.skipWarmupTimer = skipWarmupTimer;
 window.toggleExerciseComplete = function(tabIdx, exerciseIdx, numSets, isCompleted) {
-  const showFacu = whoTrainsToday === "both" || whoTrainsToday === "facu";
-  const showAlma = whoTrainsToday === "both" || whoTrainsToday === "alma";
-  
   for (let s = 0; s < numSets; s++) {
     const setKey = `${tabIdx}-${exerciseIdx}-${s}`;
     if (!completedSets[setKey]) {
-      completedSets[setKey] = { facu: false, alma: false };
+      completedSets[setKey] = { naty: false, alma: false };
     }
-    if (showFacu) completedSets[setKey].facu = !isCompleted;
-    if (showAlma) completedSets[setKey].alma = !isCompleted;
+    completedSets[setKey].naty = !isCompleted;
   }
   localStorage.setItem("gymRoutineSets_" + activeRoutineId, JSON.stringify(completedSets));
   
   const today = getDateKey(new Date());
   if (!trainingHistory[today]) {
-    trainingHistory[today] = { alma: false, facu: false, weights: {}, completed_sets: {} };
+    trainingHistory[today] = { alma: false, naty: false, weights: {}, completed_sets: {} };
   }
   trainingHistory[today].completed_sets = completedSets;
   if (typeof debouncedSaveToCloud === 'function') debouncedSaveToCloud(1000);
@@ -5639,21 +5493,15 @@ function renderContent(skipAnimations = false) {
     `${dayData.exercises.length} Ejercicios`;
 
   // Calculate total sets and completed sets for progress
-  const multiplier = whoTrainsToday === "both" ? 2 : 1;
   let totalSets = 0;
   let completedSetsCount = 0;
   dayData.exercises.forEach((exercise, idx) => {
     const numSets = parseInt(exercise.sets) || 3;
-    totalSets += numSets * multiplier;
+    totalSets += numSets;
     for (let s = 0; s < numSets; s++) {
       const setKey = `${activeTab}-${idx}-${s}`;
-      const setData = completedSets[setKey] || { facu: false, alma: false };
-      if (whoTrainsToday === "both" || whoTrainsToday === "facu") {
-        if (setData.facu) completedSetsCount++;
-      }
-      if (whoTrainsToday === "both" || whoTrainsToday === "alma") {
-        if (setData.alma) completedSetsCount++;
-      }
+      const setData = completedSets[setKey] || { naty: false, alma: false };
+      if (setData.naty) completedSetsCount++;
     }
   });
 
@@ -5688,7 +5536,6 @@ function renderContent(skipAnimations = false) {
   const completionMsg = document.getElementById("completion-message");
   if (progress === 100) {
     completionMsg.classList.remove("hidden");
-    // Auto-open summary modal with a slight delay
     if (typeof openWorkoutSummaryModal === "function") {
       setTimeout(openWorkoutSummaryModal, 600);
     }
@@ -5731,22 +5578,19 @@ function renderContent(skipAnimations = false) {
 
   listContainer.appendChild(warmupContainer);
 
-  const showFacu = whoTrainsToday === "both" || whoTrainsToday === "facu";
-  const showAlma = whoTrainsToday === "both" || whoTrainsToday === "alma";
-
   dayData.exercises.forEach((exercise, idx) => {
     const numSets = parseInt(exercise.sets) || 3;
     const restTime = parseRestTime(exercise.notes || "");
+    const cleanNotes = (exercise.notes || "").replace(/Descanso:\s*[\d\.]+\s*(min|seg|s|m)\.?/gi, "").trim();
 
-    // Count completed sets for this exercise (Total checks / Total required)
+    // Count completed sets for this exercise
     let exerciseCompletedChecks = 0;
     for (let s = 0; s < numSets; s++) {
       const setKey = `${activeTab}-${idx}-${s}`;
-      const setData = completedSets[setKey] || { facu: false, alma: false };
-      if (showFacu && setData.facu) exerciseCompletedChecks++;
-      if (showAlma && setData.alma) exerciseCompletedChecks++;
+      const setData = completedSets[setKey] || { naty: false, alma: false };
+      if (setData.naty) exerciseCompletedChecks++;
     }
-    const isExerciseCompleted = exerciseCompletedChecks === numSets * multiplier;
+    const isExerciseCompleted = exerciseCompletedChecks === numSets;
 
     const card = document.createElement("div");
     const staggerClass = (!skipAnimations && idx < 6) ? `stagger-${idx + 1}` : "";
@@ -5757,109 +5601,60 @@ function renderContent(skipAnimations = false) {
     }
     card.className = cardClasses;
 
-    // Generate Set Rows
-    let setRowsHTML = `<div class="flex flex-col">`;
+    // Generate Set Rows (Single clean Naty row)
+    let setRowsHTML = `<div class="flex flex-col gap-2.5">`;
     for (let s = 0; s < numSets; s++) {
       const setKey = `${activeTab}-${idx}-${s}`;
       if (typeof completedSets[setKey] !== "object") {
-        completedSets[setKey] = { facu: false, alma: false };
+        completedSets[setKey] = { naty: false, alma: false };
       }
       const setData = completedSets[setKey];
 
-      let weightFacu = setWeights[setKey] && setWeights[setKey].facu ? setWeights[setKey].facu : "";
-      let weightAlma = setWeights[setKey] && setWeights[setKey].alma ? setWeights[setKey].alma : "";
-      let repsFacu = setReps[setKey] && setReps[setKey].facu ? setReps[setKey].facu : "";
-      let repsAlma = setReps[setKey] && setReps[setKey].alma ? setReps[setKey].alma : "";
+      let weightNaty = setWeights[setKey] && setWeights[setKey].naty ? setWeights[setKey].naty : "";
+      let repsNaty = setReps[setKey] && setReps[setKey].naty ? setReps[setKey].naty : "";
 
-      if (!weightFacu) {
-        const last = getLastWeight(exercise.name, "facu", activeTab);
-        if (last) weightFacu = last;
+      if (!weightNaty) {
+        const last = getLastWeight(exercise.name, "naty", activeTab);
+        if (last) weightNaty = last;
       }
-      if (!weightAlma) {
-        const last = getLastWeight(exercise.name, "alma", activeTab);
-        if (last) weightAlma = last;
-      }
-      if (!repsFacu) {
-        const last = getLastReps(exercise.name, "facu", activeTab);
-        if (last) repsFacu = last;
-      }
-      if (!repsAlma) {
-        const last = getLastReps(exercise.name, "alma", activeTab);
-        if (last) repsAlma = last;
+      if (!repsNaty) {
+        const last = getLastReps(exercise.name, "naty", activeTab);
+        if (last) repsNaty = last;
       }
       
       const targetRepsPlaceholder = exercise.reps ? exercise.reps.replace(/[^0-9-]/g, '').split('-')[0] || "10" : "10";
 
       setRowsHTML += `
-      <div class="flex relative group">
-          <!-- Timeline Vertical Line -->
-          <div class="absolute left-[19px] top-10 bottom-[-16px] w-0.5 bg-slate-800 group-last:hidden"></div>
-          
-          <!-- Set Circle -->
-          <div class="w-10 flex flex-col items-center shrink-0 z-10 pt-1">
-              <div class="w-10 h-10 rounded-full bg-slate-900 text-slate-400 font-bold flex items-center justify-center border-[4px] border-slate-900 shadow-sm">
+      <div class="flex items-center justify-between p-2.5 sm:p-3 rounded-2xl transition-all duration-200 border ${setData.naty ? 'bg-violet-950/20 border-violet-500/40 shadow-[0_0_15px_rgba(139,92,246,0.1)]' : 'bg-slate-900/60 border-slate-800/80 hover:border-slate-700'}">
+          <!-- Left: Set Number & Inputs -->
+          <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-xl ${setData.naty ? 'bg-violet-600 text-white font-black' : 'bg-slate-800 text-slate-400 font-bold'} text-xs flex items-center justify-center shrink-0 font-mono transition-colors">
                   ${s + 1}
               </div>
+              
+              <!-- Reps & Weight in clean pills -->
+              <div class="flex items-center gap-2">
+                  <div class="flex items-center bg-slate-950/60 border border-slate-800/80 rounded-xl px-2.5 py-1">
+                      <input type="number" value="${repsNaty}" placeholder="${targetRepsPlaceholder}" data-set-key="${setKey}" data-user="naty"
+                          class="reps-input w-10 text-center font-bold text-white text-sm outline-none m-0 p-0" onclick="event.stopPropagation()">
+                      <span class="text-[11px] font-semibold text-slate-400 ml-1">reps</span>
+                  </div>
+                  
+                  <span class="text-slate-600 font-bold">×</span>
+                  
+                  <div class="flex items-center bg-slate-950/60 border border-slate-800/80 rounded-xl px-2.5 py-1">
+                      <input type="number" value="${weightNaty}" placeholder="0" data-set-key="${setKey}" data-user="naty"
+                          class="weight-input w-11 text-center font-bold text-white text-sm outline-none m-0 p-0" onclick="event.stopPropagation()">
+                      <span class="text-[11px] font-semibold text-slate-400 ml-1">kg</span>
+                  </div>
+              </div>
           </div>
           
-          <!-- Inputs Column -->
-          <div class="flex-1 ml-3 flex flex-col gap-2 pb-6">
-              ${showFacu ? `
-              <div class="flex items-center justify-between bg-slate-900 border border-slate-800 rounded-xl p-1.5 pl-4 transition-colors ${setData.facu ? 'border-[var(--accent-facu)]/30 bg-[var(--accent-facu)]/5' : ''}">
-                  <div class="flex items-center gap-2">
-                      ${whoTrainsToday === 'both' ? `<div class="w-2 h-2 rounded-full bg-[var(--accent-facu)]"></div>` : ''}
-                      
-                      <!-- Reps Input -->
-                      <div class="flex items-center">
-                          <input type="number" value="${repsFacu}" placeholder="${targetRepsPlaceholder}" data-set-key="${setKey}" data-user="facu"
-                              class="reps-input w-12 bg-transparent appearance-none border-none shadow-none font-bold text-white text-lg text-center outline-none p-0 placeholder:text-slate-700 m-0" onclick="event.stopPropagation()">
-                          <span class="text-slate-500 text-sm font-medium mr-1 hidden sm:inline">reps</span>
-                      </div>
-                      
-                      <span class="text-slate-600 font-bold hidden sm:inline">·</span>
-                      
-                      <!-- Weight Input -->
-                      <div class="flex items-center">
-                          <input type="number" value="${weightFacu}" placeholder="0" data-set-key="${setKey}" data-user="facu"
-                              class="weight-input w-14 bg-transparent appearance-none border-none shadow-none font-bold text-white text-lg text-center outline-none p-0 placeholder:text-slate-700 m-0" onclick="event.stopPropagation()">
-                          <span class="text-slate-500 text-sm font-medium">kg</span>
-                      </div>
-                  </div>
-                  <button data-set-key="${setKey}" data-user="facu" data-exercise-name="${exercise.name}" data-rest-time="${restTime}"
-                      class="set-btn shrink-0 w-12 h-10 rounded-lg flex items-center justify-center transition-all ${setData.facu ? 'bg-[var(--accent-facu)] text-black' : 'bg-slate-800 text-slate-500 hover:text-white'}">
-                      <i data-lucide="check" class="w-5 h-5"></i>
-                  </button>
-              </div>
-              ` : ''}
-              
-              ${showAlma ? `
-              <div class="flex items-center justify-between bg-slate-900 border border-slate-800 rounded-xl p-1.5 pl-4 transition-colors ${setData.alma ? 'border-[var(--accent-alma)]/30 bg-[var(--accent-alma)]/5' : ''}">
-                  <div class="flex items-center gap-2">
-                      ${whoTrainsToday === 'both' ? `<div class="w-2 h-2 rounded-full bg-[var(--accent-alma)]"></div>` : ''}
-                      
-                      <!-- Reps Input -->
-                      <div class="flex items-center">
-                          <input type="number" value="${repsAlma}" placeholder="${targetRepsPlaceholder}" data-set-key="${setKey}" data-user="alma"
-                              class="reps-input w-12 bg-transparent appearance-none border-none shadow-none font-bold text-white text-lg text-center outline-none p-0 placeholder:text-slate-700 m-0" onclick="event.stopPropagation()">
-                          <span class="text-slate-500 text-sm font-medium mr-1 hidden sm:inline">reps</span>
-                      </div>
-                      
-                      <span class="text-slate-600 font-bold hidden sm:inline">·</span>
-                      
-                      <!-- Weight Input -->
-                      <div class="flex items-center">
-                          <input type="number" value="${weightAlma}" placeholder="0" data-set-key="${setKey}" data-user="alma"
-                              class="weight-input w-14 bg-transparent appearance-none border-none shadow-none font-bold text-white text-lg text-center outline-none p-0 placeholder:text-slate-700 m-0" onclick="event.stopPropagation()">
-                          <span class="text-slate-500 text-sm font-medium">kg</span>
-                      </div>
-                  </div>
-                  <button data-set-key="${setKey}" data-user="alma" data-exercise-name="${exercise.name}" data-rest-time="${restTime}"
-                      class="set-btn shrink-0 w-12 h-10 rounded-lg flex items-center justify-center transition-all ${setData.alma ? 'bg-[var(--accent-alma)] text-white' : 'bg-slate-800 text-slate-500 hover:text-white'}">
-                      <i data-lucide="check" class="w-5 h-5"></i>
-                  </button>
-              </div>
-              ` : ''}
-          </div>
+          <!-- Right: Check Action -->
+          <button data-set-key="${setKey}" data-user="naty" data-exercise-name="${exercise.name}" data-rest-time="${restTime}"
+              class="set-btn shrink-0 w-11 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer ${setData.naty ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-500/30 active:scale-95' : 'bg-slate-800/80 text-slate-400 hover:text-white hover:bg-slate-700'}">
+              <i data-lucide="${setData.naty ? 'check' : 'check'}" class="w-4 h-4"></i>
+          </button>
       </div>
       `;
     }
@@ -5867,82 +5662,73 @@ function renderContent(skipAnimations = false) {
 
     // Assemble Card HTML
     card.innerHTML = `
-        <!-- Header -->
-        <div class="px-4 py-4 flex items-center gap-4">
-            <!-- Thumbnail (Image) -->
-            <div class="w-20 h-20 bg-black rounded-2xl flex items-center justify-center shrink-0 overflow-hidden relative cursor-pointer border border-slate-800" onclick='event.stopPropagation(); openImageModal("${getExerciseImage(exercise)}")'>
-                <img src="${getExerciseImage(exercise)}" alt="${exercise.name}" class="w-full h-full object-cover grayscale opacity-80 transition-opacity duration-300 hover:opacity-100" onerror="this.onerror=null; this.src='./assets/exercises/squat.jpg';" />
+        <!-- Card Header -->
+        <div class="p-4 sm:p-5 flex items-start gap-4">
+            <!-- Thumbnail -->
+            <div class="w-20 h-20 rounded-2xl bg-black flex items-center justify-center shrink-0 overflow-hidden relative cursor-pointer border border-slate-800/80 hover:border-violet-500/50 transition-all shadow-md group" onclick='event.stopPropagation(); openImageModal("${getExerciseImage(exercise)}", "${(exercise.name || "").replace(/"/g, "&quot;")}")'>
+                <img src="${getExerciseImage(exercise)}" alt="${exercise.name}" class="w-full h-full object-cover grayscale opacity-90 transition-all duration-300 group-hover:opacity-100 group-hover:scale-105" onerror="this.onerror=null; this.src='./assets/exercises/squat.jpg';" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-1">
+                    <i data-lucide="maximize-2" class="w-3.5 h-3.5 text-white drop-shadow"></i>
+                </div>
             </div>
             
-            <!-- Title & Info -->
-            <div class="flex-1 flex flex-col justify-center min-w-0">
+            <!-- Title & Metadata -->
+            <div class="flex-1 min-w-0">
                 <div class="flex justify-between items-start gap-2">
-                    <h3 class="font-bold text-[22px] text-white leading-tight tracking-tight truncate">${exercise.name}</h3>
-                    <button onclick="event.stopPropagation(); showExerciseHistory('${exercise.name}')" class="text-slate-400 hover:text-white shrink-0 mt-1">
-                        <i data-lucide="info" class="w-5 h-5"></i>
+                    <h3 class="font-extrabold text-lg sm:text-xl text-white leading-tight tracking-tight">${exercise.name}</h3>
+                    <button onclick="event.stopPropagation(); showExerciseHistory('${exercise.name}')" title="Ver historial del ejercicio" class="text-slate-400 hover:text-violet-400 p-1.5 rounded-full hover:bg-slate-800 transition-colors shrink-0">
+                        <i data-lucide="info" class="w-4 h-4"></i>
                     </button>
                 </div>
-                <p class="text-[13px] text-slate-400 mt-1.5 truncate">
-                    ${exercise.muscles.primary.join(", ")}
-                </p>
+                <div class="flex items-center gap-2 mt-1.5 flex-wrap">
+                    <span class="text-xs font-semibold text-violet-400 bg-violet-500/10 border border-violet-500/20 px-2.5 py-0.5 rounded-full">
+                        ${exercise.muscles.primary.join(", ")}
+                    </span>
+                    <span class="text-xs text-slate-400 flex items-center gap-1 font-medium">
+                        <i data-lucide="timer" class="w-3 h-3 text-slate-400"></i> ${restTime >= 60 ? Math.floor(restTime/60) + ' min' : restTime + 's'}
+                    </span>
+                </div>
             </div>
         </div>
         
-        <!-- Objective Note -->
-        <div class="px-4 mb-4 mt-2">
-             <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-sm text-slate-300 flex gap-2 items-center">
-                 <i data-lucide="target" class="w-4 h-4 text-emerald-500 shrink-0"></i>
-                 <span class="font-medium">Objetivo: <span class="text-white">${numSets} series de ${exercise.reps} reps</span></span>
-             </div>
-        </div>
-        
-        <!-- Quick Actions (Pills) -->
-        <div class="px-4 py-1 flex items-center gap-2 mb-5 overflow-x-auto no-scrollbar scroll-smooth">
-            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-[13px] text-white whitespace-nowrap">
-                <i data-lucide="timer" class="w-3.5 h-3.5 text-slate-400"></i> ${restTime >= 60 ? Math.floor(restTime/60) + ':00' : restTime + 's'}
+        <!-- Objective & Quick Actions Bar -->
+        <div class="px-4 sm:px-5 pb-3 flex items-center justify-between gap-2 flex-wrap">
+            <div class="text-xs font-semibold text-slate-300 flex items-center gap-1.5 bg-slate-900/60 border border-slate-800 px-3 py-1 rounded-full">
+                <i data-lucide="target" class="w-3.5 h-3.5 text-emerald-400"></i>
+                <span>Objetivo: <strong class="text-white">${numSets} series × ${exercise.reps} reps</strong></span>
             </div>
-            ${exercise.notes ? `
-            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-[13px] text-white whitespace-nowrap">
-                <i data-lucide="plus" class="w-3.5 h-3.5 text-slate-400"></i> Notas
-            </div>` : ''}
-            <button onclick="toggleExerciseComplete('${activeTab}', ${idx}, ${numSets}, ${isExerciseCompleted})" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full ${isExerciseCompleted ? 'bg-slate-800 border border-slate-700 text-slate-400' : 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-500'} text-[13px] font-bold whitespace-nowrap hover:bg-opacity-80 transition-all active:scale-95 ml-auto">
+            
+            <button onclick="toggleExerciseComplete('${activeTab}', ${idx}, ${numSets}, ${isExerciseCompleted})" 
+                class="text-xs font-bold px-3 py-1 rounded-full transition-all flex items-center gap-1.5 cursor-pointer ml-auto ${isExerciseCompleted ? 'bg-slate-800 border border-slate-700 text-slate-400' : 'bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/25'}">
                 <i data-lucide="${isExerciseCompleted ? 'rotate-ccw' : 'check-circle-2'}" class="w-3.5 h-3.5"></i>
-                ${isExerciseCompleted ? 'Deshacer todo' : 'Completar todo'}
+                ${isExerciseCompleted ? 'Deshacer' : 'Completar todo'}
             </button>
         </div>
         
-        <!-- Coach Note Dropdown -->
-        ${exercise.notes ? `
-        <div class="px-4 mb-4">
-             <div class="p-3 rounded-xl bg-slate-900 border border-fuchsia-500/20 text-xs text-fuchsia-200/90 flex gap-2 items-start">
-                 <i data-lucide="lightbulb" class="w-4 h-4 text-fuchsia-500 shrink-0 mt-0.5"></i>
-                 ${exercise.notes.replace(/Descanso:.*?(min|seg)\.?/gi, "").trim()}
+        <!-- Coach Note (only if non-empty text exists) -->
+        ${cleanNotes ? `
+        <div class="px-4 sm:px-5 mb-3">
+             <div class="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-200 flex gap-2.5 items-start leading-relaxed">
+                 <i data-lucide="lightbulb" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+                 <span>${cleanNotes}</span>
              </div>
         </div>
         ` : ''}
 
-        <!-- Sets Tracker Timeline -->
-        <div class="px-4 w-full">
+        <!-- Sets Tracker Rows -->
+        <div class="px-4 sm:px-5 pb-5 w-full">
             ${setRowsHTML}
             
-            <!-- Action buttons -->
-            <div class="flex items-center gap-6 mt-2 mb-2">
-                <!-- Agregar serie button -->
-                <div onclick="addExerciseSet('${activeTab}', ${idx})" class="flex items-center gap-3 group cursor-pointer transition-opacity hover:opacity-80">
-                    <div class="w-10 h-10 rounded-full bg-[#ea580c] text-black flex items-center justify-center shrink-0">
-                        <i data-lucide="plus" class="w-5 h-5 font-bold"></i>
-                    </div>
-                    <span class="text-[#ea580c] font-medium text-sm">Agregar</span>
-                </div>
+            <!-- Add / Remove Set Row Actions -->
+            <div class="flex items-center gap-3 mt-3 pt-2 border-t border-slate-800/60 text-xs">
+                <button onclick="addExerciseSet('${activeTab}', ${idx})" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-violet-400 font-bold transition-all cursor-pointer active:scale-95">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar serie
+                </button>
                 
-                <!-- Quitar serie button -->
                 ${numSets > 1 ? `
-                <div onclick="removeExerciseSet('${activeTab}', ${idx})" class="flex items-center gap-3 group cursor-pointer transition-opacity hover:opacity-80">
-                    <div class="w-10 h-10 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center shrink-0">
-                        <i data-lucide="minus" class="w-5 h-5 font-bold"></i>
-                    </div>
-                    <span class="text-slate-400 font-medium text-sm">Quitar</span>
-                </div>
+                <button onclick="removeExerciseSet('${activeTab}', ${idx})" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 font-medium transition-all cursor-pointer active:scale-95">
+                    <i data-lucide="minus" class="w-3.5 h-3.5"></i> Quitar serie
+                </button>
                 ` : ''}
             </div>
         </div>
@@ -5976,7 +5762,7 @@ function renderContent(skipAnimations = false) {
             
             const today = getDateKey(new Date());
             if (!trainingHistory[today]) {
-              trainingHistory[today] = { alma: false, facu: false, weights: {}, completed_sets: {} };
+              trainingHistory[today] = { alma: false, naty: false, weights: {}, completed_sets: {} };
             }
             trainingHistory[today].completed_sets = {};
             
@@ -5994,13 +5780,13 @@ function renderContent(skipAnimations = false) {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
       const setKey = btn.dataset.setKey;
-      const user = btn.dataset.user; // 'facu' or 'alma'
+      const user = btn.dataset.user; // 'naty' or 'alma'
       const exerciseName = btn.dataset.exerciseName;
       const restTime = parseInt(btn.dataset.restTime);
 
       // Initialize if missing
       if (!completedSets[setKey] || typeof completedSets[setKey] !== "object") {
-        completedSets[setKey] = { facu: false, alma: false };
+        completedSets[setKey] = { naty: false, alma: false };
       }
 
       // Record local update timestamp to prevent sync race condition
@@ -6022,6 +5808,11 @@ function renderContent(skipAnimations = false) {
       if (!currentState) {
         // TURN ON
         completedSets[setKey][user] = true;
+        // Reward +5 gems per set completed
+        if (user === "naty" && gamification && gamification.naty) {
+          gamification.naty.points = (gamification.naty.points || 0) + 5;
+          updateGamificationUI();
+        }
         // Sólo mostrar timer si se activa
         showTimer(user, exerciseName, restTime);
         
@@ -6034,6 +5825,10 @@ function renderContent(skipAnimations = false) {
       } else {
         // TURN OFF
         completedSets[setKey][user] = false;
+        if (user === "naty" && gamification && gamification.naty && gamification.naty.points >= 5) {
+          gamification.naty.points -= 5;
+          updateGamificationUI();
+        }
         
         // Hide the timer if it is currently active for this user
         if (timerState[user] && timerState[user].active) {
@@ -6046,7 +5841,7 @@ function renderContent(skipAnimations = false) {
       // Real-time synchronization
       const today = getDateKey(new Date());
       if (!trainingHistory[today]) {
-        trainingHistory[today] = { alma: false, facu: false, weights: {}, completed_sets: {} };
+        trainingHistory[today] = { alma: false, naty: false, weights: {}, completed_sets: {} };
       }
       trainingHistory[today].completed_sets = completedSets;
       trainingHistory[today].weights = {
@@ -6067,7 +5862,7 @@ function renderContent(skipAnimations = false) {
       const val = e.target.value;
 
       if (!setWeights[setKey]) {
-        setWeights[setKey] = { facu: "", alma: "" };
+        setWeights[setKey] = { naty: "", alma: "" };
       }
       setWeights[setKey][user] = val;
       const now = Date.now();
@@ -6082,7 +5877,7 @@ function renderContent(skipAnimations = false) {
       // Real-time synchronization
       const today = getDateKey(new Date());
       if (!trainingHistory[today]) {
-        trainingHistory[today] = { alma: false, facu: false, weights: {}, completed_sets: {} };
+        trainingHistory[today] = { alma: false, naty: false, weights: {}, completed_sets: {} };
       }
       trainingHistory[today].weights = {
         ...trainingHistory[today].weights,
@@ -6106,35 +5901,37 @@ function renderContent(skipAnimations = false) {
   safeCreateIcons();
 }
 
-function openImageModal(imgSrc) {
+function openImageModal(imgSrc, title = "Vista Previa") {
   const modal = document.getElementById("image-modal");
   const container = document.getElementById("image-modal-content");
+  const titleEl = document.getElementById("image-modal-title");
 
   if (!modal || !container) return;
 
-  // Ensure modal background is visible
-  modal.classList.remove("hidden");
-  
-  // Inject the image full size
-  container.innerHTML = `<img src="${imgSrc}" class="w-full h-full object-cover rounded-3xl shadow-2xl grayscale" />`;
+  if (titleEl) {
+    titleEl.textContent = title || "Vista Previa";
+  }
 
-  // Animate in
-  setTimeout(() => {
-    modal.classList.remove("opacity-0");
-    modal.children[0].classList.remove("scale-95", "opacity-0");
-  }, 10);
+  // Inject the image full size with high contrast B&W styling
+  container.innerHTML = `
+    <div class="relative w-full max-w-sm sm:max-w-md aspect-square rounded-2xl overflow-hidden border border-slate-800 shadow-2xl bg-black flex items-center justify-center">
+      <img id="modal-image" src="${imgSrc}" alt="${title}" class="w-full h-full object-cover grayscale contrast-125 brightness-95 transition-transform duration-500 hover:scale-105" onerror="this.onerror=null; this.src='./assets/exercises/squat.jpg';" />
+    </div>`;
+
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+  safeCreateIcons();
 }
 
 function closeImageModal() {
   const modal = document.getElementById("image-modal");
   if (!modal) return;
-  modal.classList.add("opacity-0");
-  modal.children[0].classList.add("scale-95", "opacity-0");
-
-  setTimeout(() => {
-    modal.classList.add("hidden");
-  }, 300);
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
 }
+
+window.openImageModal = openImageModal;
+window.closeImageModal = closeImageModal;
 
 // --- VISIBILITY HANDLER ---
 document.addEventListener("visibilitychange", () => {
@@ -6146,7 +5943,7 @@ document.addEventListener("visibilitychange", () => {
     let needsUpdate = false;
     const now = Date.now();
 
-    ["facu", "alma"].forEach((user) => {
+    ["naty", "alma"].forEach((user) => {
       const state = timerState[user];
       if (state.active) {
         if (!state.isStopwatch) {
@@ -6180,7 +5977,7 @@ if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App
       unlockAudio();
       let needsUpdate = false;
       const now = Date.now();
-      ["facu", "alma", "session"].forEach((user) => {
+      ["naty", "alma", "session"].forEach((user) => {
         const state = timerState[user];
         if (state.active && !state.isStopwatch) {
           const diff = state.endTime - now;
@@ -6201,60 +5998,19 @@ if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App
   });
 }
 
-// --- SERVICE WORKER REGISTRATION WITH AUTO-UPDATE ---
+// --- SERVICE WORKER REGISTRATION REMOVED ---
+// Service workers in Capacitor cause infinite reload loops and prevent APK updates from applying.
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", async () => {
-    // Limpiar todos los cachés viejos automáticamente
-    if ("caches" in window) {
-      const cacheNames = await caches.keys();
-      const currentCacheVersion = "gym-rutina-v12";
-      for (const cacheName of cacheNames) {
-        if (cacheName !== currentCacheVersion) {
-          console.log("Limpiando caché viejo:", cacheName);
-          await caches.delete(cacheName);
-        }
-      }
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for(let registration of registrations) {
+      registration.unregister();
     }
-
-    navigator.serviceWorker
-      .register("sw.js")
-      .then((registration) => {
-        console.log("ServiceWorker registered with scope:", registration.scope);
-
-        // Forzar verificación de actualizaciones
-        registration.update();
-
-        // Verificar actualizaciones automáticamente
-        registration.addEventListener("updatefound", () => {
-          const newWorker = registration.installing;
-          console.log("Nueva versión del Service Worker encontrada...");
-
-          newWorker.addEventListener("statechange", () => {
-            if (
-              newWorker.state === "installed" &&
-              navigator.serviceWorker.controller
-            ) {
-              // Hay una nueva versión lista, recargar automáticamente
-              console.log("Nueva versión instalada, recargando...");
-              window.location.reload();
-            }
-          });
-        });
-      })
-      .catch((error) => {
-        console.log("ServiceWorker registration failed:", error);
-      });
-
-    // Si el Service Worker toma control, recargar para aplicar cambios
-    let refreshing = false;
-    navigator.serviceWorker.addEventListener("controllerchange", () => {
-      if (!refreshing) {
-        refreshing = true;
-        console.log("Service Worker actualizado, recargando página...");
-        window.location.reload();
-      }
-    });
   });
+  if ("caches" in window) {
+    caches.keys().then(function(names) {
+      for (let name of names) caches.delete(name);
+    });
+  }
 }
 
 // Debug
@@ -6580,81 +6336,209 @@ function calculate1RM() {
 }
 window.calculate1RM = calculate1RM;
 
-// --- STREAK LOGIC ---
-// --- GAMIFICATION SYSTEM ---
-function updateGamificationUI() {
-  calculateUserStreak("facu");
-  calculateUserStreak("alma");
+// --- STREAK LOGIC & DUOLINGO-STYLE GAMIFICATION ---
+let currentStreakUser = "naty";
 
-  // Verificar oportunidades de rescate
+function updateGamificationUI() {
+  calculateUserStreak("naty");
+
+  // Verificar oportunidades de rescate para Naty
   setTimeout(() => {
-    checkForStreakRescue("facu");
-    checkForStreakRescue("alma");
+    checkForStreakRescue("naty");
   }, 1000);
 
-  // Update Header UI
+  // Update Header Duolingo-style Streak Badge
+  const streakNaty = gamification.naty ? (gamification.naty.streak || 0) : 0;
+  const isFire = streakNaty > 0;
+
+  // Direct fast DOM update if element exists in index.html
+  const streakCountEl = document.getElementById("header-streak-count");
+  if (streakCountEl) {
+    streakCountEl.textContent = streakNaty;
+    streakCountEl.className = `text-sm font-black font-mono tracking-tight ${isFire ? 'text-amber-300' : 'text-slate-400'}`;
+  }
+  const streakIconEl = document.getElementById("header-streak-icon");
+  if (streakIconEl) {
+    streakIconEl.className = `w-4 h-4 ${isFire ? 'text-orange-500 fill-orange-500 animate-flame-flicker drop-shadow-[0_0_8px_rgba(249,115,22,0.9)]' : 'text-slate-600 fill-slate-700'}`;
+  }
+
+  // Update Header & Sidebar Gems Badges
+  const gemsNaty = gamification.naty ? (gamification.naty.points || 0) : 0;
+  const headerGemsEl = document.getElementById("header-gems-count");
+  if (headerGemsEl) headerGemsEl.textContent = gemsNaty;
+  const sidebarGemsEl = document.getElementById("sidebar-gems-count");
+  if (sidebarGemsEl) sidebarGemsEl.textContent = gemsNaty;
+
   const container = document.getElementById("streak-display");
   if (container) {
     container.classList.remove("hidden");
-    
-    const showFacu = whoTrainsToday === "facu" || whoTrainsToday === "both";
-    const showAlma = whoTrainsToday === "alma" || whoTrainsToday === "both";
-    
-    // Si solo hay uno, puede ocupar todo el ancho, sino grid
-    container.className = showFacu && showAlma 
-        ? "grid grid-cols-2 md:flex md:flex-row gap-2 md:gap-3 md:justify-start mt-3 pb-3"
-        : "flex flex-col md:flex-row gap-2 md:gap-3 md:justify-start mt-3 pb-3";
-
-    let html = "";
-
-    if (showFacu) {
-      html += `
-            <div class="flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 bg-slate-800/80 px-2 md:px-4 py-2 md:py-2 rounded-xl border border-blue-500/30 shadow-sm transition-transform active:scale-95 cursor-pointer w-full md:w-auto" onclick="openShopModal('facu')">
-                <span class="text-[10px] font-bold text-blue-400 uppercase tracking-widest md:min-w-[30px]">FACU</span>
-                <div class="flex items-center gap-2 md:gap-3">
-                    <div class="flex items-center gap-1.5">
-                        <i data-lucide="flame" class="w-3.5 h-3.5 ${gamification.facu.streak > 0 ? "text-violet-500 fill-violet-500" : "text-slate-600"}"></i>
-                        <span class="text-sm font-bold text-slate-200">${gamification.facu.streak}</span>
-                    </div>
-                    <div class="w-px h-3 bg-slate-600"></div>
-                    <div class="flex items-center gap-1.5">
-                        <i data-lucide="gem" class="w-3.5 h-3.5 text-emerald-400"></i>
-                        <span class="text-sm font-bold text-slate-200">${gamification.facu.points}</span>
-                    </div>
-                    <div class="flex items-center gap-0.5">
-                        <i data-lucide="shield-check" class="w-3.5 h-3.5 ml-1 ${gamification.facu.freezes > 0 ? "text-cyan-400" : "text-slate-400 opacity-50"}"></i>
-                        <span class="text-xs font-bold ml-0.5 ${gamification.facu.freezes > 0 ? "text-cyan-400" : "text-slate-400 opacity-50"}">${gamification.facu.freezes}</span>
-                    </div>
-                </div>
-            </div>`;
-    }
-
-    if (showAlma) {
-      html += `
-            <div class="flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 bg-slate-800/80 px-2 md:px-4 py-2 md:py-2 rounded-xl border border-pink-500/30 shadow-sm transition-transform active:scale-95 cursor-pointer w-full md:w-auto" onclick="openShopModal('alma')">
-                <span class="text-[10px] font-bold text-pink-400 uppercase tracking-widest md:min-w-[30px]">ALMA</span>
-                <div class="flex items-center gap-2 md:gap-3">
-                    <div class="flex items-center gap-1.5">
-                        <i data-lucide="flame" class="w-3.5 h-3.5 ${gamification.alma.streak > 0 ? "text-violet-500 fill-violet-500" : "text-slate-600"}"></i>
-                        <span class="text-sm font-bold text-slate-200">${gamification.alma.streak}</span>
-                    </div>
-                    <div class="w-px h-3 bg-slate-600"></div>
-                    <div class="flex items-center gap-1.5">
-                        <i data-lucide="gem" class="w-3.5 h-3.5 text-emerald-400"></i>
-                        <span class="text-sm font-bold text-slate-200">${gamification.alma.points}</span>
-                    </div>
-                    <div class="flex items-center gap-0.5">
-                        <i data-lucide="shield-check" class="w-3.5 h-3.5 ml-1 ${gamification.alma.freezes > 0 ? "text-cyan-400" : "text-slate-400 opacity-50"}"></i>
-                        <span class="text-xs font-bold ml-0.5 ${gamification.alma.freezes > 0 ? "text-cyan-400" : "text-slate-400 opacity-50"}">${gamification.alma.freezes}</span>
-                    </div>
-                </div>
-            </div>`;
-    }
-    
-    container.innerHTML = html;
+    container.innerHTML = `
+      <button onclick="openStreakModal('naty')" title="Ver racha de entrenamiento de Naty"
+          class="group relative flex items-center gap-1.5 sm:gap-2.5 bg-gradient-to-r from-amber-500/15 via-orange-500/10 to-amber-500/5 hover:from-amber-500/25 hover:to-orange-500/20 border border-amber-500/40 hover:border-amber-400/70 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full shadow-[0_0_15px_rgba(245,158,11,0.15)] hover:shadow-[0_0_20px_rgba(245,158,11,0.3)] transition-all active:scale-95 cursor-pointer">
+          <span class="text-[11px] font-extrabold uppercase tracking-wider text-violet-400 flex items-center gap-1">
+              <i data-lucide="user" class="w-3.5 h-3.5"></i>
+              <span>Naty</span>
+          </span>
+          <div class="flex items-center gap-1 pl-1.5 border-l border-slate-700/60">
+              <i id="header-streak-icon" data-lucide="flame" class="w-4 h-4 ${isFire ? 'text-orange-500 fill-orange-500 animate-flame-flicker drop-shadow-[0_0_8px_rgba(249,115,22,0.9)]' : 'text-slate-600 fill-slate-700'}"></i>
+              <span id="header-streak-count" class="text-sm font-black font-mono tracking-tight ${isFire ? 'text-amber-300' : 'text-slate-400'}">${streakNaty}</span>
+              <span class="text-[10px] font-bold text-amber-400/80 uppercase hidden md:inline">días</span>
+          </div>
+      </button>`;
     safeCreateIcons();
   }
 }
+
+function openStreakModal(user) {
+  currentStreakUser = user || (whoTrainsToday === "alma" ? "alma" : "naty");
+  const userData = gamification[currentStreakUser] || { streak: 0, points: 0, freezes: 0, frozenDays: [] };
+  const streak = userData.streak || 0;
+  const userName = currentStreakUser === "alma" ? "Alma" : "Naty";
+
+  const modal = document.getElementById("streak-modal");
+  if (!modal) return;
+
+  const countEl = document.getElementById("streak-modal-count");
+  if (countEl) {
+    countEl.innerHTML = `<i data-lucide="flame" class="w-7 h-7 text-orange-500 fill-orange-500 drop-shadow-[0_0_8px_rgba(249,115,22,0.9)]"></i> ${streak} ${streak === 1 ? "DÍA" : "DÍAS"}`;
+  }
+
+  const subtitleEl = document.getElementById("streak-modal-subtitle");
+  if (subtitleEl) {
+    subtitleEl.textContent = `Racha de entrenamiento de ${userName}`;
+    subtitleEl.className = `text-xs font-bold uppercase tracking-widest ${currentStreakUser === "alma" ? "text-pink-400" : "text-amber-400"} mt-0.5`;
+  }
+
+  const pointsEl = document.getElementById("streak-modal-points");
+  if (pointsEl) pointsEl.textContent = userData.points || 0;
+
+  const freezesEl = document.getElementById("streak-modal-freezes");
+  if (freezesEl) freezesEl.textContent = userData.freezes || 0;
+
+  // Render weekly days (Lunes a Domingo of current week)
+  const daysContainer = document.getElementById("streak-week-days");
+  if (daysContainer) {
+    const today = new Date();
+    const currentDayOfWeek = today.getDay(); // 0=Dom, 1=Lun...
+    // Calculate Monday of current week
+    const mondayOffset = currentDayOfWeek === 0 ? -6 : 1 - currentDayOfWeek;
+    const monday = new Date(today);
+    monday.setDate(today.getDate() + mondayOffset);
+
+    const dayLabels = ["L", "M", "M", "J", "V", "S", "D"];
+    let daysHtml = "";
+    let trainedThisWeekCount = 0;
+    const todayKey = getDateKey(today);
+    let trainedToday = false;
+
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      const dKey = getDateKey(d);
+      const isToday = dKey === todayKey;
+      const hasTrained = trainingHistory[dKey] && trainingHistory[dKey][currentStreakUser] && !trainingHistory[dKey].deleted;
+      const isFrozen = (userData.frozenDays || []).includes(dKey);
+
+      if (hasTrained) {
+        trainedThisWeekCount++;
+        if (isToday) trainedToday = true;
+      }
+
+      let bubbleClass = "bg-slate-900 border-slate-800 text-slate-500";
+      let iconHtml = dayLabels[i];
+
+      if (hasTrained) {
+        bubbleClass = "bg-gradient-to-t from-orange-500/30 to-amber-500/20 border-amber-500/60 text-amber-300 shadow-[0_0_10px_rgba(245,158,11,0.25)]";
+        iconHtml = `<i data-lucide="check" class="w-3.5 h-3.5 text-amber-400"></i>`;
+      } else if (isFrozen) {
+        bubbleClass = "bg-cyan-500/20 border-cyan-500/50 text-cyan-300";
+        iconHtml = `<i data-lucide="shield-check" class="w-3.5 h-3.5 text-cyan-400"></i>`;
+      } else if (isToday) {
+        bubbleClass = "bg-amber-500/10 border-dashed border-amber-400 text-amber-400 animate-pulse";
+        iconHtml = `<i data-lucide="flame" class="w-3.5 h-3.5 text-orange-400"></i>`;
+      }
+
+      daysHtml += `
+        <div class="flex flex-col items-center gap-1">
+          <span class="text-[9px] font-bold ${isToday ? 'text-amber-400 font-extrabold' : 'text-slate-500'}">${dayLabels[i]}</span>
+          <div class="w-8 h-8 rounded-full border flex items-center justify-center text-xs font-black transition-transform ${bubbleClass}">
+            ${iconHtml}
+          </div>
+        </div>`;
+    }
+    daysContainer.innerHTML = daysHtml;
+
+    const summaryEl = document.getElementById("streak-week-summary");
+    if (summaryEl) {
+      summaryEl.textContent = `${trainedThisWeekCount}/4 días meta`;
+    }
+
+    // Motivational box
+    const titleEl = document.getElementById("streak-motivational-title");
+    const descEl = document.getElementById("streak-motivational-desc");
+    if (titleEl && descEl) {
+      if (trainedToday) {
+        titleEl.textContent = "¡Racha a salvo por hoy!";
+        descEl.textContent = "Excelente disciplina. Ya registraste tu entrenamiento de hoy. ¡A descansar y recuperar fuerzas!";
+      } else if (streak > 0) {
+        titleEl.textContent = `¡Mantén viva la llama de ${streak} ${streak === 1 ? 'día' : 'días'}!`;
+        descEl.textContent = "No olvides completar tu sesión de hoy para seguir sumando a tu racha.";
+      } else {
+        titleEl.textContent = "¡Empieza tu racha hoy!";
+        descEl.textContent = "Completa tu entrenamiento de hoy para encender tu primer día de racha.";
+      }
+    }
+  }
+
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+  safeCreateIcons();
+}
+
+function closeStreakModal() {
+  const modal = document.getElementById("streak-modal");
+  if (modal) {
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  }
+}
+
+function showStreakCelebration(user, newStreak) {
+  const modal = document.getElementById("streak-celebration-modal");
+  if (!modal) return;
+
+  const countEl = document.getElementById("celebration-streak-count");
+  if (countEl) {
+    countEl.innerHTML = `🔥 ${newStreak} ${newStreak === 1 ? "DÍA" : "DÍAS"}`;
+  }
+
+  const textEl = document.getElementById("celebration-streak-text");
+  if (textEl) {
+    const userName = user === "alma" ? "Alma" : "Naty";
+    textEl.textContent = `¡Impresionante, ${userName}! Acumulaste ${newStreak} ${newStreak === 1 ? "día seguido" : "días seguidos"} cumpliendo tu plan.`;
+  }
+
+  if (typeof triggerConfetti === "function") {
+    triggerConfetti();
+  }
+
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+  safeCreateIcons();
+}
+
+function closeStreakCelebrationModal() {
+  const modal = document.getElementById("streak-celebration-modal");
+  if (modal) {
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  }
+}
+
+window.openStreakModal = openStreakModal;
+window.closeStreakModal = closeStreakModal;
+window.showStreakCelebration = showStreakCelebration;
+window.closeStreakCelebrationModal = closeStreakCelebrationModal;
 
 function calculateUserStreak(user) {
   // Asegurar estructura de datos
@@ -6662,19 +6546,19 @@ function calculateUserStreak(user) {
   if (!gamification[user].lastReset) gamification[user].lastReset = 0;
 
   // SCHEDULE de días requeridos por usuario
-  // Facu: Lunes(1) a Viernes(5)
-  // Alma: Lunes(1), Miércoles(3), Viernes(5)
+  // Naty entrena: Lunes(1), Martes(2), Miércoles(3) y Viernes(5)
+  // Jueves(4), Sábado(6) y Domingo(0) son días de descanso que NO rompen la racha.
   const SCHEDULE = {
-    facu: [1, 2, 3, 4, 5], // L-M-M-J-V
-    alma: [1, 3, 5], // L-M-V
+    naty: [1, 2, 3, 5], // L-M-M-V (4 días requeridos)
+    alma: [1, 3, 5],
   };
 
-  // HOTFIX: Corregir freeze erróneo del 22/01 para Facu
-  if (user === "facu") {
+  // HOTFIX: Corregir freeze erróneo del 22/01 para Naty
+  if (user === "naty") {
     const badDate = "2026-01-22";
-    const idx = gamification.facu.frozenDays.indexOf(badDate);
+    const idx = gamification.naty.frozenDays.indexOf(badDate);
     if (idx > -1) {
-      gamification.facu.frozenDays.splice(idx, 1);
+      gamification.naty.frozenDays.splice(idx, 1);
       // No guardamos inmediatamente para no saturar, se guardará al final si cambió algo más
       // o la próxima vez que se persista.
     }
@@ -6787,8 +6671,9 @@ function checkForStreakRescue(user) {
   // Analizar solo la primera ausencia que rompió la racha
   const today = new Date();
   const todayKey = getDateKey(today);
+  // Naty entrena Lunes(1), Martes(2), Miércoles(3), Viernes(5)
   const SCHEDULE = {
-    facu: [1, 2, 3, 4, 5],
+    naty: [1, 2, 3, 5],
     alma: [1, 3, 5],
   };
 
@@ -6915,49 +6800,181 @@ function confirmRescue() {
   }
 }
 
-function buyFreeze(user) {
-  const COST = 500;
-  if (gamification[user].points >= COST) {
-    gamification[user].points -= COST;
-    gamification[user].freezes++;
-    saveToCloud();
-    updateGamificationUI();
-    // Update Shop UI if open
-    openShopModal(user);
-    showToast("shield-check", "text-cyan-400", "¡Protector de Racha comprado!");
-  } else {
-    showToast("ban", "text-red-400", "Puntos insuficientes (Req: 500)");
-  }
-}
-
-window.updateGamificationUI = updateGamificationUI;
-window.buyFreeze = buyFreeze;
-// Call on init
-window.updateStreak = updateGamificationUI;
-
-// --- SHOP MODAL ---
-function openShopModal(user) {
+// --- SHOP / TIENDA DE GEMAS ---
+function openShopModal(user = "naty") {
   const modal = document.getElementById("shop-modal");
-  const title = document.getElementById("shop-user-title");
-  const btn = document.getElementById("shop-buy-btn");
+  if (!modal) return;
 
-  const points = gamification[user].points;
-  title.textContent = `${user.toUpperCase()} - ${points} GEMAS`;
+  const userData = gamification.naty || { points: 0, freezes: 0 };
+  const gems = userData.points || 0;
+  const freezes = userData.freezes || 0;
 
-  btn.onclick = () => buyFreeze(user);
+  const gemsEl = document.getElementById("shop-user-gems");
+  if (gemsEl) gemsEl.textContent = gems;
+
+  const freezesEl = document.getElementById("shop-current-freezes");
+  if (freezesEl) freezesEl.textContent = freezes;
+
+  // Update button affordability states
+  const tiers = [
+    { id: "shop-buy-btn-1", count: 1, cost: 300 },
+    { id: "shop-buy-btn-2", count: 2, cost: 500 },
+    { id: "shop-buy-btn-3", count: 3, cost: 700 },
+  ];
+
+  tiers.forEach((t) => {
+    const btn = document.getElementById(t.id);
+    if (!btn) return;
+    if (gems < t.cost) {
+      btn.classList.add("opacity-60");
+      btn.title = `Te faltan ${t.cost - gems} gemas`;
+    } else {
+      btn.classList.remove("opacity-60");
+      btn.title = "¡Comprar ahora!";
+    }
+  });
 
   modal.classList.remove("hidden");
   modal.classList.add("flex");
   safeCreateIcons();
 }
 
+function buyFreezePack(count, cost) {
+  if (!gamification.naty) gamification.naty = { points: 0, freezes: 0, streak: 0 };
+
+  if ((gamification.naty.points || 0) >= cost) {
+    gamification.naty.points -= cost;
+    gamification.naty.freezes = (gamification.naty.freezes || 0) + count;
+
+    saveToCloud();
+    updateGamificationUI();
+    openShopModal("naty"); // Live update in modal
+
+    triggerConfetti();
+    triggerHaptic();
+    showToast("shield-check", "text-cyan-400", `¡Compraste ${count}x Protector${count > 1 ? "es" : ""} de Racha! 🛡️`);
+  } else {
+    triggerHaptic();
+    const needed = cost - (gamification.naty.points || 0);
+    showToast("ban", "text-red-400", `Gemas insuficientes. Te faltan ${needed} 💎 (tienes ${gamification.naty.points || 0})`);
+  }
+}
+
 function closeShopModal() {
   const modal = document.getElementById("shop-modal");
-  modal.classList.add("hidden");
-  modal.classList.remove("flex");
+  if (modal) {
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  }
 }
+
+function buyFreeze(user) {
+  buyFreezePack(1, 300);
+}
+
+window.updateGamificationUI = updateGamificationUI;
+window.buyFreeze = buyFreeze;
+window.buyFreezePack = buyFreezePack;
 window.openShopModal = openShopModal;
 window.closeShopModal = closeShopModal;
+window.updateStreak = updateGamificationUI;
+
+// ==========================================================================
+// DAILY MOTIVATIONAL PLEDGE SYSTEM (680+ MANTRAS NIVEL DIOS PARA NATY)
+// ==========================================================================
+
+function getDailyMotivationQuote(dateKey) {
+  const quotes = window.MOTIVATIONAL_QUOTES || [];
+  if (!quotes || quotes.length === 0) {
+    return "Si realmente quieres hacer algo, encontrarás una forma; si no, encontrarás una excusa.";
+  }
+  
+  const key = dateKey || getDateKey(new Date());
+  let hash = 0;
+  for (let i = 0; i < key.length; i++) {
+    hash = ((hash << 5) - hash) + key.charCodeAt(i);
+    hash |= 0;
+  }
+  const index = Math.abs(hash) % quotes.length;
+  return quotes[index];
+}
+
+function checkAndShowDailyMotivation() {
+  const today = getDateKey(new Date());
+  const accepted = localStorage.getItem("natyDailyPledgeAccepted_" + today);
+  
+  if (!accepted) {
+    openDailyMotivationModal(false);
+  }
+}
+
+function openDailyMotivationModal(isManual = false) {
+  const modal = document.getElementById("daily-motivation-modal");
+  const quoteEl = document.getElementById("daily-motivation-quote-text");
+  const btn = document.getElementById("accept-motivation-btn");
+  
+  if (!modal || !quoteEl) return;
+  
+  const today = getDateKey(new Date());
+  const quote = getDailyMotivationQuote(today);
+  
+  quoteEl.textContent = quote;
+  
+  const alreadyAccepted = localStorage.getItem("natyDailyPledgeAccepted_" + today) === "true";
+  
+  if (btn) {
+    if (isManual && alreadyAccepted) {
+      btn.textContent = "Cerrar";
+      btn.className = "w-full py-3.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-sm rounded-full transition-all text-center cursor-pointer";
+    } else {
+      btn.textContent = "Prometo darlo todo hoy";
+      btn.className = "w-full py-3.5 sm:py-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold text-sm sm:text-base rounded-full shadow-lg shadow-violet-500/25 active:scale-95 transition-all text-center cursor-pointer";
+    }
+  }
+  
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+  safeCreateIcons();
+}
+
+function acceptDailyMotivation() {
+  const modal = document.getElementById("daily-motivation-modal");
+  const today = getDateKey(new Date());
+  const alreadyAccepted = localStorage.getItem("natyDailyPledgeAccepted_" + today) === "true";
+  
+  if (!alreadyAccepted) {
+    localStorage.setItem("natyDailyPledgeAccepted_" + today, "true");
+    
+    // Reward Naty with +10 gems for daily pledge commitment
+    let currentGems = parseInt(localStorage.getItem("naty_gems_balance") || "0", 10);
+    currentGems += 10;
+    localStorage.setItem("naty_gems_balance", currentGems.toString());
+    
+    if (typeof updateGamificationUI === "function") {
+      updateGamificationUI();
+    }
+    
+    if (typeof triggerConfetti === "function") triggerConfetti();
+    if (typeof triggerHaptic === "function") triggerHaptic();
+    if (typeof showToast === "function") {
+      showToast("check-circle", "text-emerald-400", "Pacto firmado. +10 gemas registradas.");
+    }
+  }
+  
+  if (modal) {
+    modal.classList.add("opacity-0");
+    setTimeout(() => {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex", "opacity-0");
+    }, 300);
+  }
+}
+
+window.openDailyMotivationModal = openDailyMotivationModal;
+window.acceptDailyMotivation = acceptDailyMotivation;
+window.checkAndShowDailyMotivation = checkAndShowDailyMotivation;
+window.getDailyMotivationQuote = getDailyMotivationQuote;
+
 function closeHistoryDetailsModal() {
   const modal = document.getElementById("history-details-modal");
   modal.classList.add("hidden");
@@ -7006,7 +7023,7 @@ function showExerciseHistory(exerciseName) {
     const repsVal = parseReps(exerciseObj ? exerciseObj.reps : "10");
     
     // First pass: Find All-Time Personal Records (PR) for this exercise using Epley 1RM
-    let facuAllTimePR = 0;
+    let natyAllTimePR = 0;
     let almaAllTimePR = 0;
 
     // Scan today's/current session values
@@ -7014,9 +7031,9 @@ function showExerciseHistory(exerciseName) {
       const key = `${targetTab}-${targetExIdx}-${s}`;
       const w = setWeights[key];
       if (w) {
-        if (w.facu) {
-          const oneRM = Math.round(parseFloat(w.facu) * (1 + repsVal / 30));
-          if (oneRM > facuAllTimePR) facuAllTimePR = oneRM;
+        if (w.naty) {
+          const oneRM = Math.round(parseFloat(w.naty) * (1 + repsVal / 30));
+          if (oneRM > natyAllTimePR) natyAllTimePR = oneRM;
         }
         if (w.alma) {
           const oneRM = Math.round(parseFloat(w.alma) * (1 + repsVal / 30));
@@ -7033,9 +7050,9 @@ function showExerciseHistory(exerciseName) {
         const key = `${targetTab}-${targetExIdx}-${s}`;
         const w = dayRecord.weights[key];
         if (w) {
-          if (w.facu) {
-            const oneRM = Math.round(parseFloat(w.facu) * (1 + repsVal / 30));
-            if (oneRM > facuAllTimePR) facuAllTimePR = oneRM;
+          if (w.naty) {
+            const oneRM = Math.round(parseFloat(w.naty) * (1 + repsVal / 30));
+            if (oneRM > natyAllTimePR) natyAllTimePR = oneRM;
           }
           if (w.alma) {
             const oneRM = Math.round(parseFloat(w.alma) * (1 + repsVal / 30));
@@ -7047,20 +7064,20 @@ function showExerciseHistory(exerciseName) {
 
     // 1.5 CHECK CURRENT SESSION (TODAY/NOW)
     let todayHasData = false;
-    let todayFacuWeights = [];
+    let todayNatyWeights = [];
     let todayAlmaWeights = [];
-    let todayFacuMax1RM = 0;
+    let todayNatyMax1RM = 0;
     let todayAlmaMax1RM = 0;
     
     for (let s = 0; s < setsCount; s++) {
       const key = `${targetTab}-${targetExIdx}-${s}`;
       const w = setWeights[key];
       if (w) {
-        if (w.facu) {
-          todayFacuWeights.push(w.facu);
+        if (w.naty) {
+          todayNatyWeights.push(w.naty);
           todayHasData = true;
-          const oneRM = Math.round(parseFloat(w.facu) * (1 + repsVal / 30));
-          if (oneRM > todayFacuMax1RM) todayFacuMax1RM = oneRM;
+          const oneRM = Math.round(parseFloat(w.naty) * (1 + repsVal / 30));
+          if (oneRM > todayNatyMax1RM) todayNatyMax1RM = oneRM;
         }
         if (w.alma) {
           todayAlmaWeights.push(w.alma);
@@ -7074,9 +7091,9 @@ function showExerciseHistory(exerciseName) {
     if (todayHasData) {
       historyItems.push({
         date: "Hoy (Progreso)",
-        facu: todayFacuWeights.join(" - "),
+        naty: todayNatyWeights.join(" - "),
         alma: todayAlmaWeights.join(" - "),
-        facu1RM: todayFacuMax1RM,
+        naty1RM: todayNatyMax1RM,
         alma1RM: todayAlmaMax1RM,
         isToday: true, // Optional flag for styling
       });
@@ -7094,20 +7111,20 @@ function showExerciseHistory(exerciseName) {
 
       // Check if we have data for this exercise
       let hasData = false;
-      let facuWeights = [];
+      let natyWeights = [];
       let almaWeights = [];
-      let facuMax1RM = 0;
+      let natyMax1RM = 0;
       let almaMax1RM = 0;
 
       for (let s = 0; s < setsCount; s++) {
         const key = `${targetTab}-${targetExIdx}-${s}`;
         const w = dayRecord.weights[key];
         if (w) {
-          if (w.facu) {
-            facuWeights.push(w.facu);
+          if (w.naty) {
+            natyWeights.push(w.naty);
             hasData = true;
-            const oneRM = Math.round(parseFloat(w.facu) * (1 + repsVal / 30));
-            if (oneRM > facuMax1RM) facuMax1RM = oneRM;
+            const oneRM = Math.round(parseFloat(w.naty) * (1 + repsVal / 30));
+            if (oneRM > natyMax1RM) natyMax1RM = oneRM;
           }
           if (w.alma) {
             almaWeights.push(w.alma);
@@ -7131,9 +7148,9 @@ function showExerciseHistory(exerciseName) {
 
         historyItems.push({
           date: dateStr,
-          facu: facuWeights.join(" - "),
+          naty: natyWeights.join(" - "),
           alma: almaWeights.join(" - "),
-          facu1RM: facuMax1RM,
+          naty1RM: natyMax1RM,
           alma1RM: almaMax1RM,
         });
       }
@@ -7153,9 +7170,9 @@ function showExerciseHistory(exerciseName) {
         const dateColor = item.isToday ? "text-emerald-400" : "text-slate-400";
 
         // Determine if this set is the all-time PR
-        const isFacuPR = item.facu1RM > 0 && item.facu1RM === facuAllTimePR;
-        const facuPRBadge = isFacuPR ? '<span class="pr-badge alltime ml-1.5"><i data-lucide="trophy" class="w-2.5 h-2.5"></i> PR</span>' : '';
-        const facuPRPercent = facuAllTimePR > 0 ? Math.min(100, Math.round((item.facu1RM / facuAllTimePR) * 100)) : 0;
+        const isNatyPR = item.naty1RM > 0 && item.naty1RM === natyAllTimePR;
+        const natyPRBadge = isNatyPR ? '<span class="pr-badge alltime ml-1.5"><i data-lucide="trophy" class="w-2.5 h-2.5"></i> PR</span>' : '';
+        const natyPRPercent = natyAllTimePR > 0 ? Math.min(100, Math.round((item.naty1RM / natyAllTimePR) * 100)) : 0;
 
         const isAlmaPR = item.alma1RM > 0 && item.alma1RM === almaAllTimePR;
         const almaPRBadge = isAlmaPR ? '<span class="pr-badge alltime ml-1.5"><i data-lucide="trophy" class="w-2.5 h-2.5"></i> PR</span>' : '';
@@ -7169,12 +7186,12 @@ function showExerciseHistory(exerciseName) {
                     </div>
                     <div class="flex-1 px-2 border-l border-slate-700 ml-2 grid grid-cols-2 gap-4">
                         <div class="flex flex-col">
-                            <span class="text-[10px] text-blue-500 font-bold uppercase flex items-center gap-1">Facu ${facuPRBadge}</span>
-                            <span class="text-slate-200 font-mono text-sm">${item.facu || "-"}</span>
-                            ${item.facu1RM ? `
-                              <span class="text-[10px] text-slate-400 font-mono mt-0.5">Est. 1RM: <b>${item.facu1RM} kg</b></span>
-                              <div class="pr-progress-track" title="${facuPRPercent}% de tu PR (${facuAllTimePR} kg)">
-                                <div class="pr-progress-bar facu" style="width: ${facuPRPercent}%"></div>
+                            <span class="text-[10px] text-blue-500 font-bold uppercase flex items-center gap-1">Naty ${natyPRBadge}</span>
+                            <span class="text-slate-200 font-mono text-sm">${item.naty || "-"}</span>
+                            ${item.naty1RM ? `
+                              <span class="text-[10px] text-slate-400 font-mono mt-0.5">Est. 1RM: <b>${item.naty1RM} kg</b></span>
+                              <div class="pr-progress-track" title="${natyPRPercent}% de tu PR (${natyAllTimePR} kg)">
+                                <div class="pr-progress-bar naty" style="width: ${natyPRPercent}%"></div>
                               </div>
                             ` : ''}
                         </div>
@@ -7286,11 +7303,11 @@ window.closeMuscleMapModal = closeMuscleMapModal;
 // Example: addHistoricalTraining("2026-01-14", "both")
 // Parameters:
 //   date: "YYYY-MM-DD" format
-//   who: "facu", "alma", or "both"
+//   who: "naty", "alma", or "both"
 function addHistoricalTraining(date, who) {
   if (!date || !who) {
     console.error(
-      "Usage: addHistoricalTraining('2026-01-14', 'facu'|'alma'|'both')",
+      "Usage: addHistoricalTraining('2026-01-14', 'naty'|'alma'|'both')",
     );
     return;
   }
@@ -7307,11 +7324,11 @@ function addHistoricalTraining(date, who) {
   }
 
   if (!trainingHistory[date]) {
-    trainingHistory[date] = { alma: false, facu: false, weights: {} };
+    trainingHistory[date] = { alma: false, naty: false, weights: {} };
   }
 
-  if (who === "facu" || who === "both") {
-    trainingHistory[date].facu = true;
+  if (who === "naty" || who === "both") {
+    trainingHistory[date].naty = true;
   }
   if (who === "alma" || who === "both") {
     trainingHistory[date].alma = true;
@@ -7323,8 +7340,8 @@ function addHistoricalTraining(date, who) {
       trainingHistory[date].weights[key] = {};
     }
 
-    if ((who === "facu" || who === "both") && currentWeights[key].facu) {
-      trainingHistory[date].weights[key].facu = currentWeights[key].facu;
+    if ((who === "naty" || who === "both") && currentWeights[key].naty) {
+      trainingHistory[date].weights[key].naty = currentWeights[key].naty;
     }
     if ((who === "alma" || who === "both") && currentWeights[key].alma) {
       trainingHistory[date].weights[key].alma = currentWeights[key].alma;
@@ -7334,18 +7351,18 @@ function addHistoricalTraining(date, who) {
   localStorage.setItem("gymTrainingHistory", JSON.stringify(trainingHistory));
 
   // Calculate volume for confirmation
-  let volFacu = 0,
+  let volNaty = 0,
     volAlma = 0;
   Object.values(trainingHistory[date].weights).forEach((w) => {
-    volFacu += (parseInt(w.facu) || 0) * 10;
+    volNaty += (parseInt(w.naty) || 0) * 10;
     volAlma += (parseInt(w.alma) || 0) * 10;
   });
 
   const volMsg =
     who === "both"
-      ? `Facu: ${volFacu}kg, Alma: ${volAlma}kg`
-      : who === "facu"
-        ? `${volFacu}kg`
+      ? `Naty: ${volNaty}kg, Alma: ${volAlma}kg`
+      : who === "naty"
+        ? `${volNaty}kg`
         : `${volAlma}kg`;
   console.log(
     `✅ Entrenamiento añadido: ${date} (${who}) - Volumen: ${volMsg}`,
@@ -7410,14 +7427,10 @@ function renderAchievements() {
   container.innerHTML = "";
 
   const countBadge = document.getElementById("total-achievements-count");
-
-  // Get combined unlocked achievements for counting
-  const unlockedFacu = gamification.facu.achievements || [];
-  const unlockedAlma = gamification.alma.achievements || [];
-  const allUnlockedIDs = new Set([...unlockedFacu, ...unlockedAlma]);
+  const unlockedNaty = (gamification?.naty?.achievements) || [];
 
   if (countBadge) {
-    countBadge.textContent = `${allUnlockedIDs.size} / ${achievementsConfig.length}`;
+    countBadge.textContent = `${unlockedNaty.length} / ${achievementsConfig.length}`;
   }
 
   // Filter
@@ -7429,16 +7442,12 @@ function renderAchievements() {
   }
 
   filtered.forEach((ach) => {
-    // Check status
-    const facuHas = unlockedFacu.includes(ach.id);
-    const almaHas = unlockedAlma.includes(ach.id);
-    const isUnlocked = facuHas || almaHas;
+    const isUnlocked = unlockedNaty.includes(ach.id);
 
-    // Define Styles based on Tier
     let borderClass = "border-slate-800";
     let bgClass = "bg-slate-900";
     let iconColor = "text-slate-600";
-    let opacity = "opacity-50 grayscale"; // Locked state default
+    let opacity = "opacity-50 grayscale";
 
     if (isUnlocked) {
       opacity = "opacity-100";
@@ -7465,19 +7474,6 @@ function renderAchievements() {
       }
     }
 
-    // Determine badging who has it
-    let whoHasHTML = "";
-    if (isUnlocked) {
-      whoHasHTML = '<div class="flex items-center gap-1 mt-3 justify-center">';
-      if (facuHas)
-        whoHasHTML += '<i data-lucide="user" class="w-4 h-4 text-sky-400 inline" title="Facu lo tiene"></i>';
-      if (almaHas)
-        whoHasHTML += '<i data-lucide="user" class="w-4 h-4 text-pink-400 inline" title="Alma lo tiene"></i>';
-      whoHasHTML += "</div>";
-    } else {
-      whoHasHTML = '<div class="h-4 mt-3 opacity-0">.</div>'; // Spacer
-    }
-
     const html = `
       <div class="relative p-4 rounded-2xl border ${borderClass} ${bgClass} flex flex-col items-center text-center transition-all duration-300 ${opacity} hover:scale-[1.02]">
           ${isUnlocked ? `<div class="absolute top-2 right-2 text-[10px] uppercase font-bold tracking-wider ${iconColor}">${ach.tier}</div>` : ""}
@@ -7487,9 +7483,14 @@ function renderAchievements() {
           </div>
           
           <h3 class="font-bold text-white text-sm mb-1 line-clamp-1" title="${ach.title}">${ach.title}</h3>
-          <p class="text-xs text-slate-500 line-clamp-2 leading-tight">${ach.desc}</p>
+          <p class="text-xs text-slate-500 line-clamp-2 leading-tight mb-3">${ach.desc}</p>
           
-          ${whoHasHTML}
+          <div class="mt-auto w-full flex items-center justify-center pt-2 border-t border-slate-800/60">
+             ${isUnlocked 
+               ? `<span class="text-[11px] font-bold text-emerald-400 flex items-center gap-1"><i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Desbloqueado</span>`
+               : `<span class="text-[11px] font-bold text-slate-600 flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5"></i> Bloqueado</span>`
+             }
+          </div>
       </div>
     `;
     container.innerHTML += html;
@@ -7591,36 +7592,7 @@ function updateWeatherUI(tempText, elements) {
   }
 }
 
-// Iniciar clima al cargar
-onReady(initWeather);
-
-// --- SPLASH SCREEN DISMISSAL (GUARANTEED DISMISSAL) ---
-function dismissSplashScreen() {
-  const splash = document.getElementById("splash-screen");
-  if (splash) {
-    splash.style.transition = "opacity 0.4s ease";
-    splash.style.opacity = "0";
-    splash.style.pointerEvents = "none";
-    setTimeout(() => {
-      splash.style.display = "none";
-      try { splash.remove(); } catch (e) {}
-      if (typeof initializeUI === "function") {
-        initializeUI();
-      }
-    }, 400);
-  } else {
-    if (typeof initializeUI === "function") {
-      initializeUI();
-    }
-  }
-}
-
-onReady(() => {
-  setTimeout(dismissSplashScreen, 300);
-});
-
-// Failsafe timer (always removes splash after 1.2s even if DOM events were delayed)
-setTimeout(dismissSplashScreen, 1200);
+// Legacy splash screen logic removed in favor of unified init()
 
 // --- MULTIPLE ROUTINES MANAGER FUNCTIONS ---
 
@@ -7887,7 +7859,7 @@ function initAIChat() {
 
 Estoy listo para armar tu rutina especializada y llevar tus entrenamientos al siguiente nivel. Para diseñarla a tu medida, por favor cuéntame:
 
-1. **¿Para quién es la rutina?** (¿Solo Facu, solo Alma, o entrenan juntos?)
+1. **¿Para quién es la rutina?** (¿Solo Naty, solo Alma, o entrenan juntos?)
 2. **¿Cuántos días por semana** pueden entrenar?
 3. **¿Cuál es su objetivo físico** principal? (Fuerza, hipertrofia, tonificación, pérdida de grasa)
 4. **¿Tienen alguna limitación, lesión o preferencia** de ejercicios?
@@ -8113,10 +8085,10 @@ async function sendAIChatMessage() {
   
   try {
     const systemPrompt = `Eres Coach Vital, un entrenador personal legendario con miles de certificaciones en cambio físico, ganancia de masa muscular y pérdida de grasa.
-Llamas siempre "Ing. Rodriguez" al usuario Facu (él y su novia Alma entrenarán). Sé muy motivador, profesional y directo.
+Llamas siempre "Ing. Rodriguez" al usuario Naty (él y su novia Alma entrenarán). Sé muy motivador, profesional y directo.
 
 Tu objetivo es hacerle preguntas al usuario (de manera concisa) para recopilar los siguientes datos necesarios:
-1. Para quién es la rutina (Facu, Alma o ambos juntos).
+1. Para quién es la rutina (Naty, Alma o ambos juntos).
 2. Días disponibles para entrenar (de 1 a 5 días).
 3. Objetivo físico (hipertrofia, definición, fuerza, etc.).
 4. Si tienen alguna lesión o limitación.
@@ -8275,73 +8247,91 @@ let sessionElapsedSeconds = 0;
 let sessionTimerInterval = null;
 let isSessionTimerRunning = false;
 
+function formatStopwatchTime(totalSeconds) {
+  const safeSecs = Math.max(0, Math.floor(totalSeconds));
+  const hrs = Math.floor(safeSecs / 3600);
+  const mins = Math.floor((safeSecs % 3600) / 60);
+  const secs = safeSecs % 60;
+  return `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+}
+
+function updateStopwatchUI() {
+  const displayEl = document.getElementById("session-stopwatch-display") || document.getElementById("session-stopwatch");
+  if (!displayEl) return;
+  
+  let currentElapsed = sessionElapsedSeconds;
+  if (isSessionTimerRunning && sessionStartTime) {
+    const diffSeconds = Math.floor((Date.now() - sessionStartTime) / 1000);
+    currentElapsed = sessionElapsedSeconds + Math.max(0, diffSeconds);
+  }
+  
+  displayEl.textContent = formatStopwatchTime(currentElapsed);
+}
+
 function initSessionStopwatch() {
   const savedStartTime = localStorage.getItem("vigor_sessionStartTime");
   const savedElapsed = localStorage.getItem("vigor_sessionElapsedSeconds");
   const savedRunning = localStorage.getItem("vigor_sessionTimerRunning");
 
-  if (savedStartTime) {
+  sessionElapsedSeconds = parseInt(savedElapsed || "0");
+
+  if (savedRunning === "true" && savedStartTime) {
     sessionStartTime = parseInt(savedStartTime);
-    sessionElapsedSeconds = parseInt(savedElapsed || "0");
-    if (savedRunning === "true") {
-      isSessionTimerRunning = true;
-      const now = Date.now();
-      const additionalElapsed = Math.floor((now - sessionStartTime) / 1000);
-      sessionElapsedSeconds += additionalElapsed;
-      sessionStartTime = now;
-      localStorage.setItem("vigor_sessionStartTime", sessionStartTime.toString());
-      localStorage.setItem("vigor_sessionElapsedSeconds", sessionElapsedSeconds.toString());
-      startGlobalSessionInterval();
-    } else {
-      isSessionTimerRunning = false;
+    isSessionTimerRunning = true;
+    
+    if (sessionTimerInterval) clearInterval(sessionTimerInterval);
+    sessionTimerInterval = setInterval(() => {
       updateStopwatchUI();
-    }
+    }, 1000);
+  } else {
+    isSessionTimerRunning = false;
   }
+
+  updateStopwatchUI();
+  updateStopwatchControls();
 }
 
 function startWorkoutSession() {
   if (isSessionTimerRunning) return;
   
-  if (!sessionStartTime) {
-    sessionStartTime = Date.now();
-    sessionElapsedSeconds = 0;
-    localStorage.setItem("vigor_sessionStartTime", sessionStartTime.toString());
-  } else {
-    sessionStartTime = Date.now() - (sessionElapsedSeconds * 1000);
-    localStorage.setItem("vigor_sessionStartTime", sessionStartTime.toString());
-  }
-  
+  sessionStartTime = Date.now();
   isSessionTimerRunning = true;
   localStorage.setItem("vigor_sessionTimerRunning", "true");
+  localStorage.setItem("vigor_sessionStartTime", sessionStartTime.toString());
   
+  if (sessionTimerInterval) clearInterval(sessionTimerInterval);
+  sessionTimerInterval = setInterval(() => {
+    updateStopwatchUI();
+  }, 1000);
+  
+  updateStopwatchUI();
   updateStopwatchControls();
   
-  // Show global session timer (Stopwatch mode)
-  showTimer("session", "Entrenamiento", 0, { isStopwatch: true, startTime: sessionStartTime });
-  
-  // Show the panel in case it was hidden
   const panel = document.getElementById("session-control-panel");
   if (panel) panel.classList.remove("hidden");
-}
-
-function startGlobalSessionInterval() {
-  // Deprecated. Handled by globalTimerInterval in showTimer
 }
 
 function pauseWorkoutSession() {
   if (!isSessionTimerRunning) return;
   
-  isSessionTimerRunning = false;
-  localStorage.setItem("vigor_sessionTimerRunning", "false");
-  
-  // Save current elapsed seconds
-  if (timerState["session"] && timerState["session"].currentSeconds > 0) {
-      sessionElapsedSeconds = timerState["session"].currentSeconds;
-      localStorage.setItem("vigor_sessionElapsedSeconds", sessionElapsedSeconds.toString());
+  if (sessionStartTime) {
+    const diffSeconds = Math.floor((Date.now() - sessionStartTime) / 1000);
+    sessionElapsedSeconds += Math.max(0, diffSeconds);
   }
   
+  isSessionTimerRunning = false;
+  sessionStartTime = null;
+  localStorage.setItem("vigor_sessionTimerRunning", "false");
+  localStorage.setItem("vigor_sessionElapsedSeconds", sessionElapsedSeconds.toString());
+  localStorage.removeItem("vigor_sessionStartTime");
+  
+  if (sessionTimerInterval) {
+    clearInterval(sessionTimerInterval);
+    sessionTimerInterval = null;
+  }
+  
+  updateStopwatchUI();
   updateStopwatchControls();
-  hideTimer("session");
 }
 
 function confirmResetWorkoutSession() {
@@ -8351,6 +8341,11 @@ function confirmResetWorkoutSession() {
 }
 
 function resetWorkoutSession() {
+  if (sessionTimerInterval) {
+    clearInterval(sessionTimerInterval);
+    sessionTimerInterval = null;
+  }
+  
   isSessionTimerRunning = false;
   sessionStartTime = null;
   sessionElapsedSeconds = 0;
@@ -8362,10 +8357,7 @@ function resetWorkoutSession() {
   updateStopwatchUI();
   updateStopwatchControls();
   updateLiveVolumeUI();
-  hideTimer("session");
 }
-
-// updateStopwatchUI was removed because it's handled globally by updateTimerDisplay()
 
 function updateStopwatchControls() {
   const btnPlay = document.getElementById("btn-session-play");
@@ -8427,29 +8419,20 @@ function openWorkoutSummaryModal() {
   if (!modal) return;
 
   const durationText = document.getElementById("session-stopwatch")?.textContent || "00:00:00";
-  document.getElementById("summary-duration").textContent = durationText;
+  const durationEl = document.getElementById("summary-duration");
+  if (durationEl) durationEl.textContent = durationText;
 
-  const volFacu = calculateSessionVolume("facu");
-  const volAlma = calculateSessionVolume("alma");
+  const volNaty = calculateSessionVolume("naty");
+  const natyCard = document.getElementById("summary-naty-card");
+  if (natyCard) natyCard.style.display = "block";
 
-  const facuCard = document.getElementById("summary-facu-card");
-  const almaCard = document.getElementById("summary-alma-card");
-
-  if (facuCard) {
-    facuCard.style.display = whoTrainsToday === "alma" ? "none" : "block";
-  }
-  if (almaCard) {
-    almaCard.style.display = whoTrainsToday === "facu" ? "none" : "block";
+  const natyVolEl = document.getElementById("summary-naty-vol");
+  if (natyVolEl) {
+    natyVolEl.innerHTML = `${volNaty.toLocaleString()} <span class="text-xs font-normal text-[var(--text-dim)]">kg</span>`;
   }
 
-  document.getElementById("summary-facu-vol").innerHTML = `${volFacu.toLocaleString()} <span class="text-xs font-normal text-[var(--text-dim)]">kg</span>`;
-  document.getElementById("summary-alma-vol").innerHTML = `${volAlma.toLocaleString()} <span class="text-xs font-normal text-[var(--text-dim)]">kg</span>`;
-
-  const prevFacuVol = getLastSessionVolume("facu");
-  const prevAlmaVol = getLastSessionVolume("alma");
-
-  updateOverloadStats("facu", volFacu, prevFacuVol);
-  updateOverloadStats("alma", volAlma, prevAlmaVol);
+  const prevNatyVol = getLastSessionVolume("naty");
+  updateOverloadStats("naty", volNaty, prevNatyVol);
 
   modal.classList.remove("hidden");
   modal.classList.add("flex");
@@ -8542,12 +8525,12 @@ function closeWorkoutSummaryModal() {
 
 function saveSessionAndCloseSummary() {
   let who = "both";
-  if (whoTrainsToday === "facu") {
-    who = "facu";
+  if (whoTrainsToday === "naty") {
+    who = "naty";
   } else if (whoTrainsToday === "alma") {
     who = "alma";
   } else {
-    let facuTrained = false;
+    let natyTrained = false;
     let almaTrained = false;
     
     const dayData = routineData[activeTab];
@@ -8557,15 +8540,15 @@ function saveSessionAndCloseSummary() {
         for (let s = 0; s < numSets; s++) {
           const setKey = `${activeTab}-${idx}-${s}`;
           if (completedSets[setKey]) {
-            if (completedSets[setKey].facu) facuTrained = true;
+            if (completedSets[setKey].naty) natyTrained = true;
             if (completedSets[setKey].alma) almaTrained = true;
           }
         }
       });
     }
     
-    if (facuTrained && almaTrained) who = "both";
-    else if (facuTrained) who = "facu";
+    if (natyTrained && almaTrained) who = "both";
+    else if (natyTrained) who = "naty";
     else if (almaTrained) who = "alma";
     else who = "both";
   }
@@ -8661,14 +8644,4 @@ window.removeExerciseSet = function(tabId, exerciseIndex) {
 };
 
 
-function initializeUI() {
-  // Hardcode Naty
-  sessionTraineeSelected = "naty";
-  activeFullModalUser = "naty";
-  
-  // Render
-  renderTabs();
-  renderDay(activeTab);
-  updateSessionVolumes();
-  renderAdvancedStats();
-}
+// Legacy initializeUI removed
