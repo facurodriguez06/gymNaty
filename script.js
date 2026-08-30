@@ -77,7 +77,7 @@ const DEFAULT_ROUTINE = [
     title: "Día 2: Tren Superior (Empujes)",
     exercises: [
       {
-        name: "Press de banca plano (Barra o manc)",
+        name: "Press de banca plano",
         image: "./assets/exercises/bench_press.jpg",
         sets: "4",
         reps: "5 - 8",
@@ -95,11 +95,11 @@ const DEFAULT_ROUTINE = [
         muscles: { primary: ["back", "biceps"], secondary: ["rear_delts"] }
       },
       {
-        name: "Press militar con mancuernas (Hombros)",
+        name: "Press militar con mancuernas",
         image: "./assets/exercises/military_press.jpg",
         sets: "3",
         reps: "8 - 12",
-        rir: "Hipertrofia",
+        rir: "Deltoide Anterior",
         notes: "Descanso: 2 min.",
         muscles: { primary: ["shoulders"], secondary: ["triceps"] }
       },
@@ -113,11 +113,20 @@ const DEFAULT_ROUTINE = [
         muscles: { primary: ["back"], secondary: ["biceps"] }
       },
       {
-        name: "Tríceps en polea alta (Cuerda)",
+        name: "Tríceps en polea alta",
         image: "./assets/exercises/tricep_pushdown.jpg",
         sets: "3",
         reps: "12 - 15",
-        rir: "Aislamiento",
+        rir: "Cabezas lateral y medial",
+        notes: "Descanso: 1 min.",
+        muscles: { primary: ["triceps"], secondary: [] }
+      },
+      {
+        name: "Extensión de tríceps tras nuca",
+        image: "./assets/exercises/overhead_triceps.jpg",
+        sets: "3",
+        reps: "10 - 12",
+        rir: "Cabeza larga del tríceps",
         notes: "Descanso: 1 min.",
         muscles: { primary: ["triceps"], secondary: [] }
       }
@@ -137,7 +146,7 @@ const DEFAULT_ROUTINE = [
         muscles: { primary: ["glutes", "hamstrings", "lower_back"], secondary: ["quads"] }
       },
       {
-        name: "Hip Thrust (Empuje de cadera)",
+        name: "Hip Thrust",
         image: "./assets/exercises/hip_thrust.jpg",
         sets: "4",
         reps: "8 - 12",
@@ -146,16 +155,16 @@ const DEFAULT_ROUTINE = [
         muscles: { primary: ["glutes"], secondary: ["hamstrings"] }
       },
       {
-        name: "Sentadilla Búlgara con mancuernas",
+        name: "Subidas al cajón (Step-ups)",
         image: "./assets/exercises/squat.jpg",
         sets: "3",
-        reps: "8 - 10 x pierna",
+        reps: "8 - 10 por pierna",
         rir: "Hipertrofia unilateral",
         notes: "Descanso: 2 min.",
         muscles: { primary: ["quads", "glutes"], secondary: ["hamstrings"] }
       },
       {
-        name: "Curl femoral (Acostada o sentada)",
+        name: "Curl femoral",
         image: "./assets/exercises/leg_curl.jpg",
         sets: "3",
         reps: "12 - 15",
@@ -179,7 +188,7 @@ const DEFAULT_ROUTINE = [
     title: "Día 4: Tren Superior (Tracciones)",
     exercises: [
       {
-        name: "Jalón al pecho con agarre estrecho / neutro",
+        name: "Jalón al pecho agarre estrecho",
         image: "./assets/exercises/lat_pulldown_neutral.jpg",
         sets: "4",
         reps: "8 - 10",
@@ -188,7 +197,7 @@ const DEFAULT_ROUTINE = [
         muscles: { primary: ["back"], secondary: ["biceps"] }
       },
       {
-        name: "Press Inclinado con mancuernas (Pecho alto)",
+        name: "Press Inclinado con mancuernas",
         image: "./assets/exercises/incline_press.jpg",
         sets: "3",
         reps: "8 - 12",
@@ -197,7 +206,7 @@ const DEFAULT_ROUTINE = [
         muscles: { primary: ["chest"], secondary: ["shoulders", "triceps"] }
       },
       {
-        name: "Remo gironda (Polea baja sentada)",
+        name: "Remo gironda (Polea baja)",
         image: "./assets/exercises/seated_cable_row.jpg",
         sets: "3",
         reps: "10 - 12",
@@ -206,13 +215,22 @@ const DEFAULT_ROUTINE = [
         muscles: { primary: ["back"], secondary: ["biceps"] }
       },
       {
-        name: "Elevaciones laterales para hombros",
+        name: "Elevaciones laterales",
         image: "./assets/exercises/lateral_raise_db.jpg",
         sets: "4",
         reps: "12 - 15",
-        rir: "Aislamiento",
+        rir: "Deltoide Lateral",
         notes: "Descanso: 1 min.",
         muscles: { primary: ["shoulders"], secondary: [] }
+      },
+      {
+        name: "Face Pull o Pájaros",
+        image: "./assets/exercises/rear_delt_fly.jpg",
+        sets: "3",
+        reps: "12 - 15",
+        rir: "Deltoide Posterior",
+        notes: "Descanso: 1 min.",
+        muscles: { primary: ["shoulders", "back"], secondary: [] }
       },
       {
         name: "Curl de bíceps con mancuernas",
@@ -420,8 +438,8 @@ function getExerciseImage(exercise) {
 function initializeRoutines() {
   migrateLegacyData();
   
-  const storedList = localStorage.getItem("gymRoutinesList");
-  const storedActiveId = localStorage.getItem("gymActiveRoutineId");
+  const storedList = localStorage.getItem("vitalRoutinesList");
+  const storedActiveId = localStorage.getItem("vitalActiveRoutineId");
   
   if (storedList) {
     routinesList = JSON.parse(storedList).map(r => ({
@@ -438,14 +456,14 @@ function initializeRoutines() {
         isBase: true,
       }
     ];
-    localStorage.setItem("gymRoutinesList", JSON.stringify(routinesList));
+    localStorage.setItem("vitalRoutinesList", JSON.stringify(routinesList));
   }
   
   if (storedActiveId) {
     activeRoutineId = storedActiveId;
   } else {
     activeRoutineId = "routine-1";
-    localStorage.setItem("gymActiveRoutineId", activeRoutineId);
+    localStorage.setItem("vitalActiveRoutineId", activeRoutineId);
   }
   
   // Set routineData global variable
@@ -1055,11 +1073,11 @@ function applyCloudState(state, triggerTimers = false) {
       isBase: !!routine.is_base,
       data: routine.data || DEFAULT_ROUTINE,
     }));
-    localStorage.setItem("gymRoutinesList", JSON.stringify(routinesList));
+    localStorage.setItem("vitalRoutinesList", JSON.stringify(routinesList));
     const active = state.routines.find((r) => r.is_active) || state.routines[0];
     if (active) {
       activeRoutineId = active.id;
-      localStorage.setItem("gymActiveRoutineId", activeRoutineId);
+      localStorage.setItem("vitalActiveRoutineId", activeRoutineId);
       routineData = active.data || DEFAULT_ROUTINE;
     }
   }
@@ -7789,7 +7807,7 @@ function selectActiveRoutine(id) {
   }
 
   activeRoutineId = id;
-  localStorage.setItem("gymActiveRoutineId", id);
+  localStorage.setItem("vitalActiveRoutineId", id);
   
   // Set routineData global variable
   const activeRoutine = targetRoutine || routinesList[0];
@@ -7827,7 +7845,7 @@ function renameRoutine(id) {
   }
   
   routine.name = trimmed;
-  localStorage.setItem("gymRoutinesList", JSON.stringify(routinesList));
+  localStorage.setItem("vitalRoutinesList", JSON.stringify(routinesList));
   renderRoutinesList();
   logToScreen(`Rutina renombrada a "${trimmed}"`, "success");
 }
@@ -7853,7 +7871,7 @@ function deleteRoutine(id) {
     `¿Estás seguro de que quieres eliminar la rutina "${routine.name}"? Esta acción no se puede deshacer y borrará sus pesos registrados.`,
     () => {
       routinesList = routinesList.filter(r => r.id !== id);
-      localStorage.setItem("gymRoutinesList", JSON.stringify(routinesList));
+      localStorage.setItem("vitalRoutinesList", JSON.stringify(routinesList));
       
       // Clean up localstorage sets & weights for that routine
       localStorage.removeItem("gymRoutineSets_" + id);
@@ -8201,7 +8219,7 @@ function applyGeneratedRoutine(routineDataArray) {
       };
       
       routinesList.push(newRoutine);
-      localStorage.setItem("gymRoutinesList", JSON.stringify(routinesList));
+      localStorage.setItem("vitalRoutinesList", JSON.stringify(routinesList));
 
       scheduleCloudSync();
       
@@ -8624,7 +8642,7 @@ window.addExerciseSet = function(tabId, exerciseIndex) {
     
     // Save to localStorage
     if (typeof routinesList !== "undefined") {
-      localStorage.setItem("gymRoutinesList", JSON.stringify(routinesList));
+      localStorage.setItem("vitalRoutinesList", JSON.stringify(routinesList));
     }
     
     // Re-render without full animation
@@ -8647,7 +8665,7 @@ window.removeExerciseSet = function(tabId, exerciseIndex) {
       
       // Save to localStorage
       if (typeof routinesList !== "undefined") {
-        localStorage.setItem("gymRoutinesList", JSON.stringify(routinesList));
+        localStorage.setItem("vitalRoutinesList", JSON.stringify(routinesList));
       }
       
       // Re-render without full animation
