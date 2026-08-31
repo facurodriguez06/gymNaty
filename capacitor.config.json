@@ -1,6 +1,6 @@
 {
   "appId": "com.vigor.app.boost",
-  "appName": "Vital Boost",
+  "appName": "Vital",
   "webDir": "www",
   "bundledWebRuntime": false,
   "server": {

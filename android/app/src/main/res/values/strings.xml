@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Vital Boost</string>
-    <string name="title_activity_main">Vital Boost</string>
+    <string name="app_name">Vital</string>
+    <string name="title_activity_main">Vital</string>
     <string name="package_name">com.vigor.app.boost</string>
     <string name="custom_url_scheme">com.vigor.app.boost</string>
 </resources>
