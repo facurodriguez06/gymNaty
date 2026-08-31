@@ -42,7 +42,11 @@
    ========================================================================== */
 
 /* DARK MODE (Default: Warm Midnight Slate) */
-:root {
+:root,
+html.dark,
+html[data-theme="dark"],
+body.dark,
+body[data-theme="dark"] {
   --bg-base: #0b0f19;
   --bg-header: rgba(15, 22, 36, 0.85);
   --bg-panel: rgba(20, 29, 47, 0.75);
@@ -81,19 +85,22 @@
 }
 
 /* LIGHT MODE (Warm Porcelain & Crisp Glass) */
+html.light,
+html[data-theme="light"],
 html:not(.dark),
-body.light {
+body.light,
+body[data-theme="light"] {
   --bg-base: #f8fafc;
-  --bg-header: rgba(255, 255, 255, 0.88);
-  --bg-panel: rgba(255, 255, 255, 0.92);
+  --bg-header: rgba(255, 255, 255, 0.95);
+  --bg-panel: rgba(255, 255, 255, 0.96);
   --bg-panel-solid: #ffffff;
   --bg-panel-alt: #f1f5f9;
   --bg-card: #ffffff;
   --bg-card-hover: #f8fafc;
   --bg-input: #f1f5f9;
   
-  --border-dim: rgba(15, 23, 42, 0.06);
-  --border-strong: rgba(15, 23, 42, 0.1);
+  --border-dim: rgba(15, 23, 42, 0.08);
+  --border-strong: rgba(15, 23, 42, 0.15);
   --border-focus: #7c3aed;
   
   --text-main: #0f172a;
@@ -186,13 +193,42 @@ h1, h2, h3, h4, h5, h6, #day-title {
 #header-menu-btn {
   background-color: var(--bg-panel-alt) !important;
   color: var(--text-main) !important;
-  border-color: var(--border-strong) !important;
+  border: 1px solid var(--border-strong) !important;
 }
 
-#header-menu-btn svg,
-#header-menu-btn i {
-  stroke: var(--text-main) !important;
-  color: var(--text-main) !important;
+html.light #header-menu-btn,
+body.light #header-menu-btn,
+[data-theme="light"] #header-menu-btn {
+  background-color: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.15) !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light #header-menu-btn svg,
+html.light #header-menu-btn i,
+body.light #header-menu-btn svg,
+body.light #header-menu-btn i,
+[data-theme="light"] #header-menu-btn svg,
+[data-theme="light"] #header-menu-btn i {
+  stroke: #0f172a !important;
+  color: #0f172a !important;
+}
+
+html.dark #header-menu-btn,
+body.dark #header-menu-btn,
+[data-theme="dark"] #header-menu-btn {
+  background-color: #1a243a !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+html.dark #header-menu-btn svg,
+html.dark #header-menu-btn i,
+body.dark #header-menu-btn svg,
+body.dark #header-menu-btn i,
+[data-theme="dark"] #header-menu-btn svg,
+[data-theme="dark"] #header-menu-btn i {
+  stroke: #f8fafc !important;
+  color: #f8fafc !important;
 }
 
 #sidebar-overlay {

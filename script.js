@@ -1678,14 +1678,20 @@ function applyTheme() {
 
   if (currentTheme === "light") {
     body.classList.add("light");
-    body.classList.remove("dark");
-    html.classList.remove("dark"); // Remove from HTML
-    if (icon) icon.outerHTML = '<i id="theme-icon" data-lucide="sun" class="w-4 h-4 text-slate-300"></i>';
-    if (sidebarIcon) sidebarIcon.outerHTML = '<i id="theme-icon-sidebar" data-lucide="sun" class="w-4 h-4 text-slate-400"></i>';
+    body.classList.remove("dark", "bg-slate-950", "text-slate-200");
+    html.classList.add("light");
+    html.classList.remove("dark");
+    document.documentElement.setAttribute("data-theme", "light");
+    body.setAttribute("data-theme", "light");
+    if (icon) icon.outerHTML = '<i id="theme-icon" data-lucide="sun" class="w-4 h-4 text-amber-500"></i>';
+    if (sidebarIcon) sidebarIcon.outerHTML = '<i id="theme-icon-sidebar" data-lucide="sun" class="w-4 h-4 text-amber-500"></i>';
   } else {
     body.classList.remove("light");
     body.classList.add("dark");
-    html.classList.add("dark"); // Add to HTML for Tailwind
+    html.classList.remove("light");
+    html.classList.add("dark");
+    document.documentElement.setAttribute("data-theme", "dark");
+    body.setAttribute("data-theme", "dark");
     if (icon) icon.outerHTML = '<i id="theme-icon" data-lucide="moon" class="w-4 h-4 text-slate-300"></i>';
     if (sidebarIcon) sidebarIcon.outerHTML = '<i id="theme-icon-sidebar" data-lucide="moon" class="w-4 h-4 text-slate-400"></i>';
   }
