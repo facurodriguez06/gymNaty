@@ -5766,9 +5766,9 @@ function renderContent(skipAnimations = false) {
             </div>
             
             <button onclick="toggleExerciseComplete('${activeTab}', ${idx}, ${numSets}, ${isExerciseCompleted})" 
-                class="text-xs font-bold px-3 py-1 rounded-full transition-all flex items-center gap-1.5 cursor-pointer ml-auto ${isExerciseCompleted ? 'bg-[var(--bg-panel-alt)] border border-[var(--border-strong)] text-[var(--text-dim)]' : 'bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/25'}">
+                class="btn-toggle-exercise-all text-xs font-bold px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer ml-auto ${isExerciseCompleted ? 'completed-state' : 'active-state'}">
                 <i data-lucide="${isExerciseCompleted ? 'rotate-ccw' : 'check-circle-2'}" class="w-3.5 h-3.5"></i>
-                ${isExerciseCompleted ? 'Deshacer' : 'Completar todo'}
+                <span>${isExerciseCompleted ? 'Deshacer' : 'Completar todo'}</span>
             </button>
         </div>
         

@@ -447,33 +447,27 @@ body.light #timer-skip-btn,
 
 /* ==========================================================================
    SOLID & GRADIENT COLORED BUTTONS (HIGH CONTRAST WHITE TYPOGRAPHY)
-   Ensures that in Light Mode and Dark Mode, all violet, emerald, purple,
-   indigo, blue, amber, and gradient buttons display crystal-clear white text.
+   Ensures that in Light Mode and Dark Mode, all solid violet, emerald, purple,
+   indigo, blue, and gradient buttons display crystal-clear white text.
    ========================================================================== */
 
-button.text-white,
-button[class*="bg-violet-"],
-button[class*="from-violet-"],
-button[class*="bg-purple-"],
-button[class*="from-purple-"],
-button[class*="bg-emerald-"],
-button[class*="from-emerald-"],
-button[class*="bg-green-"],
-button[class*="from-green-"],
-button[class*="bg-indigo-"],
-button[class*="from-indigo-"],
-button[class*="bg-blue-"],
-button[class*="from-blue-"],
-button[class*="bg-cyan-"],
-button[class*="from-cyan-"],
-button[class*="bg-teal-"],
-button[class*="from-teal-"],
-button[class*="bg-orange-"],
-button[class*="from-orange-"],
-button[class*="bg-red-"],
-button[class*="from-red-"],
-button[class*="bg-rose-"],
-button[class*="from-rose-"],
+button.text-white:not(.btn-toggle-exercise-all),
+button[class*="from-violet-"]:not(.btn-toggle-exercise-all),
+button[class*="from-purple-"]:not(.btn-toggle-exercise-all),
+button[class*="from-emerald-"]:not(.btn-toggle-exercise-all),
+button[class*="from-green-"]:not(.btn-toggle-exercise-all),
+button[class*="from-indigo-"]:not(.btn-toggle-exercise-all),
+button[class*="from-blue-"]:not(.btn-toggle-exercise-all),
+button[class*="from-cyan-"]:not(.btn-toggle-exercise-all),
+button[class*="from-teal-"]:not(.btn-toggle-exercise-all),
+button[class*="from-orange-"]:not(.btn-toggle-exercise-all),
+button[class*="from-red-"]:not(.btn-toggle-exercise-all),
+button[class*="from-rose-"]:not(.btn-toggle-exercise-all),
+button[class*="bg-violet-600"],
+button[class*="bg-emerald-600"],
+button[class*="bg-purple-600"],
+button[class*="bg-indigo-600"],
+button[class*="bg-blue-600"],
 .btn-primary,
 .set-btn[class*="from-violet-"],
 .set-btn[class*="bg-violet-"],
@@ -485,23 +479,15 @@ button[class*="from-rose-"],
   color: #ffffff !important;
 }
 
-button.text-white *,
-button[class*="bg-violet-"] *,
-button[class*="from-violet-"] *,
-button[class*="bg-purple-"] *,
-button[class*="from-purple-"] *,
-button[class*="bg-emerald-"] *,
-button[class*="from-emerald-"] *,
-button[class*="bg-green-"] *,
-button[class*="from-green-"] *,
-button[class*="bg-indigo-"] *,
-button[class*="from-indigo-"] *,
-button[class*="bg-blue-"] *,
-button[class*="from-blue-"] *,
-button[class*="bg-cyan-"] *,
-button[class*="from-cyan-"] *,
-button[class*="bg-teal-"] *,
-button[class*="from-teal-"] *,
+button.text-white:not(.btn-toggle-exercise-all) *,
+button[class*="from-violet-"]:not(.btn-toggle-exercise-all) *,
+button[class*="from-purple-"]:not(.btn-toggle-exercise-all) *,
+button[class*="from-emerald-"]:not(.btn-toggle-exercise-all) *,
+button[class*="from-green-"]:not(.btn-toggle-exercise-all) *,
+button[class*="from-indigo-"]:not(.btn-toggle-exercise-all) *,
+button[class*="from-blue-"]:not(.btn-toggle-exercise-all) *,
+button[class*="bg-violet-600"] *,
+button[class*="bg-emerald-600"] *,
 .btn-primary *,
 .set-btn[class*="from-violet-"] *,
 .set-btn[class*="bg-violet-"] *,
@@ -512,40 +498,16 @@ button[class*="from-teal-"] *,
   color: #ffffff !important;
 }
 
-button.text-white svg,
-button.text-white i,
-button[class*="bg-violet-"] svg,
-button[class*="bg-violet-"] i,
-button[class*="from-violet-"] svg,
-button[class*="from-violet-"] i,
-button[class*="bg-purple-"] svg,
-button[class*="bg-purple-"] i,
-button[class*="from-purple-"] svg,
-button[class*="from-purple-"] i,
-button[class*="bg-emerald-"] svg,
-button[class*="bg-emerald-"] i,
-button[class*="from-emerald-"] svg,
-button[class*="from-emerald-"] i,
-button[class*="bg-green-"] svg,
-button[class*="bg-green-"] i,
-button[class*="from-green-"] svg,
-button[class*="from-green-"] i,
-button[class*="bg-indigo-"] svg,
-button[class*="bg-indigo-"] i,
-button[class*="from-indigo-"] svg,
-button[class*="from-indigo-"] i,
-button[class*="bg-blue-"] svg,
-button[class*="bg-blue-"] i,
-button[class*="from-blue-"] svg,
-button[class*="from-blue-"] i,
-button[class*="bg-cyan-"] svg,
-button[class*="bg-cyan-"] i,
-button[class*="from-cyan-"] svg,
-button[class*="from-cyan-"] i,
-button[class*="bg-teal-"] svg,
-button[class*="bg-teal-"] i,
-button[class*="from-teal-"] svg,
-button[class*="from-teal-"] i,
+button.text-white:not(.btn-toggle-exercise-all) svg,
+button.text-white:not(.btn-toggle-exercise-all) i,
+button[class*="from-violet-"]:not(.btn-toggle-exercise-all) svg,
+button[class*="from-violet-"]:not(.btn-toggle-exercise-all) i,
+button[class*="from-emerald-"]:not(.btn-toggle-exercise-all) svg,
+button[class*="from-emerald-"]:not(.btn-toggle-exercise-all) i,
+button[class*="bg-violet-600"] svg,
+button[class*="bg-violet-600"] i,
+button[class*="bg-emerald-600"] svg,
+button[class*="bg-emerald-600"] i,
 .btn-primary svg,
 .btn-primary i,
 .set-btn[class*="from-violet-"] svg,
@@ -562,6 +524,58 @@ button[class*="from-teal-"] i,
 .btn-ai-routine i {
   stroke: #ffffff !important;
   color: #ffffff !important;
+}
+
+/* ==========================================================================
+   "COMPLETAR TODO" / "DESHACER" EXERCISE QUICK ACTION BUTTON
+   ========================================================================== */
+
+.btn-toggle-exercise-all.active-state {
+  background-color: rgba(16, 185, 129, 0.15) !important;
+  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+  color: #34d399 !important;
+}
+
+.btn-toggle-exercise-all.active-state *,
+.btn-toggle-exercise-all.active-state svg,
+.btn-toggle-exercise-all.active-state i {
+  stroke: #34d399 !important;
+  color: #34d399 !important;
+}
+
+/* Light Mode: High-contrast rich emerald green typography */
+html.light .btn-toggle-exercise-all.active-state,
+body.light .btn-toggle-exercise-all.active-state,
+[data-theme="light"] .btn-toggle-exercise-all.active-state {
+  background-color: rgba(16, 185, 129, 0.14) !important;
+  border: 1px solid rgba(5, 150, 105, 0.4) !important;
+  color: #065f46 !important; /* Deep forest emerald */
+}
+
+html.light .btn-toggle-exercise-all.active-state *,
+html.light .btn-toggle-exercise-all.active-state svg,
+html.light .btn-toggle-exercise-all.active-state i,
+body.light .btn-toggle-exercise-all.active-state *,
+body.light .btn-toggle-exercise-all.active-state svg,
+body.light .btn-toggle-exercise-all.active-state i,
+[data-theme="light"] .btn-toggle-exercise-all.active-state *,
+[data-theme="light"] .btn-toggle-exercise-all.active-state svg,
+[data-theme="light"] .btn-toggle-exercise-all.active-state i {
+  stroke: #065f46 !important;
+  color: #065f46 !important;
+}
+
+.btn-toggle-exercise-all.completed-state {
+  background-color: var(--bg-panel-alt) !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--text-dim) !important;
+}
+
+.btn-toggle-exercise-all.completed-state *,
+.btn-toggle-exercise-all.completed-state svg,
+.btn-toggle-exercise-all.completed-state i {
+  stroke: var(--text-dim) !important;
+  color: var(--text-dim) !important;
 }
 
 /* ==========================================================================
