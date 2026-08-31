@@ -41,23 +41,23 @@
    THEME VARIABLES & COLOR PALETTES
    ========================================================================== */
 
-/* DARK MODE (Default: Warm Midnight Slate) */
+/* DARK MODE (True OLED Pitch Black #000000) */
 :root,
 html.dark,
 html[data-theme="dark"],
 body.dark,
 body[data-theme="dark"] {
-  --bg-base: #0b0f19;
-  --bg-header: rgba(15, 22, 36, 0.85);
-  --bg-panel: rgba(20, 29, 47, 0.75);
-  --bg-panel-solid: #141d2f;
-  --bg-panel-alt: #1a243a;
-  --bg-card: rgba(18, 26, 43, 0.85);
-  --bg-card-hover: rgba(26, 37, 60, 0.95);
-  --bg-input: #111726;
+  --bg-base: #000000;
+  --bg-header: rgba(0, 0, 0, 0.92);
+  --bg-panel: rgba(12, 12, 16, 0.85);
+  --bg-panel-solid: #0a0a0d;
+  --bg-panel-alt: #101014;
+  --bg-card: rgba(12, 12, 16, 0.92);
+  --bg-card-hover: rgba(19, 19, 24, 0.98);
+  --bg-input: #07070a;
   
   --border-dim: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.14);
+  --border-strong: rgba(255, 255, 255, 0.15);
   --border-focus: #8b5cf6;
   
   --text-main: #f8fafc;
@@ -81,7 +81,7 @@ body[data-theme="dark"] {
   --glow-emerald: 0 0 25px rgba(16, 185, 129, 0.35);
   --glow-amber: 0 0 25px rgba(245, 158, 11, 0.35);
   --glow-cyan: 0 0 25px rgba(6, 182, 212, 0.35);
-  --card-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.4);
+  --card-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.6);
 }
 
 /* LIGHT MODE (Warm Porcelain & Crisp Glass) */
@@ -146,21 +146,20 @@ body {
   position: relative;
 }
 
-/* Ambient dynamic background lighting */
+/* Dynamic background lighting (Light Mode only; turned off in Dark Mode for 100% True OLED Pure Black #000000) */
 body::before {
   content: '';
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
   pointer-events: none;
   z-index: -1;
-  background: radial-gradient(circle at 10% 0%, rgba(139, 92, 246, 0.09), transparent 45%),
-              radial-gradient(circle at 90% 90%, rgba(6, 182, 212, 0.07), transparent 45%),
-              radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.04), transparent 60%);
-  transition: opacity 0.5s ease;
+  display: none;
 }
 
-html:not(.dark) body::before,
-body.light::before {
+html.light body::before,
+body.light::before,
+[data-theme="light"] body::before {
+  display: block;
   background: radial-gradient(circle at 15% 0%, rgba(124, 58, 237, 0.07), transparent 40%),
               radial-gradient(circle at 85% 90%, rgba(2, 132, 199, 0.06), transparent 40%),
               radial-gradient(circle at 50% 50%, rgba(5, 150, 105, 0.04), transparent 50%);
@@ -216,7 +215,7 @@ body.light #header-menu-btn i,
 html.dark #header-menu-btn,
 body.dark #header-menu-btn,
 [data-theme="dark"] #header-menu-btn {
-  background-color: #1a243a !important;
+  background-color: #101014 !important;
   border-color: rgba(255, 255, 255, 0.14) !important;
 }
 
@@ -233,7 +232,7 @@ body.dark #header-menu-btn i,
 #sidebar-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(2, 6, 23, 0.8);
+  background-color: rgba(0, 0, 0, 0.85);
   z-index: 90;
   opacity: 0;
   pointer-events: none;
@@ -259,7 +258,7 @@ body.dark #header-menu-btn i,
   transform: translate3d(-100%, 0, 0) !important;
   pointer-events: none;
   transition: transform 0.18s cubic-bezier(0, 0, 0.2, 1);
-  box-shadow: 10px 0 40px rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 10px 0 40px rgba(0, 0, 0, 0.7) !important;
   will-change: transform;
   contain: layout style paint;
 }
@@ -273,7 +272,7 @@ body.dark #header-menu-btn i,
 #timer-full {
   background-color: var(--bg-card) !important;
   border: 1.5px solid var(--border-strong) !important;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35) !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5) !important;
 }
 
 html.light #timer-full,
@@ -287,7 +286,7 @@ body.light #timer-full,
 html.dark #timer-full,
 body.dark #timer-full,
 [data-theme="dark"] #timer-full {
-  background-color: #141d2f !important;
+  background-color: #0c0c10 !important;
   border-color: rgba(255, 255, 255, 0.14) !important;
 }
 
@@ -357,7 +356,7 @@ body.light #app-initial-loader h1,
 html.dark #app-initial-loader,
 body.dark #app-initial-loader,
 [data-theme="dark"] #app-initial-loader {
-  background-color: #0b0f19 !important;
+  background-color: #000000 !important;
   color: #ffffff !important;
 }
 
