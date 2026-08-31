@@ -913,18 +913,7 @@ function updateDOMInPlace() {
     if (!setKey || !user) return;
     
     const isCompleted = !!(completedSets[setKey] && completedSets[setKey][user]);
-    const hasSvg = btn.querySelector("svg") !== null;
-    
-    if (isCompleted !== hasSvg) {
-      const baseClass = "set-btn w-12 h-12 font-black text-sm transition-all duration-100 flex items-center justify-center border-2 shadow-[2px_2px_0_#000] hover:-translate-y-0.5 active:translate-y-0 active:shadow-none";
-      if (isCompleted) {
-        btn.className = `${baseClass} bg-[var(--accent-${user})] text-black border-black`;
-        btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
-      } else {
-        btn.className = `${baseClass} bg-[var(--bg-base)] text-[var(--text-dim)] border-[var(--border-strong)] hover:border-[var(--accent-${user})] hover:text-[var(--accent-${user})]`;
-        btn.textContent = user === "naty" ? "F" : "A";
-      }
-    }
+    updateSingleSetUI(setKey, user, isCompleted, btn);
   });
 
   // 2. Update weight inputs
@@ -3608,7 +3597,7 @@ function createMiniTimerBubble(user, state) {
                     class="${ringColor} transition-all duration-1000 ease-linear drop-shadow-[0_0_8px_rgba(currentColor,0.5)]" />
             </svg>
              <div class="absolute inset-0 flex items-center justify-center">
-                 ${state.isStopwatch ? `<i data-lucide="timer" class="w-5 h-5 text-emerald-500"></i>` : `<span class="text-[12px] font-black uppercase text-[var(--text-main)]">${user === "naty" ? "F" : "A"}</span>`}
+                 ${state.isStopwatch ? `<i data-lucide="timer" class="w-5 h-5 text-emerald-500"></i>` : `<span class="text-[12px] font-black uppercase text-[var(--text-main)]">${user === "naty" ? "N" : "A"}</span>`}
              </div>
         </div>
         <div class="text-left flex flex-col justify-center">

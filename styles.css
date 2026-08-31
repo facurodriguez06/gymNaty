@@ -273,18 +273,78 @@ body.dark #header-menu-btn i,
 /* Timer Modal Theme Support */
 #timer-full {
   background-color: var(--bg-card) !important;
-  border-color: var(--border-strong) !important;
+  border: 1.5px solid var(--border-strong) !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35) !important;
 }
 
-#timer-display,
+html.light #timer-full,
+body.light #timer-full,
+[data-theme="light"] #timer-full {
+  background-color: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.14) !important;
+  box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.25) !important;
+}
+
+html.dark #timer-full,
+body.dark #timer-full,
+[data-theme="dark"] #timer-full {
+  background-color: #141d2f !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+#timer-display {
+  color: var(--text-main) !important;
+}
+
+html.light #timer-display,
+body.light #timer-display,
+[data-theme="light"] #timer-display {
+  color: #0f172a !important;
+}
+
+html.dark #timer-display,
+body.dark #timer-display,
+[data-theme="dark"] #timer-display {
+  color: #ffffff !important;
+}
+
 #timer-exercise-name {
   color: var(--text-main) !important;
+}
+
+html.light #timer-exercise-name,
+body.light #timer-exercise-name,
+[data-theme="light"] #timer-exercise-name {
+  color: #0f172a !important;
+}
+
+html.dark #timer-exercise-name,
+body.dark #timer-exercise-name,
+[data-theme="dark"] #timer-exercise-name {
+  color: #f8fafc !important;
+}
+
+html.light #timer-ring-bg {
+  stroke: #e2e8f0 !important;
+  opacity: 1 !important;
+}
+
+html.dark #timer-ring-bg {
+  stroke: rgba(255, 255, 255, 0.12) !important;
+  opacity: 1 !important;
 }
 
 #timer-minimize-btn {
   background-color: var(--bg-panel-alt) !important;
   color: var(--text-main) !important;
   border-color: var(--border-strong) !important;
+}
+
+html.light #timer-minimize-btn,
+body.light #timer-minimize-btn,
+[data-theme="light"] #timer-minimize-btn {
+  background-color: #f1f5f9 !important;
+  border-color: rgba(15, 23, 42, 0.14) !important;
 }
 
 #timer-minimize-btn svg,
@@ -297,6 +357,14 @@ body.dark #header-menu-btn i,
   background-color: var(--bg-panel-alt) !important;
   color: var(--text-main) !important;
   border-color: var(--border-strong) !important;
+}
+
+html.light #timer-skip-btn,
+body.light #timer-skip-btn,
+[data-theme="light"] #timer-skip-btn {
+  background-color: #f1f5f9 !important;
+  border-color: rgba(15, 23, 42, 0.14) !important;
+  color: #0f172a !important;
 }
 
 /* Navigation active tab pill */
