@@ -30,11 +30,43 @@
   -webkit-backdrop-filter: none !important;
 }
 
-/* Contain layout recalculations */
+/* Touch Latency Elimination (0ms instant tap response) */
+*, *::before, *::after {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button, 
+[role="button"],
+.cursor-pointer,
+input[type="button"],
+input[type="submit"] {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+input, textarea, select {
+  touch-action: manipulation;
+}
+
+/* Contain layout recalculations & off-screen virtualization (Lazy GPU painting) */
 #exercises-list,
 #achievements-grid,
-#charts-container {
+#charts-container,
+#calendar-grid {
   contain: content;
+}
+
+.exercise-card {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 120px;
+  contain: layout style;
+}
+
+.achievement-card {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 140px;
+  contain: layout style;
 }
 
 /* ==========================================================================

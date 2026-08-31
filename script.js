@@ -2008,8 +2008,7 @@ function renderCalendar() {
   }
 
   if (!grid) return;
-  grid.innerHTML = "";
-
+  
   const firstDay = new Date(calendarYear, calendarMonth, 1);
   const lastDay = new Date(calendarYear, calendarMonth + 1, 0);
   const startDayOfWeek = firstDay.getDay();
@@ -2017,22 +2016,20 @@ function renderCalendar() {
   const today = new Date();
   const todayKey = getDateKey(today);
 
+  const htmlBuffer = [];
+
   // Empty cells for days before month starts
   for (let i = 0; i < startDayOfWeek; i++) {
-    grid.innerHTML += `<div class="p-2"></div>`;
+    htmlBuffer.push('<div class="p-2"></div>');
   }
 
   // Days of the month
   for (let day = 1; day <= daysInMonth; day++) {
     const date = new Date(calendarYear, calendarMonth, day);
     const dateKey = getDateKey(date);
-
-    // Legacy support
     const legacyKey = date.toDateString();
-
     const isToday = dateKey === todayKey;
 
-    // Check both
     const history = (trainingHistory || {})[dateKey] || (trainingHistory || {})[legacyKey];
 
     let bgClass = "bg-slate-800/50 hover:bg-slate-800";
@@ -2050,51 +2047,39 @@ function renderCalendar() {
     // Water indicators
     let waterIndicators = "";
     if (history && history.water) {
-      // Naty Water Dot
       if (history.water.naty >= (history.water.natyGoal || 3500)) {
-        waterIndicators +=
-          '<div class="w-1.5 h-1.5 rounded-full bg-blue-500" title="Naty: Meta cumplida"></div>';
+        waterIndicators += '<div class="w-1.5 h-1.5 rounded-full bg-blue-500" title="Naty: Meta cumplida"></div>';
       } else if (history.water.naty > 0) {
-        waterIndicators +=
-          '<div class="w-1.5 h-1.5 rounded-full bg-slate-500" title="Naty: ' +
-          history.water.naty +
-          'ml"></div>';
+        waterIndicators += '<div class="w-1.5 h-1.5 rounded-full bg-slate-500" title="Naty: ' + history.water.naty + 'ml"></div>';
       }
     }
 
     // Check if we have hydration data in waterState (for TODAY live update)
     if (isToday && waterState) {
-      // Reset to re-calc based on live waterState if it's today
       waterIndicators = "";
       if (waterState.naty >= (waterState.natyGoal || 3500)) {
-        waterIndicators +=
-          '<div class="w-1.5 h-1.5 rounded-full bg-blue-500" title="Naty: Meta cumplida"></div>';
+        waterIndicators += '<div class="w-1.5 h-1.5 rounded-full bg-blue-500" title="Naty: Meta cumplida"></div>';
       } else if (waterState.naty > 0) {
-        waterIndicators +=
-          '<div class="w-1.5 h-1.5 rounded-full bg-slate-500" title="Naty: ' +
-          waterState.naty +
-          'ml"></div>';
+        waterIndicators += '<div class="w-1.5 h-1.5 rounded-full bg-slate-500" title="Naty: ' + waterState.naty + 'ml"></div>';
       }
     }
 
-    const todayRing = isToday
-      ? "ring-2 ring-emerald-400 ring-offset-2 ring-offset-slate-900"
-      : "";
+    const todayRing = isToday ? "ring-2 ring-emerald-400 ring-offset-2 ring-offset-slate-900" : "";
 
-    grid.innerHTML += `
-                    <div class="min-h-[3rem] p-1 ${bgClass} border ${borderClass} rounded-lg flex flex-col items-center justify-center ${todayRing} transition-colors cursor-pointer" 
-                         onclick="toggleDayModal('${dateKey}')">
-                        <span class="text-sm font-medium ${
-                          isToday ? "text-emerald-400" : "text-slate-300"
-                        }">${day}</span>
-                        <div class="flex gap-1 items-center justify-center mt-0.5">
-                            ${icon}
-                            ${waterIndicators ? `<div class="flex gap-0.5">${waterIndicators}</div>` : ""}
-                        </div>
-                    </div>
-                `;
+    htmlBuffer.push(`
+      <div class="min-h-[3rem] p-1 ${bgClass} border ${borderClass} rounded-lg flex flex-col items-center justify-center ${todayRing} transition-colors cursor-pointer" 
+           onclick="toggleDayModal('${dateKey}')">
+          <span class="text-sm font-medium ${isToday ? "text-emerald-400" : "text-slate-300"}">${day}</span>
+          <div class="flex gap-1 items-center justify-center mt-0.5">
+              ${icon}
+              ${waterIndicators ? `<div class="flex gap-0.5">${waterIndicators}</div>` : ""}
+          </div>
+      </div>
+    `);
   }
-  safeCreateIcons();
+
+  grid.innerHTML = htmlBuffer.join("");
+  safeCreateIcons(grid);
 }
 
 function getVolumeHistory(user, days) {
@@ -7539,6 +7524,8 @@ function renderAchievements() {
     );
   }
 
+  const htmlBuffer = [];
+
   filtered.forEach((ach) => {
     const isUnlocked = unlockedNaty.includes(ach.id);
 
@@ -7572,8 +7559,8 @@ function renderAchievements() {
       }
     }
 
-    const html = `
-      <div class="relative p-4 rounded-2xl border ${borderClass} ${bgClass} flex flex-col items-center text-center transition-all duration-300 ${opacity} hover:scale-[1.02]">
+    htmlBuffer.push(`
+      <div class="achievement-card relative p-4 rounded-2xl border ${borderClass} ${bgClass} flex flex-col items-center text-center transition-all duration-300 ${opacity} hover:scale-[1.02]">
           ${isUnlocked ? `<div class="absolute top-2 right-2 text-[10px] uppercase font-bold tracking-wider ${iconColor}">${ach.tier}</div>` : ""}
           
           <div class="w-12 h-12 rounded-full bg-slate-950 flex items-center justify-center mb-3 border border-slate-800">
@@ -7590,11 +7577,11 @@ function renderAchievements() {
              }
           </div>
       </div>
-    `;
-    container.innerHTML += html;
+    `);
   });
 
-  safeCreateIcons();
+  container.innerHTML = htmlBuffer.join("");
+  safeCreateIcons(container);
 }
 
 window.filterAchievements = filterAchievements;
