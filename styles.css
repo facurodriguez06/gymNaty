@@ -522,8 +522,20 @@ div[onclick*="openImageModal"]:hover img,
 }
 
 /* Mobile Safe Areas and Fluid Scaling */
-.content-safe-bottom {
-  padding-bottom: calc(2rem + env(safe-area-inset-bottom, 24px));
+.content-safe-bottom,
+#app-content {
+  padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 20px));
+}
+
+#bottom-nav {
+  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 12px));
+  background-color: var(--bg-header) !important;
+  border-top: 1px solid var(--border-dim) !important;
+}
+
+.bottom-nav-btn {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 button, input, a, select {
@@ -535,7 +547,6 @@ button, input, a, select {
 #app-content {
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
-  contain: layout style;
 }
 
 .exercise-card {
