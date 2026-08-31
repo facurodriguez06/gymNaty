@@ -5471,8 +5471,8 @@ function updateSingleSetUI(setKey, user, isCompleted, clickedBtn) {
     const numberBadge = row ? row.querySelector(".w-8.h-8") : null;
     
     if (isCompleted) {
-      btn.className = "set-btn shrink-0 w-11 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-500/30 active:scale-95";
-      btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+      btn.className = "set-btn shrink-0 w-12 h-11 min-w-[48px] rounded-2xl flex items-center justify-center transition-all cursor-pointer bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-500/30 active:scale-95";
+      btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
       if (row) {
         row.className = "flex items-center justify-between p-2.5 sm:p-3 rounded-2xl transition-all duration-200 border bg-violet-950/20 border-violet-500/40 shadow-[0_0_15px_rgba(139,92,246,0.1)]";
       }
@@ -5480,8 +5480,8 @@ function updateSingleSetUI(setKey, user, isCompleted, clickedBtn) {
         numberBadge.className = "w-8 h-8 rounded-xl bg-violet-600 text-white font-black text-xs flex items-center justify-center shrink-0 font-mono transition-colors";
       }
     } else {
-      btn.className = "set-btn shrink-0 w-11 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer bg-[var(--bg-input)] text-[var(--text-dim)] border border-[var(--border-strong)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card)]";
-      btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+      btn.className = "set-btn shrink-0 w-12 h-11 min-w-[48px] rounded-2xl flex items-center justify-center transition-all cursor-pointer bg-[var(--bg-input)] text-[var(--text-dim)] border border-[var(--border-strong)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card)]";
+      btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
       if (row) {
         row.className = "flex items-center justify-between p-2.5 sm:p-3 rounded-2xl transition-all duration-200 border bg-[var(--bg-panel-alt)] border-[var(--border-strong)] hover:border-violet-500/30";
       }
@@ -5731,8 +5731,8 @@ function renderContent(skipAnimations = false) {
           
           <!-- Right: Check Action -->
           <button data-set-key="${setKey}" data-user="naty" data-exercise-name="${exercise.name}" data-rest-time="${restTime}"
-              class="set-btn shrink-0 w-11 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer ${setData.naty ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-500/30 active:scale-95' : 'bg-[var(--bg-input)] text-[var(--text-dim)] border border-[var(--border-strong)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card)]'}">
-              <i data-lucide="${setData.naty ? 'check' : 'check'}" class="w-4 h-4"></i>
+              class="set-btn shrink-0 w-12 h-11 min-w-[48px] rounded-2xl flex items-center justify-center transition-all cursor-pointer ${setData.naty ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-500/30 active:scale-95' : 'bg-[var(--bg-input)] text-[var(--text-dim)] border border-[var(--border-strong)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card)]'}">
+              <i data-lucide="check" class="w-5 h-5"></i>
           </button>
       </div>
       `;

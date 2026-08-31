@@ -234,12 +234,13 @@ body.dark #header-menu-btn i,
 #sidebar-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(2, 6, 23, 0.85);
+  background-color: rgba(2, 6, 23, 0.8);
   z-index: 90;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  transition: opacity 0.18s ease, visibility 0.18s ease;
+  will-change: opacity;
 }
 
 #sidebar-overlay.open {
@@ -258,15 +259,16 @@ body.dark #header-menu-btn i,
   background-color: var(--bg-panel-solid) !important;
   border-right: 1px solid var(--border-dim) !important;
   z-index: 100;
-  transform: translateX(-100%) !important;
+  transform: translate3d(-100%, 0, 0) !important;
   visibility: hidden;
   pointer-events: none;
-  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.3s ease;
+  transition: transform 0.18s cubic-bezier(0, 0, 0.2, 1), visibility 0.18s ease;
   box-shadow: 10px 0 40px rgba(0, 0, 0, 0.5) !important;
+  will-change: transform;
 }
 
 #sidebar.open {
-  transform: translateX(0) !important;
+  transform: translate3d(0, 0, 0) !important;
   visibility: visible !important;
   pointer-events: auto !important;
 }
