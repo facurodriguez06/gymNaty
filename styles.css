@@ -237,15 +237,13 @@ body.dark #header-menu-btn i,
   background-color: rgba(2, 6, 23, 0.8);
   z-index: 90;
   opacity: 0;
-  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.18s ease, visibility 0.18s ease;
+  transition: opacity 0.18s ease;
   will-change: opacity;
 }
 
 #sidebar-overlay.open {
   opacity: 1 !important;
-  visibility: visible !important;
   pointer-events: auto !important;
 }
 
@@ -260,17 +258,45 @@ body.dark #header-menu-btn i,
   border-right: 1px solid var(--border-dim) !important;
   z-index: 100;
   transform: translate3d(-100%, 0, 0) !important;
-  visibility: hidden;
   pointer-events: none;
-  transition: transform 0.18s cubic-bezier(0, 0, 0.2, 1), visibility 0.18s ease;
+  transition: transform 0.18s cubic-bezier(0, 0, 0.2, 1);
   box-shadow: 10px 0 40px rgba(0, 0, 0, 0.5) !important;
   will-change: transform;
+  contain: layout style paint;
 }
 
 #sidebar.open {
   transform: translate3d(0, 0, 0) !important;
-  visibility: visible !important;
   pointer-events: auto !important;
+}
+
+/* Timer Modal Theme Support */
+#timer-full {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border-strong) !important;
+}
+
+#timer-display,
+#timer-exercise-name {
+  color: var(--text-main) !important;
+}
+
+#timer-minimize-btn {
+  background-color: var(--bg-panel-alt) !important;
+  color: var(--text-main) !important;
+  border-color: var(--border-strong) !important;
+}
+
+#timer-minimize-btn svg,
+#timer-minimize-btn i {
+  stroke: var(--text-main) !important;
+  color: var(--text-main) !important;
+}
+
+#timer-skip-btn {
+  background-color: var(--bg-panel-alt) !important;
+  color: var(--text-main) !important;
+  border-color: var(--border-strong) !important;
 }
 
 /* Navigation active tab pill */

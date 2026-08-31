@@ -1748,7 +1748,6 @@ function toggleSidebar() {
     sidebar.classList.add("open");
     if (overlay) overlay.classList.add("open");
   }
-  safeCreateIcons();
   if (typeof triggerHaptic === "function") triggerHaptic();
 }
 
@@ -3586,8 +3585,8 @@ function createMiniTimerBubble(user, state) {
   const textColor = user === "naty" ? "text-sky-400" : "text-pink-400";
   const ringColor = user === "naty" ? "text-sky-500" : "text-pink-500";
 
-  // Vital Aesthetic for minimized bubble: solid #09090b bg, subtle border, rounded-[24px]
-  div.className = `bg-slate-950 border border-slate-800 rounded-[24px] p-3 pr-5 shadow-2xl cursor-pointer hover:scale-105 hover:bg-slate-900 transition-all duration-200 pointer-events-auto flex items-center gap-3`;
+  // Vital Aesthetic for minimized bubble: theme-aware bg, border, rounded-[24px]
+  div.className = `bg-[var(--bg-card)] border border-[var(--border-strong)] rounded-[24px] p-3 pr-5 shadow-2xl cursor-pointer hover:scale-105 transition-all duration-200 pointer-events-auto flex items-center gap-3`;
   div.onclick = () => expandTimer(user);
 
   const hrs = Math.floor(state.currentSeconds / 3600);
@@ -3603,18 +3602,18 @@ function createMiniTimerBubble(user, state) {
   div.innerHTML = `
         <div class="relative w-11 h-11 flex-shrink-0">
              <svg class="w-11 h-11 transform -rotate-90 drop-shadow-md ${state.isStopwatch ? 'hidden' : ''}">
-                <circle cx="22" cy="22" r="18" stroke="#27272a" stroke-width="4" fill="none" />
+                <circle cx="22" cy="22" r="18" stroke="currentColor" stroke-width="4" fill="none" class="text-[var(--border-strong)] opacity-40" />
                 <circle id="mini-ring-${user}" cx="22" cy="22" r="18" stroke="currentColor" stroke-width="4"
                     fill="none" stroke-linecap="round" stroke-dasharray="113.1" stroke-dashoffset="0"
                     class="${ringColor} transition-all duration-1000 ease-linear drop-shadow-[0_0_8px_rgba(currentColor,0.5)]" />
             </svg>
              <div class="absolute inset-0 flex items-center justify-center">
-                 ${state.isStopwatch ? `<i data-lucide="timer" class="w-5 h-5 text-emerald-500"></i>` : `<span class="text-[12px] font-black uppercase text-slate-300">${user === "naty" ? "F" : "A"}</span>`}
+                 ${state.isStopwatch ? `<i data-lucide="timer" class="w-5 h-5 text-emerald-500"></i>` : `<span class="text-[12px] font-black uppercase text-[var(--text-main)]">${user === "naty" ? "F" : "A"}</span>`}
              </div>
         </div>
         <div class="text-left flex flex-col justify-center">
-            <div id="mini-display-${user}" class="text-2xl font-mono font-black text-white tabular-nums leading-none tracking-tight">${timeStr}</div>
-            <p class="text-[10px] text-slate-400 max-w-[100px] truncate font-bold uppercase mt-1">${state.exerciseName}</p>
+            <div id="mini-display-${user}" class="text-2xl font-mono font-black text-[var(--text-main)] tabular-nums leading-none tracking-tight">${timeStr}</div>
+            <p class="text-[10px] text-[var(--text-dim)] max-w-[100px] truncate font-bold uppercase mt-1">${state.exerciseName}</p>
         </div>
     `;
   return div;
