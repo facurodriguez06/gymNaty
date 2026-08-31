@@ -123,7 +123,7 @@
                 <button onclick="navigateTo('ai-routine')"
                     class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all group btn-ai-routine">
                     <i data-lucide="sparkles" class="w-5 h-5 transition-colors"></i>
-                    <span class="font-medium">ARMA TU RUTINA</span>
+                    <span class="font-medium">Planificador</span>
                 </button>
                 <button onclick="navigateTo('routine')"
                     class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[var(--text-dim)] hover:bg-[var(--bg-panel-alt)] hover:text-[var(--text-main)] transition-all group active-nav-item">
@@ -157,8 +157,8 @@
                 </button>
                 <button onclick="closeSidebarIfOpen(); openDailyMotivationModal(true)"
                     class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 transition-all group">
-                    <i data-lucide="flame" class="w-5 h-5 text-amber-400 group-hover:scale-110 transition-transform"></i>
-                    <span class="font-bold">Mantra de Hoy</span>
+                    <i data-lucide="compass" class="w-5 h-5 text-amber-400 group-hover:scale-110 transition-transform"></i>
+                    <span class="font-bold">Enfoque del Día</span>
                 </button>
                 <button onclick="navigateTo('water')"
                     class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[var(--text-dim)] hover:bg-[var(--bg-panel-alt)] hover:text-[var(--text-main)] transition-all group">
@@ -341,16 +341,16 @@
                     </div>
                 </div>
 
-                <!-- Daily Motivation Mantra Banner -->
+                <!-- Daily Motivation Focus Banner -->
                 <div id="daily-motivation-banner" onclick="openDailyMotivationModal(true)"
                     class="mb-6 p-4 rounded-3xl bg-gradient-to-r from-violet-950/20 via-[var(--bg-card)] to-indigo-950/15 border border-[var(--border-strong)] shadow-sm hover:border-violet-500/40 transition-all cursor-pointer flex items-center gap-3.5 group active:scale-[0.99]">
                     <div class="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0 shadow-inner group-hover:scale-105 transition-transform">
-                        <i data-lucide="sparkles" class="w-5 h-5"></i>
+                        <i data-lucide="compass" class="w-5 h-5"></i>
                     </div>
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center gap-2">
-                            <span class="text-[10px] font-extrabold text-amber-400 uppercase tracking-widest">Mantra de Hoy</span>
-                            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20">+10 Gemas</span>
+                            <span class="text-[10px] font-extrabold text-amber-400 uppercase tracking-widest">Enfoque del Día</span>
+                            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20">+10 pts</span>
                         </div>
                         <p id="daily-motivation-banner-text" class="text-xs sm:text-sm font-semibold text-[var(--text-main)] italic line-clamp-2 leading-snug mt-1">
                             "Si realmente quieres hacer algo, encontrarás una forma; si no, encontrarás una excusa."
@@ -719,10 +719,10 @@
                     <div class="flex items-center gap-2 mb-1">
                         <i data-lucide="sparkles" class="w-7 h-7 md:w-8 md:h-8 text-cyan-400 animate-pulse shrink-0"></i>
                         <h1 class="text-2xl md:text-3xl font-black text-cyan-400 flex-1 min-w-0 leading-tight">
-                            Asistente Personal Trainer IA
+                            Planificador de Rutinas
                         </h1>
                     </div>
-                    <p class="text-slate-400 text-sm">Diseña tu rutina perfecta con la ayuda del Coach Vital</p>
+                    <p class="text-slate-400 text-sm">Diseña tu rutina personalizada según tus objetivos</p>
                 </div>
                 <div class="flex items-center gap-2">
                     <button onclick="navigateTo('routine')" class="px-4 py-2 bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700/50 rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-2 active:scale-[0.97]">
@@ -742,20 +742,20 @@
                             <i data-lucide="dumbbell" class="w-10 h-10 text-cyan-400"></i>
                         </div>
                         <h3 class="text-lg font-black text-white">Coach Vital</h3>
-                        <p class="text-xs text-emerald-400 font-bold uppercase tracking-widest mt-1">Personal Trainer IA</p>
-                        <p class="text-[10px] text-slate-500 mt-2 italic leading-relaxed">"Certificaciones en cambio físico, hipertrofia y prevención de lesiones."</p>
+                        <p class="text-xs text-emerald-400 font-bold uppercase tracking-widest mt-1">Entrenador Deportivo</p>
+                        <p class="text-[10px] text-slate-500 mt-2 italic leading-relaxed">"Especialista en recomposición corporal, fuerza e hipertrofia."</p>
                     </div>
 
                     <div class="space-y-4">
-                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Información Clave</h4>
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Información</h4>
                         <div class="flex flex-col gap-3 text-xs">
                             <div class="flex justify-between py-1.5 border-b border-slate-800/50">
-                                <span class="text-slate-500">Modelo</span>
-                                <span class="text-slate-300 font-mono">Gemini 3 Flash</span>
+                                <span class="text-slate-500">Enfoque</span>
+                                <span class="text-slate-300">Fuerza & Progresión</span>
                             </div>
                             <div class="flex justify-between py-1.5 border-b border-slate-800/50">
                                 <span class="text-slate-500">Especialidad</span>
-                                <span class="text-slate-300">Cambio Físico & Fuerza</span>
+                                <span class="text-slate-300">Cambio Físico & Salud</span>
                             </div>
                             <div class="flex justify-between py-1.5">
                                 <span class="text-slate-500">Configuración</span>
@@ -1121,11 +1121,11 @@
                     <i data-lucide="sparkles" class="w-4 h-4"></i>
                 </div>
                 <div>
-                    <h4 class="font-bold text-[var(--text-main)] mb-0.5">¿Cómo ganas gemas?</h4>
+                    <h4 class="font-bold text-[var(--text-main)] mb-0.5">¿Cómo ganas puntos?</h4>
                     <p class="text-[var(--text-dim)] text-[11px] leading-relaxed">
-                        <strong class="text-emerald-400">+100 💎</strong> por entrenar · 
-                        <strong class="text-sky-400">+25 💎</strong> por meta de agua · 
-                        <strong class="text-violet-400">+5 💎</strong> por cada serie completada.
+                        <strong class="text-emerald-400">+100 pts</strong> por entrenar · 
+                        <strong class="text-sky-400">+25 pts</strong> por meta de agua · 
+                        <strong class="text-violet-400">+5 pts</strong> por cada serie completada.
                     </p>
                 </div>
             </div>
@@ -1152,7 +1152,7 @@
                 <!-- Item 2: 2x Pack Freeze (Discount) -->
                 <div class="bg-[var(--bg-panel-alt)] p-4 rounded-2xl border border-violet-500/30 hover:border-violet-500/60 transition-all flex items-center justify-between gap-3 group relative overflow-hidden">
                     <div class="absolute top-0 right-0 bg-gradient-to-l from-violet-600 to-indigo-600 text-white text-[9px] font-black uppercase px-2 py-0.5 rounded-bl-lg tracking-wider">
-                        Ahorra 100 💎
+                        Ahorra 100 pts
                     </div>
                     <div class="flex items-center gap-3.5">
                         <div class="w-12 h-12 rounded-2xl bg-violet-500/10 border border-violet-500/30 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-[0_0_15px_rgba(139,92,246,0.15)]">
@@ -1690,11 +1690,11 @@
             <!-- Motivational Message Card -->
             <div id="streak-motivational-box" class="w-full bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3.5 mb-5 text-left flex items-start gap-3">
                 <div class="p-1.5 rounded-lg bg-amber-500/20 text-amber-400 mt-0.5">
-                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    <i data-lucide="compass" class="w-4 h-4"></i>
                 </div>
                 <div>
-                    <p id="streak-motivational-title" class="text-xs font-black text-amber-300 uppercase tracking-wider">¡Llama encendida!</p>
-                    <p id="streak-motivational-desc" class="text-xs text-[var(--text-dim)] mt-0.5 leading-snug">Completá tu sesión de hoy para seguir sumando días a tu racha.</p>
+                    <p id="streak-motivational-title" class="text-xs font-black text-amber-300 uppercase tracking-wider">Racha Activa</p>
+                    <p id="streak-motivational-desc" class="text-xs text-[var(--text-dim)] mt-0.5 leading-snug">Completá tu sesión para mantener tu constancia de entrenamiento.</p>
                 </div>
             </div>
 
@@ -1706,7 +1706,7 @@
                     </div>
                     <div class="text-left">
                         <span id="streak-modal-points" class="text-sm font-black text-[var(--text-main)] font-mono block leading-none">0</span>
-                        <span class="text-[9px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Gemas</span>
+                        <span class="text-[9px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Puntos</span>
                     </div>
                 </div>
                 <div onclick="closeStreakModal(); if(typeof openShopModal==='function') openShopModal(currentStreakUser);" class="bg-[var(--bg-panel-alt)] hover:bg-[var(--bg-card)] border border-[var(--border-strong)] hover:border-cyan-500/40 rounded-xl p-2.5 flex items-center gap-2.5 cursor-pointer transition-all active:scale-95">
@@ -1723,7 +1723,7 @@
             <!-- Action Button -->
             <button onclick="closeStreakModal()"
                 class="w-full py-3 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-black rounded-xl shadow-lg shadow-orange-500/20 transition-all text-sm uppercase tracking-wider active:scale-95">
-                ¡Vamos por más!
+                Continuar
             </button>
         </div>
     </div>
@@ -1741,12 +1741,12 @@
                 </div>
             </div>
 
-            <span class="text-xs font-black uppercase tracking-widest text-orange-400 mb-1">¡RACHA AUMENTADA!</span>
+            <span class="text-xs font-black uppercase tracking-widest text-orange-400 mb-1">RACHA ACTUALIZADA</span>
             <h3 id="celebration-streak-count" class="text-4xl font-black text-white font-mono tracking-tight mb-2">
-                🔥 1 DÍA
+                1 DÍA
             </h3>
             <p id="celebration-streak-text" class="text-sm text-slate-300 mb-6 leading-relaxed">
-                ¡Gran trabajo, Naty! Tu constancia está dando frutos.
+                Sesión completada con éxito. Has sumado un nuevo día de constancia.
             </p>
 
             <button onclick="closeStreakCelebrationModal()"
@@ -1769,7 +1769,7 @@
             <!-- Header Tag -->
             <div class="flex justify-center mb-3">
                 <span class="text-[11px] font-semibold uppercase tracking-wider text-violet-400 bg-violet-500/10 border border-violet-500/20 px-3.5 py-1 rounded-full flex items-center gap-1.5">
-                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i> Mantra de Hoy
+                    <i data-lucide="compass" class="w-3.5 h-3.5 text-amber-400"></i> Enfoque del Día
                 </span>
             </div>
 
@@ -1778,7 +1778,7 @@
                 Hola, Naty
             </h2>
             <p class="text-xs text-[var(--text-dim)] font-medium mb-6 text-center">
-                Tu enfoque para la sesión de hoy
+                Mentalidad y disciplina para tu sesión de hoy
             </p>
 
             <!-- Quote Container -->
@@ -1788,10 +1788,10 @@
                 </p>
             </div>
 
-            <!-- Pledge Action Button -->
+            <!-- Action Button -->
             <button id="accept-motivation-btn" onclick="acceptDailyMotivation()"
                 class="w-full py-3.5 sm:py-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold text-sm sm:text-base rounded-2xl shadow-lg shadow-violet-500/25 active:scale-95 transition-all text-center cursor-pointer flex items-center justify-center gap-2">
-                <i data-lucide="check" class="w-4 h-4"></i> Prometo darlo todo hoy
+                <i data-lucide="check" class="w-4 h-4"></i> Comenzar Entrenamiento
             </button>
         </div>
     </div>

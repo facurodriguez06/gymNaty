@@ -2445,7 +2445,7 @@ function addWater(user, amount) {
       saveToCloud();
       updateGamificationUI();
       if (typeof showToast === "function") {
-        showToast("droplet", "text-sky-400", "¡Meta de agua completada! +25 💎");
+        showToast("droplet", "text-sky-400", "Meta de agua completada (+25 pts)");
       }
       if (typeof triggerConfetti === "function") triggerConfetti();
     }
@@ -6595,7 +6595,7 @@ function showStreakCelebration(user, newStreak) {
 
   const countEl = document.getElementById("celebration-streak-count");
   if (countEl) {
-    countEl.innerHTML = `🔥 ${newStreak} ${newStreak === 1 ? "DÍA" : "DÍAS"}`;
+    countEl.innerHTML = `${newStreak} ${newStreak === 1 ? "DÍA" : "DÍAS"}`;
   }
 
   const textEl = document.getElementById("celebration-streak-text");
@@ -6939,11 +6939,11 @@ function buyFreezePack(count, cost) {
 
     triggerConfetti();
     triggerHaptic();
-    showToast("shield-check", "text-cyan-400", `¡Compraste ${count}x Protector${count > 1 ? "es" : ""} de Racha! 🛡️`);
+    showToast("shield-check", "text-cyan-400", `¡Compraste ${count}x Protector${count > 1 ? "es" : ""} de Racha!`);
   } else {
     triggerHaptic();
     const needed = cost - (gamification.naty.points || 0);
-    showToast("ban", "text-red-400", `Gemas insuficientes. Te faltan ${needed} 💎 (tienes ${gamification.naty.points || 0})`);
+    showToast("ban", "text-red-400", `Puntos insuficientes. Te faltan ${needed} pts (tienes ${gamification.naty.points || 0})`);
   }
 }
 
@@ -6967,7 +6967,7 @@ window.closeShopModal = closeShopModal;
 window.updateStreak = updateGamificationUI;
 
 // ==========================================================================
-// DAILY MOTIVATIONAL PLEDGE SYSTEM (680+ MANTRAS NIVEL DIOS PARA NATY)
+// DAILY MOTIVATIONAL FOCUS SYSTEM
 // ==========================================================================
 
 function getDailyMotivationQuote(dateKey) {
@@ -7020,10 +7020,10 @@ function openDailyMotivationModal(isManual = false) {
   
   if (btn) {
     if (isManual && alreadyAccepted) {
-      btn.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i> Pacto Firmado Hoy`;
+      btn.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i> Enfoque Confirmado`;
       btn.className = "w-full py-3.5 bg-[var(--bg-panel-alt)] border border-[var(--border-strong)] hover:bg-[var(--bg-card)] text-[var(--text-main)] font-bold text-sm rounded-2xl transition-all text-center cursor-pointer flex items-center justify-center gap-2";
     } else {
-      btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> Prometo darlo todo hoy`;
+      btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> Comenzar Entrenamiento`;
       btn.className = "w-full py-3.5 sm:py-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold text-sm sm:text-base rounded-2xl shadow-lg shadow-violet-500/25 active:scale-95 transition-all text-center cursor-pointer flex items-center justify-center gap-2";
     }
   }
@@ -7041,7 +7041,7 @@ function acceptDailyMotivation() {
   if (!alreadyAccepted) {
     localStorage.setItem("natyDailyPledgeAccepted_" + today, "true");
     
-    // Reward Naty with +10 gems for daily pledge commitment
+    // Reward Naty with +10 points for daily pledge commitment
     let currentGems = parseInt(localStorage.getItem("naty_gems_balance") || "0", 10);
     currentGems += 10;
     localStorage.setItem("naty_gems_balance", currentGems.toString());
@@ -7053,7 +7053,7 @@ function acceptDailyMotivation() {
     if (typeof triggerConfetti === "function") triggerConfetti();
     if (typeof triggerHaptic === "function") triggerHaptic();
     if (typeof showToast === "function") {
-      showToast("check-circle", "text-emerald-400", "Pacto firmado. +10 gemas registradas.");
+      showToast("check-circle", "text-emerald-400", "Enfoque registrado (+10 pts).");
     }
   }
   
