@@ -319,6 +319,23 @@
                     </div>
                 </div>
 
+                <!-- Daily Motivation Mantra Banner -->
+                <div id="daily-motivation-banner" onclick="openDailyMotivationModal(true)"
+                    class="mb-6 p-4 rounded-3xl bg-gradient-to-r from-violet-950/20 via-[var(--bg-card)] to-indigo-950/15 border border-[var(--border-strong)] shadow-sm hover:border-violet-500/40 transition-all cursor-pointer flex items-center gap-3.5 group active:scale-[0.99]">
+                    <div class="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0 shadow-inner group-hover:scale-105 transition-transform">
+                        <i data-lucide="sparkles" class="w-5 h-5"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-extrabold text-amber-400 uppercase tracking-widest">Mantra de Hoy</span>
+                            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20">+10 Gemas</span>
+                        </div>
+                        <p id="daily-motivation-banner-text" class="text-xs sm:text-sm font-semibold text-[var(--text-main)] italic line-clamp-2 leading-snug mt-1">
+                            "Si realmente quieres hacer algo, encontrarás una forma; si no, encontrarás una excusa."
+                        </p>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-[var(--text-muted)] group-hover:text-violet-400 group-hover:translate-x-0.5 transition-all shrink-0"></i>
+                </div>
 
                 <!-- Exercises List -->
                 <div id="exercises-list" class="space-y-4">
@@ -1719,35 +1736,40 @@
 
     <!-- DAILY MOTIVATIONAL PLEDGE GATE MODAL -->
     <div id="daily-motivation-modal"
-        class="fixed inset-0 z-[120] hidden items-center justify-center p-4 bg-slate-950/85 backdrop-blur-xl transition-all duration-500">
-        <div class="relative max-w-md w-full bg-slate-900/95 border border-slate-800 rounded-3xl p-6 sm:p-8 text-center shadow-2xl animate-slide-up">
+        class="fixed inset-0 z-[120] hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md transition-all duration-300">
+        <div class="relative max-w-md w-full bg-[var(--bg-card)] border border-[var(--border-strong)] rounded-3xl p-6 sm:p-8 text-center shadow-2xl animate-slide-up">
             
+            <!-- Close Button (Optional Dismissal) -->
+            <button onclick="acceptDailyMotivation()" class="absolute top-4 right-4 w-10 h-10 rounded-2xl bg-[var(--bg-panel-alt)] border border-[var(--border-strong)] text-[var(--text-dim)] hover:text-[var(--text-main)] transition-colors flex items-center justify-center cursor-pointer" title="Cerrar">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+
             <!-- Header Tag -->
             <div class="flex justify-center mb-3">
-                <span class="text-[11px] font-semibold uppercase tracking-wider text-violet-400 bg-violet-500/10 border border-violet-500/20 px-3.5 py-1 rounded-full">
-                    Mantra de Hoy
+                <span class="text-[11px] font-semibold uppercase tracking-wider text-violet-400 bg-violet-500/10 border border-violet-500/20 px-3.5 py-1 rounded-full flex items-center gap-1.5">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i> Mantra de Hoy
                 </span>
             </div>
 
             <!-- Greeting for Naty -->
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-1 text-center">
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-[var(--text-main)] tracking-tight mb-1 text-center">
                 Hola, Naty
             </h2>
-            <p class="text-xs text-slate-400 font-medium mb-6 text-center">
+            <p class="text-xs text-[var(--text-dim)] font-medium mb-6 text-center">
                 Tu enfoque para la sesión de hoy
             </p>
 
             <!-- Quote Container -->
-            <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-6 sm:p-7 mb-6 text-center">
-                <p id="daily-motivation-quote-text" class="text-base sm:text-lg font-semibold text-white leading-relaxed text-center tracking-normal">
+            <div class="bg-[var(--bg-panel-alt)] border border-[var(--border-strong)] rounded-2xl p-6 sm:p-7 mb-6 text-center shadow-inner">
+                <p id="daily-motivation-quote-text" class="text-base sm:text-lg font-semibold text-[var(--text-main)] italic leading-relaxed text-center tracking-normal">
                     Cargando...
                 </p>
             </div>
 
             <!-- Pledge Action Button -->
             <button id="accept-motivation-btn" onclick="acceptDailyMotivation()"
-                class="w-full py-3.5 sm:py-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold text-sm sm:text-base rounded-full shadow-lg shadow-violet-500/25 active:scale-95 transition-all text-center cursor-pointer">
-                Prometo darlo todo hoy
+                class="w-full py-3.5 sm:py-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold text-sm sm:text-base rounded-2xl shadow-lg shadow-violet-500/25 active:scale-95 transition-all text-center cursor-pointer flex items-center justify-center gap-2">
+                <i data-lucide="check" class="w-4 h-4"></i> Prometo darlo todo hoy
             </button>
         </div>
     </div>

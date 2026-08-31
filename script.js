@@ -5565,6 +5565,9 @@ function renderContent(skipAnimations = false) {
   document.getElementById("day-title").textContent = dayData.title;
   document.getElementById("exercise-count").textContent =
     `${dayData.exercises.length} Ejercicios`;
+  if (typeof updateDailyMotivationBanner === "function") {
+    updateDailyMotivationBanner();
+  }
 
   // Calculate total sets and completed sets for progress
   let totalSets = 0;
@@ -6980,7 +6983,17 @@ function getDailyMotivationQuote(dateKey) {
   return quotes[index];
 }
 
+function updateDailyMotivationBanner() {
+  const bannerTextEl = document.getElementById("daily-motivation-banner-text");
+  if (bannerTextEl) {
+    const today = getDateKey(new Date());
+    const quote = getDailyMotivationQuote(today);
+    bannerTextEl.textContent = `"${quote}"`;
+  }
+}
+
 function checkAndShowDailyMotivation() {
+  updateDailyMotivationBanner();
   const today = getDateKey(new Date());
   const accepted = localStorage.getItem("natyDailyPledgeAccepted_" + today);
   
@@ -7001,16 +7014,17 @@ function openDailyMotivationModal(isManual = false) {
   const quote = getDailyMotivationQuote(today);
   
   quoteEl.textContent = quote;
+  updateDailyMotivationBanner();
   
   const alreadyAccepted = localStorage.getItem("natyDailyPledgeAccepted_" + today) === "true";
   
   if (btn) {
     if (isManual && alreadyAccepted) {
-      btn.textContent = "Cerrar";
-      btn.className = "w-full py-3.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-sm rounded-full transition-all text-center cursor-pointer";
+      btn.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i> Pacto Firmado Hoy`;
+      btn.className = "w-full py-3.5 bg-[var(--bg-panel-alt)] border border-[var(--border-strong)] hover:bg-[var(--bg-card)] text-[var(--text-main)] font-bold text-sm rounded-2xl transition-all text-center cursor-pointer flex items-center justify-center gap-2";
     } else {
-      btn.textContent = "Prometo darlo todo hoy";
-      btn.className = "w-full py-3.5 sm:py-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold text-sm sm:text-base rounded-full shadow-lg shadow-violet-500/25 active:scale-95 transition-all text-center cursor-pointer";
+      btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> Prometo darlo todo hoy`;
+      btn.className = "w-full py-3.5 sm:py-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold text-sm sm:text-base rounded-2xl shadow-lg shadow-violet-500/25 active:scale-95 transition-all text-center cursor-pointer flex items-center justify-center gap-2";
     }
   }
   
@@ -7053,6 +7067,7 @@ function acceptDailyMotivation() {
 }
 
 window.openDailyMotivationModal = openDailyMotivationModal;
+window.updateDailyMotivationBanner = updateDailyMotivationBanner;
 window.acceptDailyMotivation = acceptDailyMotivation;
 window.checkAndShowDailyMotivation = checkAndShowDailyMotivation;
 window.getDailyMotivationQuote = getDailyMotivationQuote;
