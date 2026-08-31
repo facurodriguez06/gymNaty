@@ -1217,7 +1217,7 @@ function applyCloudState(state, triggerTimers = false) {
         streak: natyG.streak ?? gamification.naty.streak,
         freezes: natyG.freezes ?? gamification.naty.freezes,
         frozenDays: natyG.frozen_days || natyG.frozenDays || gamification.naty.frozenDays || [],
-        achievements: Array.from(new Set([...(gamification.naty.achievements || []), ...(natyG.achievements || [])])),
+        achievements: natyG.achievements || [],
         lastReset: natyG.last_reset || gamification.naty.lastReset || 0,
         lastRescuePromptDate: natyG.last_rescue_prompt_date || gamification.naty.lastRescuePromptDate || null,
       };
@@ -1230,7 +1230,7 @@ function applyCloudState(state, triggerTimers = false) {
         streak: almaG.streak ?? gamification.alma.streak,
         freezes: almaG.freezes ?? gamification.alma.freezes,
         frozenDays: almaG.frozen_days || almaG.frozenDays || gamification.alma.frozenDays || [],
-        achievements: Array.from(new Set([...(gamification.alma.achievements || []), ...(almaG.achievements || [])])),
+        achievements: almaG.achievements || [],
         lastReset: almaG.last_reset || gamification.alma.lastReset || 0,
         lastRescuePromptDate: almaG.last_rescue_prompt_date || gamification.alma.lastRescuePromptDate || null,
       };
@@ -1448,10 +1448,9 @@ let gamification = JSON.parse(localStorage.getItem("gymGamification")) || {
   if (gamification[u].streak === undefined) gamification[u].streak = 0;
 });
 
-// Clean up unearned achievements if no workouts have been performed yet
-const hasWorkouts = Object.values(trainingHistory || {}).some((d) => d && d.naty);
-if (!hasWorkouts && gamification && gamification.naty) {
-  gamification.naty.achievements = [];
+if (gamification) {
+  if (gamification.naty) gamification.naty.achievements = [];
+  if (gamification.alma) gamification.alma.achievements = [];
   localStorage.setItem("gymGamification", JSON.stringify(gamification));
 }
 
@@ -5545,11 +5544,12 @@ function updateSingleSetUI(setKey, user, isCompleted, clickedBtn) {
   if (completionMsg) {
     if (progress === 100) {
       completionMsg.classList.remove("hidden");
-      if (typeof openWorkoutSummaryModal === "function") {
-        setTimeout(openWorkoutSummaryModal, 600);
+      if (!isSummaryDismissedToday(activeTab) && typeof openWorkoutSummaryModal === "function") {
+        setTimeout(() => openWorkoutSummaryModal(false), 600);
       }
     } else {
       completionMsg.classList.add("hidden");
+      clearSummaryDismissedToday(activeTab);
     }
   }
 
@@ -5647,9 +5647,6 @@ function renderContent(skipAnimations = false) {
   const completionMsg = document.getElementById("completion-message");
   if (progress === 100) {
     completionMsg.classList.remove("hidden");
-    if (typeof openWorkoutSummaryModal === "function") {
-      setTimeout(openWorkoutSummaryModal, 600);
-    }
   } else {
     completionMsg.classList.add("hidden");
   }
@@ -8546,7 +8543,25 @@ function calculateSessionVolume(user) {
 // ==========================================================================
 // WORKOUT SUMMARY MODAL & OVERLOAD ANALYSIS
 // ==========================================================================
-function openWorkoutSummaryModal() {
+function isSummaryDismissedToday(tabIdx = activeTab) {
+  const todayKey = getDateKey(new Date());
+  return localStorage.getItem(`workout_summary_dismissed_${activeRoutineId}_${tabIdx}_${todayKey}`) === "true";
+}
+
+function setSummaryDismissedToday(tabIdx = activeTab) {
+  const todayKey = getDateKey(new Date());
+  localStorage.setItem(`workout_summary_dismissed_${activeRoutineId}_${tabIdx}_${todayKey}`, "true");
+}
+
+function clearSummaryDismissedToday(tabIdx = activeTab) {
+  const todayKey = getDateKey(new Date());
+  localStorage.removeItem(`workout_summary_dismissed_${activeRoutineId}_${tabIdx}_${todayKey}`);
+}
+
+function openWorkoutSummaryModal(force = false) {
+  if (!force && isSummaryDismissedToday(activeTab)) {
+    return;
+  }
   const modal = document.getElementById("workout-summary-modal");
   if (!modal) return;
 
@@ -8648,6 +8663,7 @@ function getLastSessionVolume(user) {
 }
 
 function closeWorkoutSummaryModal() {
+  setSummaryDismissedToday(activeTab);
   const modal = document.getElementById("workout-summary-modal");
   if (modal) {
     modal.classList.add("hidden");
@@ -8656,6 +8672,7 @@ function closeWorkoutSummaryModal() {
 }
 
 function saveSessionAndCloseSummary() {
+  setSummaryDismissedToday(activeTab);
   let who = "both";
   if (whoTrainsToday === "naty") {
     who = "naty";
@@ -8699,6 +8716,9 @@ window.closeWorkoutSummaryModal = closeWorkoutSummaryModal;
 window.saveSessionAndCloseSummary = saveSessionAndCloseSummary;
 window.updateLiveVolumeUI = updateLiveVolumeUI;
 window.initSessionStopwatch = initSessionStopwatch;
+window.isSummaryDismissedToday = isSummaryDismissedToday;
+window.setSummaryDismissedToday = setSummaryDismissedToday;
+window.clearSummaryDismissedToday = clearSummaryDismissedToday;
 
 
 
