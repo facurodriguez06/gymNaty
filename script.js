@@ -3245,30 +3245,21 @@ async function releaseWakeLock() {
 function updateBodyScrollLock() {
   const needsLock = !!(
     activeFullModalUser &&
+    timerState[activeFullModalUser] &&
     timerState[activeFullModalUser].active &&
     !timerState[activeFullModalUser].minimized
   );
 
-  const isCurrentlyLocked = document.body.style.position === "fixed";
-
+  const appContent = document.getElementById("app-content");
   if (needsLock) {
-    if (!isCurrentlyLocked) {
-      savedScrollY = window.scrollY; // Capture original position before lock
-      document.body.style.overflow = "hidden";
-      document.body.style.position = "fixed";
-      document.body.style.top = `-${savedScrollY}px`;
-      document.body.style.width = "100%";
-      document.body.style.touchAction = "none";
-    }
+    if (appContent) appContent.style.overflow = "hidden";
   } else {
-    if (isCurrentlyLocked) {
-      document.body.style.overflow = "";
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-      document.body.style.touchAction = "";
-      window.scrollTo(0, savedScrollY);
-    }
+    if (appContent) appContent.style.overflow = "";
+    document.body.style.overflow = "";
+    document.body.style.position = "";
+    document.body.style.top = "";
+    document.body.style.width = "";
+    document.body.style.touchAction = "";
   }
 }
 
@@ -3505,67 +3496,83 @@ function renderTimerUI() {
   const modal = document.getElementById("timer-modal");
   const fullContainer = document.getElementById("timer-full");
   const miniContainer = document.getElementById("mini-timers-container");
+  const bgFlash = document.getElementById("timer-bg-flash");
 
   // Clear Mini Container
-  miniContainer.innerHTML = "";
+  if (miniContainer) {
+    miniContainer.innerHTML = "";
+  }
 
   // Check if anyone is active
   const anyActive = timerState.naty.active || timerState.alma.active || (timerState.session && timerState.session.active);
 
   if (!anyActive) {
-    modal.classList.add("hidden");
-    modal.classList.remove("flex");
+    if (modal) {
+      modal.classList.add("hidden", "pointer-events-none");
+      modal.classList.remove("flex", "pointer-events-auto", "bg-black/80", "backdrop-blur-sm");
+    }
+    if (bgFlash) {
+      bgFlash.classList.add("pointer-events-none");
+      bgFlash.classList.remove("pointer-events-auto");
+    }
+    updateBodyScrollLock();
     return;
-  }
-
-  // Show Modal Wrapper
-  modal.classList.remove("hidden");
-  modal.classList.add("flex");
-
-  // Render Full Modal?
-  if (
-    activeFullModalUser &&
-    timerState[activeFullModalUser].active &&
-    !timerState[activeFullModalUser].minimized
-  ) {
-    // Show Full Modal
-    fullContainer.classList.remove("hidden");
-    modal.classList.add("bg-black/80", "backdrop-blur-sm");
-    modal.classList.remove("bg-transparent", "pointer-events-none");
-
-    // SETUP FULL MODAL CONTENT
-    const user = activeFullModalUser;
-    const state = timerState[user];
-
-    // Colors based on user
-    const colorClass = user === "naty" ? "text-blue-400" : "text-pink-400";
-    const borderClass = user === "naty" ? "border-blue-500" : "border-pink-500";
-
-    // Update static elements of modal if needed (titles, colors)
-    // We'll update dynamic values in updateTimerDisplay
-    document.getElementById("timer-exercise-name").textContent =
-      `${state.exerciseName} (${user === "naty" ? "Naty" : (user === "session" ? "Session" : "Alma")})`;
-
-    // Just ensure the container looks right for the user?
-    // Optionally trigger a color update or just keep it emerald/neutral.
-    // Let's keep existing emerald theme BUT maybe adding a user badge?
-  } else {
-    // No one in Full Screen (all minimized)
-    fullContainer.classList.add("hidden");
-    modal.classList.remove("bg-black/80", "backdrop-blur-sm");
-    modal.classList.add("bg-transparent", "pointer-events-none");
   }
 
   // Render Bubbles (for anyone minimized or NOT the active full screen)
   ["naty", "alma", "session"].forEach((user) => {
     const state = timerState[user];
     if (state.active && (state.minimized || user !== activeFullModalUser)) {
-      // Render Bubble
       const bubble = createMiniTimerBubble(user, state);
-      miniContainer.appendChild(bubble);
+      if (miniContainer) miniContainer.appendChild(bubble);
     }
   });
 
+  // Render Full Modal?
+  const isFullScreen = !!(
+    activeFullModalUser &&
+    timerState[activeFullModalUser] &&
+    timerState[activeFullModalUser].active &&
+    !timerState[activeFullModalUser].minimized
+  );
+
+  if (isFullScreen) {
+    // Show Full Modal Overlay
+    if (modal) {
+      modal.classList.remove("hidden", "pointer-events-none");
+      modal.classList.add("flex", "pointer-events-auto", "bg-black/80", "backdrop-blur-sm");
+    }
+    if (fullContainer) {
+      fullContainer.classList.remove("hidden");
+    }
+    if (bgFlash) {
+      bgFlash.classList.remove("pointer-events-none");
+      bgFlash.classList.add("pointer-events-auto");
+    }
+
+    const user = activeFullModalUser;
+    const state = timerState[user];
+    const exerciseNameElem = document.getElementById("timer-exercise-name");
+    if (exerciseNameElem) {
+      exerciseNameElem.textContent =
+        `${state.exerciseName} (${user === "naty" ? "Naty" : (user === "session" ? "Session" : "Alma")})`;
+    }
+  } else {
+    // Completely hide full modal wrapper so user can interact with 100% of the app
+    if (modal) {
+      modal.classList.add("hidden", "pointer-events-none");
+      modal.classList.remove("flex", "pointer-events-auto", "bg-black/80", "backdrop-blur-sm");
+    }
+    if (fullContainer) {
+      fullContainer.classList.add("hidden");
+    }
+    if (bgFlash) {
+      bgFlash.classList.add("pointer-events-none");
+      bgFlash.classList.remove("pointer-events-auto");
+    }
+  }
+
+  updateBodyScrollLock();
   safeCreateIcons();
 }
 

@@ -807,7 +807,7 @@
         class="fixed inset-0 z-50 hidden items-center justify-center p-4 transition-all duration-300 pointer-events-none"
         data-minimized="false">
         <!-- Background Overlay (tap to minimize) -->
-        <div id="timer-bg-flash" onclick="minimizeTimer()" class="absolute inset-0 bg-black/70 opacity-0 pointer-events-auto transition-opacity duration-300 cursor-pointer"></div>
+        <div id="timer-bg-flash" onclick="minimizeTimer()" class="absolute inset-0 bg-black/70 opacity-0 pointer-events-none transition-opacity duration-300 cursor-pointer"></div>
 
         <!-- Full Timer Card -->
         <div id="timer-full"
@@ -860,10 +860,10 @@
                 </button>
             </div>
         </div>
+    </div>
 
-        <!-- Minimized Floating Timers Container -->
-        <div id="mini-timers-container" class="fixed bottom-24 right-4 flex flex-col gap-3 items-end z-[60] pointer-events-auto">
-        </div>
+    <!-- Minimized Floating Timers Container (Non-blocking) -->
+    <div id="mini-timers-container" class="fixed bottom-20 right-4 flex flex-col gap-3 items-end z-40 pointer-events-none">
     </div>
 
     <!-- Plate Calculator Modal -->
