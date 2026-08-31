@@ -6415,7 +6415,7 @@ function openStreakModal(user) {
         if (isToday) trainedToday = true;
       }
 
-      let bubbleClass = "bg-slate-900 border-slate-800 text-slate-500";
+      let bubbleClass = "bg-[var(--bg-card)] border-[var(--border-strong)] text-[var(--text-dim)]";
       let iconHtml = dayLabels[i];
 
       if (hasTrained) {
@@ -6431,7 +6431,7 @@ function openStreakModal(user) {
 
       daysHtml += `
         <div class="flex flex-col items-center gap-1">
-          <span class="text-[9px] font-bold ${isToday ? 'text-amber-400 font-extrabold' : 'text-slate-500'}">${dayLabels[i]}</span>
+          <span class="text-[9px] font-bold ${isToday ? 'text-amber-400 font-extrabold' : 'text-[var(--text-muted)]'}">${dayLabels[i]}</span>
           <div class="w-8 h-8 rounded-full border flex items-center justify-center text-xs font-black transition-transform ${bubbleClass}">
             ${iconHtml}
           </div>

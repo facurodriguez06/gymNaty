@@ -1622,7 +1622,7 @@
 
             <!-- Close button -->
             <button onclick="closeStreakModal()"
-                class="absolute top-4 right-4 p-2 text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-800 rounded-full transition-all z-10">
+                class="absolute top-4 right-4 p-2 text-[var(--text-dim)] hover:text-[var(--text-main)] bg-[var(--bg-panel-alt)] border border-[var(--border-strong)] hover:bg-[var(--bg-input)] rounded-full transition-all z-10 shadow-sm">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
 
@@ -1644,8 +1644,8 @@
             </div>
 
             <!-- Weekly Progress Tracker (Duolingo Style) -->
-            <div class="w-full bg-slate-950/70 border border-slate-800 rounded-2xl p-3.5 mb-4">
-                <div class="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2.5 px-1">
+            <div class="w-full bg-[var(--bg-panel-alt)] border border-[var(--border-strong)] rounded-2xl p-3.5 mb-4">
+                <div class="flex justify-between items-center text-[10px] font-bold text-[var(--text-dim)] uppercase tracking-wider mb-2.5 px-1">
                     <span>Esta semana</span>
                     <span id="streak-week-summary" class="text-amber-400">0/5 días</span>
                 </div>
@@ -1661,27 +1661,27 @@
                 </div>
                 <div>
                     <p id="streak-motivational-title" class="text-xs font-black text-amber-300 uppercase tracking-wider">¡Llama encendida!</p>
-                    <p id="streak-motivational-desc" class="text-xs text-slate-300 mt-0.5 leading-snug">Completá tu sesión de hoy para seguir sumando días a tu racha.</p>
+                    <p id="streak-motivational-desc" class="text-xs text-[var(--text-dim)] mt-0.5 leading-snug">Completá tu sesión de hoy para seguir sumando días a tu racha.</p>
                 </div>
             </div>
 
             <!-- Duolingo Gems & Protections -->
             <div class="grid grid-cols-2 gap-3 w-full mb-5">
-                <div class="bg-slate-950/60 border border-slate-800 rounded-xl p-2.5 flex items-center gap-2.5">
+                <div class="bg-[var(--bg-panel-alt)] border border-[var(--border-strong)] rounded-xl p-2.5 flex items-center gap-2.5">
                     <div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                         <i data-lucide="gem" class="w-4 h-4"></i>
                     </div>
                     <div class="text-left">
-                        <span id="streak-modal-points" class="text-sm font-black text-white font-mono block leading-none">0</span>
-                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Gemas</span>
+                        <span id="streak-modal-points" class="text-sm font-black text-[var(--text-main)] font-mono block leading-none">0</span>
+                        <span class="text-[9px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Gemas</span>
                     </div>
                 </div>
-                <div onclick="closeStreakModal(); if(typeof openShopModal==='function') openShopModal(currentStreakUser);" class="bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 hover:border-cyan-500/40 rounded-xl p-2.5 flex items-center gap-2.5 cursor-pointer transition-all active:scale-95">
+                <div onclick="closeStreakModal(); if(typeof openShopModal==='function') openShopModal(currentStreakUser);" class="bg-[var(--bg-panel-alt)] hover:bg-[var(--bg-card)] border border-[var(--border-strong)] hover:border-cyan-500/40 rounded-xl p-2.5 flex items-center gap-2.5 cursor-pointer transition-all active:scale-95">
                     <div class="p-2 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
                         <i data-lucide="shield-check" class="w-4 h-4"></i>
                     </div>
                     <div class="text-left">
-                        <span id="streak-modal-freezes" class="text-sm font-black text-white font-mono block leading-none">0</span>
+                        <span id="streak-modal-freezes" class="text-sm font-black text-[var(--text-main)] font-mono block leading-none">0</span>
                         <span class="text-[9px] font-bold text-cyan-400 uppercase tracking-wider">Protectores</span>
                     </div>
                 </div>
