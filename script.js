@@ -8850,6 +8850,68 @@ function toggleStoryBackgroundStyle() {
   if (typeof triggerHaptic === "function") triggerHaptic();
 }
 
+async function takeStoryPhoto() {
+  if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Camera) {
+    try {
+      const image = await window.Capacitor.Plugins.Camera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: 'dataUrl',
+        source: 'CAMERA'
+      });
+      if (image && image.dataUrl) {
+        const img = new Image();
+        img.onload = () => {
+          storyUploadedImage = img;
+          renderStoryCanvas();
+          if (typeof showToast === "function") showToast("camera", "text-pink-400", "Foto cargada");
+        };
+        img.src = image.dataUrl;
+        return;
+      }
+    } catch (e) {
+      console.warn("Camera plugin error, falling back:", e);
+    }
+  }
+  
+  const input = document.getElementById("story-camera-input");
+  if (input) {
+    input.setAttribute("capture", "user");
+    input.click();
+  }
+}
+
+async function pickStoryGallery() {
+  if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Camera) {
+    try {
+      const image = await window.Capacitor.Plugins.Camera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: 'dataUrl',
+        source: 'PHOTOS'
+      });
+      if (image && image.dataUrl) {
+        const img = new Image();
+        img.onload = () => {
+          storyUploadedImage = img;
+          renderStoryCanvas();
+          if (typeof showToast === "function") showToast("image", "text-pink-400", "Foto cargada");
+        };
+        img.src = image.dataUrl;
+        return;
+      }
+    } catch (e) {
+      console.warn("Gallery plugin error, falling back:", e);
+    }
+  }
+
+  const input = document.getElementById("story-gallery-input");
+  if (input) {
+    input.removeAttribute("capture");
+    input.click();
+  }
+}
+
 function handleStoryPhotoUpload(event) {
   const file = event.target.files && event.target.files[0];
   if (!file) return;
@@ -8897,7 +8959,7 @@ function renderStoryCanvas() {
     }
   }
 
-  // 1. DRAW BACKGROUND (Minimalist, clean, photo-first)
+  // 1. DRAW BACKGROUND (Ultra-clean, uncluttered photo-first)
   if (storyUploadedImage) {
     const imgRatio = storyUploadedImage.width / storyUploadedImage.height;
     const canvasRatio = width / height;
@@ -8917,29 +8979,30 @@ function renderStoryCanvas() {
 
     ctx.drawImage(storyUploadedImage, renderX, renderY, renderW, renderH);
 
-    // Subtle, natural gradients (keeps 80% of photo clean)
-    const topGrad = ctx.createLinearGradient(0, 0, 0, 240);
-    topGrad.addColorStop(0, "rgba(0, 0, 0, 0.7)");
+    // Subtle soft vignette at top
+    const topGrad = ctx.createLinearGradient(0, 0, 0, 200);
+    topGrad.addColorStop(0, "rgba(0, 0, 0, 0.65)");
     topGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
     ctx.fillStyle = topGrad;
-    ctx.fillRect(0, 0, width, 240);
+    ctx.fillRect(0, 0, width, 200);
 
-    const bottomGrad = ctx.createLinearGradient(0, 1150, 0, height);
+    // Very soft dark fade ONLY at bottom 20%
+    const bottomGrad = ctx.createLinearGradient(0, 1400, 0, height);
     bottomGrad.addColorStop(0, "rgba(0, 0, 0, 0)");
-    bottomGrad.addColorStop(0.5, "rgba(4, 6, 12, 0.65)");
-    bottomGrad.addColorStop(1, "rgba(2, 3, 6, 0.9)");
+    bottomGrad.addColorStop(0.6, "rgba(0, 0, 0, 0.65)");
+    bottomGrad.addColorStop(1, "rgba(0, 0, 0, 0.85)");
     ctx.fillStyle = bottomGrad;
-    ctx.fillRect(0, 1150, width, height - 1150);
+    ctx.fillRect(0, 1400, width, height - 1400);
   } else {
-    // Ultra-clean Minimalist Dark Studio Background
+    // Ultra-clean Minimalist Studio Background
     const bgGrad = ctx.createLinearGradient(0, 0, width, height);
     bgGrad.addColorStop(0, "#08090f");
     bgGrad.addColorStop(1, "#030407");
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, width, height);
 
-    // Subtle aesthetic ambient light
-    const glow = ctx.createRadialGradient(width * 0.5, height * 0.45, 80, width * 0.5, height * 0.45, 650);
+    // Subtle soft glow
+    const glow = ctx.createRadialGradient(width * 0.5, height * 0.5, 60, width * 0.5, height * 0.5, 600);
     glow.addColorStop(0, theme.accentGlow);
     glow.addColorStop(1, "transparent");
     ctx.fillStyle = glow;
@@ -8960,7 +9023,7 @@ function renderStoryCanvas() {
   const streak = (gamification && gamification.naty && gamification.naty.streak) || 1;
 
   // Compute Weekly Days
-  const currentDayOfWeek = today.getDay(); // 0=Dom, 1=Lun...
+  const currentDayOfWeek = today.getDay();
   const mondayOffset = currentDayOfWeek === 0 ? -6 : 1 - currentDayOfWeek;
   const monday = new Date(today);
   monday.setDate(today.getDate() + mondayOffset);
@@ -8984,215 +9047,137 @@ function renderStoryCanvas() {
   }
 
   // ==========================================
-  // 2. TOP MINIMALIST HEADER
+  // 2. TOP FLOATING BRAND WATERMARK (ZERO BOX)
   // ==========================================
-  
-  // Brand Wordmark (Left)
+  ctx.save();
+  ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
+  ctx.shadowBlur = 10;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 2;
+
+  // Left Brand Wordmark
   ctx.fillStyle = "#ffffff";
-  ctx.font = "900 24px 'Outfit', sans-serif";
+  ctx.font = "900 26px 'Outfit', sans-serif";
   ctx.textAlign = "left";
   ctx.letterSpacing = "6px";
-  ctx.fillText("VITAL", 70, 120);
+  ctx.fillText("VITAL", 70, 115);
   ctx.letterSpacing = "0px";
 
   // Accent Dot
   ctx.fillStyle = theme.accent;
   ctx.beginPath();
-  ctx.arc(175, 112, 5, 0, Math.PI * 2);
+  ctx.arc(178, 107, 5, 0, Math.PI * 2);
   ctx.fill();
 
-  // User & Date Capsule (Right)
-  drawRoundedRect(width - 360, 85, 290, 56, 28, "rgba(10, 14, 24, 0.65)", "rgba(255, 255, 255, 0.14)", 1.5);
+  // Right Tag
+  ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
+  ctx.font = "700 16px 'Outfit', sans-serif";
+  ctx.textAlign = "right";
+  ctx.fillText(`NATY · ${dateShortStr}`, width - 70, 115);
+  ctx.restore();
+
+  // ==========================================
+  // 3. BOTTOM ATHLETIC STICKER (UNCLUTTERED)
+  // ==========================================
+  
+  // Routine Title
+  ctx.save();
+  ctx.shadowColor = "rgba(0, 0, 0, 0.8)";
+  ctx.shadowBlur = 12;
   ctx.fillStyle = "#ffffff";
-  ctx.font = "800 16px 'Outfit', sans-serif";
+  ctx.font = "900 42px 'Outfit', sans-serif";
   ctx.textAlign = "center";
-  ctx.fillText(`NATY · ${dateShortStr}`, width - 215, 120);
+  ctx.fillText(routineTitle, width / 2, 1610);
+  ctx.restore();
 
-  // ==========================================
-  // 3. FLOATING ATHLETIC GLASS CAPSULE (BOTTOM)
-  // ==========================================
-  const cardX = 60;
-  const cardY = 1380;
-  const cardW = width - 120;
-  const cardH = 400;
-  const cardRadius = 38;
-
-  // Single sleek glass card
-  drawRoundedRect(cardX, cardY, cardW, cardH, cardRadius, "rgba(8, 12, 20, 0.76)", "rgba(255, 255, 255, 0.14)", 1.5);
-
-  // --- Row 1: Routine Title & Status Pill ---
-  const titleY = cardY + 60;
+  // Single Compact Floating Metrics Pill
+  const pillW = 860;
+  const pillH = 76;
+  const pillX = (width - pillW) / 2;
+  const pillY = 1645;
   
+  drawRoundedRect(pillX, pillY, pillW, pillH, 38, "rgba(8, 12, 20, 0.72)", "rgba(255, 255, 255, 0.16)", 1.5);
+
+  // Draw 3 Stats inside pill
+  const thirdW = pillW / 3;
+  
+  // 1. Volume
   ctx.fillStyle = "#ffffff";
-  ctx.font = "900 36px 'Outfit', sans-serif";
-  ctx.textAlign = "left";
-  
-  let displayTitle = routineTitle;
-  if (ctx.measureText(displayTitle).width > (cardW - 260)) {
-    ctx.font = "900 28px 'Outfit', sans-serif";
-  }
-  ctx.fillText(displayTitle, cardX + 40, titleY);
+  ctx.font = "900 24px 'Outfit', sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText(`${volNaty.toLocaleString()} kg`, pillX + (thirdW * 0.5), pillY + 47);
 
-  // Completed Pill (Right)
-  const pillW = 160;
-  const pillH = 38;
-  const pillX = cardX + cardW - pillW - 40;
-  const pillY = titleY - 28;
-  drawRoundedRect(pillX, pillY, pillW, pillH, 19, "rgba(16, 185, 129, 0.16)", "rgba(16, 185, 129, 0.5)", 1.5);
-  
-  // Checkmark circle
-  ctx.fillStyle = "#10b981";
-  ctx.beginPath();
-  ctx.arc(pillX + 22, pillY + 19, 7, 0, Math.PI * 2);
-  ctx.fill();
+  // Divider 1
+  ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
+  ctx.fillRect(pillX + thirdW, pillY + 20, 1, pillH - 40);
 
+  // 2. Duration
   ctx.fillStyle = "#ffffff";
-  ctx.font = "900 13px 'Outfit', sans-serif";
-  ctx.textAlign = "left";
-  ctx.fillText("COMPLETADO", pillX + 38, pillY + 24);
+  ctx.font = "800 22px 'JetBrains Mono', monospace";
+  ctx.textAlign = "center";
+  ctx.fillText(`${duration}`, pillX + (thirdW * 1.5), pillY + 46);
 
-  // Divider Line
-  ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(cardX + 35, cardY + 95);
-  ctx.lineTo(cardX + cardW - 35, cardY + 95);
-  ctx.stroke();
+  // Divider 2
+  ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
+  ctx.fillRect(pillX + (thirdW * 2), pillY + 20, 1, pillH - 40);
 
-  // --- Row 2: 3 Clean Key Metrics (Volume, Streak, Time) ---
-  const statsY = cardY + 165;
-  const colWidth = (cardW - 80) / 3;
-
-  // Col 1: Total Volume
-  const col1X = cardX + 40;
-  ctx.fillStyle = "#ffffff";
-  ctx.font = "900 40px 'Outfit', sans-serif";
-  ctx.textAlign = "left";
-  ctx.fillText(`${volNaty.toLocaleString()}`, col1X, statsY);
-  
-  const volNumWidth = ctx.measureText(`${volNaty.toLocaleString()}`).width;
-  ctx.fillStyle = theme.accent;
-  ctx.font = "800 18px 'Outfit', sans-serif";
-  ctx.fillText("KG", col1X + volNumWidth + 6, statsY - 2);
-
-  ctx.fillStyle = "rgba(255, 255, 255, 0.45)";
-  ctx.font = "700 12px 'Outfit', sans-serif";
-  ctx.letterSpacing = "1.5px";
-  ctx.fillText("VOLUMEN", col1X, statsY + 30);
-  ctx.letterSpacing = "0px";
-
-  // Col 2: Streak
-  const col2X = col1X + colWidth;
+  // 3. Streak
   ctx.fillStyle = "#fbbf24";
-  ctx.font = "900 40px 'Outfit', sans-serif";
-  ctx.textAlign = "left";
-  ctx.fillText(`${streak}`, col2X, statsY);
-  
-  const streakNumWidth = ctx.measureText(`${streak}`).width;
-  ctx.fillStyle = "rgba(251, 191, 36, 0.85)";
-  ctx.font = "800 18px 'Outfit', sans-serif";
-  ctx.fillText(streak === 1 ? "DÍA" : "DÍAS", col2X + streakNumWidth + 6, statsY - 2);
+  ctx.font = "900 24px 'Outfit', sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText(`${streak} ${streak === 1 ? 'día racha' : 'días racha'}`, pillX + (thirdW * 2.5), pillY + 47);
 
-  ctx.fillStyle = "rgba(255, 255, 255, 0.45)";
-  ctx.font = "700 12px 'Outfit', sans-serif";
-  ctx.letterSpacing = "1.5px";
-  ctx.fillText("RACHA ACTIVA", col2X, statsY + 30);
-  ctx.letterSpacing = "0px";
-
-  // Col 3: Duration
-  const col3X = col1X + (colWidth * 2);
-  ctx.fillStyle = "#ffffff";
-  ctx.font = "800 34px 'JetBrains Mono', monospace";
-  ctx.textAlign = "left";
-  ctx.fillText(`${duration}`, col3X, statsY);
-
-  ctx.fillStyle = "rgba(255, 255, 255, 0.45)";
-  ctx.font = "700 12px 'Outfit', sans-serif";
-  ctx.letterSpacing = "1.5px";
-  ctx.fillText("DURACIÓN", col3X, statsY + 30);
-  ctx.letterSpacing = "0px";
-
-  // Divider Line
-  ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
-  ctx.beginPath();
-  ctx.moveTo(cardX + 35, cardY + 235);
-  ctx.lineTo(cardX + cardW - 35, cardY + 235);
-  ctx.stroke();
-
-  // --- Row 3: Minimalist 7-Day Dot Tracker ---
-  const trackerY = cardY + 285;
-  
-  ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-  ctx.font = "800 13px 'Outfit', sans-serif";
-  ctx.letterSpacing = "1px";
-  ctx.textAlign = "left";
-  ctx.fillText("SEMANA", cardX + 40, trackerY + 15);
-  ctx.letterSpacing = "0px";
-
-  // 7 Clean Day Badges
-  const dotsStartX = cardX + 160;
-  const dotSpacing = 72;
-  const dotRadius = 20;
+  // Minimal 7-Day Dots Strip (Bottom of pill)
+  const dotsCenterY = pillY + 110;
+  const dotSpacing = 55;
+  const dotsStartX = (width - (6 * dotSpacing)) / 2;
 
   weeklyStatus.forEach((item, idx) => {
     const dotX = dotsStartX + (idx * dotSpacing);
-    const dotY = trackerY + 10;
-
+    
     if (item.completed) {
-      // Completed Day (Filled Clean Green)
+      // Completed (Glowing Emerald Dot)
       ctx.fillStyle = "#10b981";
       ctx.beginPath();
-      ctx.arc(dotX, dotY, dotRadius, 0, Math.PI * 2);
+      ctx.arc(dotX, dotsCenterY, 8, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "900 16px 'Outfit', sans-serif";
+      ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+      ctx.font = "700 11px 'Outfit', sans-serif";
       ctx.textAlign = "center";
-      ctx.fillText("✓", dotX, dotY + 5);
+      ctx.fillText(item.letter, dotX, dotsCenterY + 22);
     } else if (item.isToday) {
-      // Today Pending (Amber Ring)
-      ctx.strokeStyle = "#fbbf24";
-      ctx.lineWidth = 2.5;
+      // Today (Amber Dot)
+      ctx.fillStyle = "#fbbf24";
       ctx.beginPath();
-      ctx.arc(dotX, dotY, dotRadius, 0, Math.PI * 2);
-      ctx.stroke();
+      ctx.arc(dotX, dotsCenterY, 8, 0, Math.PI * 2);
+      ctx.fill();
 
       ctx.fillStyle = "#fbbf24";
-      ctx.font = "800 14px 'Outfit', sans-serif";
+      ctx.font = "800 11px 'Outfit', sans-serif";
       ctx.textAlign = "center";
-      ctx.fillText(item.letter, dotX, dotY + 5);
+      ctx.fillText(item.letter, dotX, dotsCenterY + 22);
     } else {
-      // Future / Rest Day (Dim Letter)
-      ctx.fillStyle = "rgba(255, 255, 255, 0.06)";
+      // Incomplete (Faint Ring)
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
+      ctx.lineWidth = 1.5;
       ctx.beginPath();
-      ctx.arc(dotX, dotY, dotRadius, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
-      ctx.lineWidth = 1;
+      ctx.arc(dotX, dotsCenterY, 7, 0, Math.PI * 2);
       ctx.stroke();
 
       ctx.fillStyle = "rgba(255, 255, 255, 0.35)";
-      ctx.font = "700 13px 'Outfit', sans-serif";
+      ctx.font = "600 11px 'Outfit', sans-serif";
       ctx.textAlign = "center";
-      ctx.fillText(item.letter, dotX, dotY + 5);
+      ctx.fillText(item.letter, dotX, dotsCenterY + 22);
     }
   });
 
-  // Week Target Badge (Right)
-  ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
-  ctx.font = "800 13px 'Outfit', sans-serif";
-  ctx.textAlign = "right";
-  ctx.fillText(`${weekCompletedCount}/4 DÍAS`, cardX + cardW - 40, trackerY + 15);
-
-  // ==========================================
-  // 4. BOTTOM WATERMARK
-  // ==========================================
-  ctx.fillStyle = "rgba(255, 255, 255, 0.35)";
-  ctx.font = "700 13px 'Outfit', sans-serif";
+  // Micro Watermark
+  ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+  ctx.font = "600 12px 'Outfit', sans-serif";
   ctx.letterSpacing = "2px";
   ctx.textAlign = "center";
-  ctx.fillText("VITAL ATHLETIC CLUB", width / 2, 1845);
+  ctx.fillText("VITAL ATHLETIC CLUB", width / 2, 1850);
   ctx.letterSpacing = "0px";
 }
 
@@ -9252,3 +9237,5 @@ window.handleStoryPhotoUpload = handleStoryPhotoUpload;
 window.shareStoryImage = shareStoryImage;
 window.downloadStoryImage = downloadStoryImage;
 window.renderStoryCanvas = renderStoryCanvas;
+window.takeStoryPhoto = takeStoryPhoto;
+window.pickStoryGallery = pickStoryGallery;
