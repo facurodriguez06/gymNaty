@@ -5787,13 +5787,13 @@ function renderContent(skipAnimations = false) {
             ${setRowsHTML}
             
             <!-- Add / Remove Set Row Actions -->
-            <div class="flex items-center gap-3 mt-3 pt-2 border-t border-slate-800/60 text-xs">
-                <button onclick="addExerciseSet('${activeTab}', ${idx})" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-violet-400 font-bold transition-all cursor-pointer active:scale-95">
+            <div class="flex items-center gap-2.5 mt-3 text-xs">
+                <button onclick="addExerciseSet('${activeTab}', ${idx})" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--bg-input)] hover:bg-[var(--bg-panel-alt)] border border-[var(--border-strong)] text-violet-400 font-bold transition-all cursor-pointer active:scale-95 shadow-sm">
                     <i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar serie
                 </button>
                 
                 ${numSets > 1 ? `
-                <button onclick="removeExerciseSet('${activeTab}', ${idx})" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 font-medium transition-all cursor-pointer active:scale-95">
+                <button onclick="removeExerciseSet('${activeTab}', ${idx})" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--bg-input)] hover:bg-[var(--bg-panel-alt)] border border-[var(--border-strong)] text-[var(--text-dim)] hover:text-[var(--text-main)] font-medium transition-all cursor-pointer active:scale-95 shadow-sm">
                     <i data-lucide="minus" class="w-3.5 h-3.5"></i> Quitar serie
                 </button>
                 ` : ''}
