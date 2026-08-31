@@ -7,16 +7,12 @@
     "androidScheme": "https"
   },
   "android": {
-    "backgroundColor": "#020617",
     "allowMixedContent": true
   },
   "plugins": {
     "SplashScreen": {
-      "launchShowDuration": 1200,
+      "launchShowDuration": 0,
       "launchAutoHide": true,
-      "backgroundColor": "#020617",
-      "androidSplashResourceName": "splash",
-      "androidScaleType": "CENTER_CROP",
       "showSpinner": false,
       "splashFullScreen": true,
       "splashImmersive": true
