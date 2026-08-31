@@ -567,17 +567,21 @@ button, input, a, select {
   -webkit-tap-highlight-color: transparent;
 }
 
+#exercises-list {
+  contain: layout style;
+}
+
 .exercise-card {
+  contain: layout style paint;
   content-visibility: auto;
-  contain-intrinsic-size: 0 160px;
-  transform: translateZ(0);
-  will-change: transform;
+  contain-intrinsic-size: 0 180px;
+  transform: translate3d(0, 0, 0);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 
 .animate-slide-up, .modal-card, [id$="-modal"] > div {
-  transform: translateZ(0);
+  transform: translate3d(0, 0, 0);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }

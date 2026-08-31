@@ -9,12 +9,24 @@ function onReady(fn) {
   }
 }
 
-function safeCreateIcons() {
+let pendingIconsRaf = null;
+function safeCreateIcons(container) {
   if (typeof lucide !== "undefined" && lucide && typeof lucide.createIcons === "function") {
-    try {
-      lucide.createIcons();
-    } catch (e) {
-      console.warn("lucide.createIcons error:", e);
+    if (container && container.nodeType === Node.ELEMENT_NODE) {
+      try {
+        lucide.createIcons({ root: container });
+        return;
+      } catch (e) {}
+    }
+    if (!pendingIconsRaf) {
+      pendingIconsRaf = requestAnimationFrame(() => {
+        pendingIconsRaf = null;
+        try {
+          lucide.createIcons();
+        } catch (e) {
+          console.warn("lucide.createIcons error:", e);
+        }
+      });
     }
   }
 }
