@@ -87,7 +87,6 @@ body[data-theme="dark"] {
 /* LIGHT MODE (Warm Porcelain & Crisp Glass) */
 html.light,
 html[data-theme="light"],
-html:not(.dark),
 body.light,
 body[data-theme="light"] {
   --bg-base: #f8fafc;

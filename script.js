@@ -5099,10 +5099,13 @@ function init() {
     }
   }
 
-  // Load cloud data and dismiss loader safely
-  Promise.race([
-    loadFromCloud().catch(() => {}),
-    new Promise((resolve) => setTimeout(resolve, 800)) // Wait at most 800ms
+  // Guarantee a stable, premium splash duration (minimum 1100ms display without flash)
+  const minSplashTimer = new Promise((resolve) => setTimeout(resolve, 1100));
+  const cloudLoad = loadFromCloud().catch(() => {});
+
+  Promise.all([
+    minSplashTimer,
+    Promise.race([cloudLoad, new Promise((resolve) => setTimeout(resolve, 2500))])
   ]).then(() => {
     if (typeof updateGamificationUI === "function") updateGamificationUI();
     if (typeof checkAchievements === "function") checkAchievements();

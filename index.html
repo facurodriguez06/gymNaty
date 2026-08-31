@@ -3,6 +3,23 @@
 
 <head>
     <meta charset="UTF-8">
+    <!-- Instant Theme Resolver (Executes before any CSS or asset paints, 0ms FOUC) -->
+    <script>
+        (function() {
+            try {
+                var theme = localStorage.getItem('gym_theme') || 'dark';
+                var d = document.documentElement;
+                if (theme === 'light') {
+                    d.className = 'light';
+                    d.setAttribute('data-theme', 'light');
+                } else {
+                    d.className = 'dark';
+                    d.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>VITAL</title>
@@ -24,27 +41,9 @@
     <script src="config.js"></script>
     <script src="capacitor.js"></script>
     
-    <!-- Instant Theme Resolver (0ms FOUC) -->
-    <script>
-        (function() {
-            try {
-                var theme = localStorage.getItem('gym_theme') || 'dark';
-                if (theme === 'light') {
-                    document.documentElement.classList.remove('dark');
-                    document.documentElement.classList.add('light');
-                    document.documentElement.setAttribute('data-theme', 'light');
-                } else {
-                    document.documentElement.classList.remove('light');
-                    document.documentElement.classList.add('dark');
-                    document.documentElement.setAttribute('data-theme', 'dark');
-                }
-            } catch (e) {}
-        })();
-    </script>
-    
     <!-- Precompiled Static Tailwind CSS + Theme Styles (Instant, 0ms JS Overhead) -->
     <link rel="stylesheet" href="tailwind.compiled.css">
-    <link rel="stylesheet" href="styles.css?v=4">
+    <link rel="stylesheet" href="styles.css?v=5">
     <!-- Lucide Icons -->
     <script src="lucide.min.js"></script>
 
@@ -63,7 +62,7 @@
 </head>
 
 <body
-    class="transition-colors duration-300 selection:bg-violet-500/30 selection:text-violet-200 h-[100dvh] w-[100vw] overflow-hidden flex flex-col">
+    class="selection:bg-violet-500/30 selection:text-violet-200 h-[100dvh] w-[100vw] overflow-hidden flex flex-col">
     <!-- App Initial Startup Loader (Theme-Adaptive & Ultra-High Contrast) -->
     <div id="app-initial-loader"
         class="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-[var(--bg-base)] text-[var(--text-main)] transition-opacity duration-500 pointer-events-auto">
