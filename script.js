@@ -8729,5 +8729,502 @@ window.removeExerciseSet = function(tabId, exerciseIndex) {
   }
 };
 
+// ==========================================================================
+// INSTAGRAM STORY CARD GENERATOR (9:16 ULTRA-HD ATHLETIC STORY ENGINE)
+// ==========================================================================
 
-// Legacy initializeUI removed
+let storyUploadedImage = null;
+let storyBgThemeIndex = 0;
+
+const STORY_THEMES = [
+  {
+    name: "Obsidian Violet",
+    bg1: "#07070d",
+    bg2: "#0f101f",
+    accent: "#8b5cf6",
+    accentGlow: "rgba(139, 92, 246, 0.45)",
+    badgeBg: "rgba(139, 92, 246, 0.18)",
+    badgeBorder: "rgba(139, 92, 246, 0.5)",
+  },
+  {
+    name: "Emerald Power",
+    bg1: "#040806",
+    bg2: "#071710",
+    accent: "#10b981",
+    accentGlow: "rgba(16, 185, 129, 0.45)",
+    badgeBg: "rgba(16, 185, 129, 0.18)",
+    badgeBorder: "rgba(16, 185, 129, 0.5)",
+  },
+  {
+    name: "Sunset Amber",
+    bg1: "#0a0604",
+    bg2: "#1c0d06",
+    accent: "#f59e0b",
+    accentGlow: "rgba(245, 158, 11, 0.45)",
+    badgeBg: "rgba(245, 158, 11, 0.18)",
+    badgeBorder: "rgba(245, 158, 11, 0.5)",
+  },
+  {
+    name: "Stealth OLED",
+    bg1: "#000000",
+    bg2: "#09090b",
+    accent: "#06b6d4",
+    accentGlow: "rgba(6, 182, 212, 0.45)",
+    badgeBg: "rgba(6, 182, 212, 0.18)",
+    badgeBorder: "rgba(6, 182, 212, 0.5)",
+  }
+];
+
+function openInstagramStoryModal() {
+  const modal = document.getElementById("story-generator-modal");
+  if (!modal) return;
+
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+  
+  safeCreateIcons(modal);
+  
+  // Render canvas after modal becomes visible
+  setTimeout(() => {
+    renderStoryCanvas();
+  }, 50);
+}
+
+function closeInstagramStoryModal() {
+  const modal = document.getElementById("story-generator-modal");
+  if (modal) {
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  }
+}
+
+function toggleStoryBackgroundStyle() {
+  storyBgThemeIndex = (storyBgThemeIndex + 1) % STORY_THEMES.length;
+  renderStoryCanvas();
+  if (typeof triggerHaptic === "function") triggerHaptic();
+}
+
+function handleStoryPhotoUpload(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      storyUploadedImage = img;
+      renderStoryCanvas();
+      if (typeof showToast === "function") {
+        showToast("camera", "text-pink-400", "Foto cargada en la historia");
+      }
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderStoryCanvas() {
+  const canvas = document.getElementById("story-export-canvas");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  const width = 1080;
+  const height = 1920;
+  canvas.width = width;
+  canvas.height = height;
+
+  const theme = STORY_THEMES[storyBgThemeIndex] || STORY_THEMES[0];
+
+  // 1. DRAW BACKGROUND
+  if (storyUploadedImage) {
+    // Aspect-fill (cover) image to canvas
+    const imgRatio = storyUploadedImage.width / storyUploadedImage.height;
+    const canvasRatio = width / height;
+    let renderW, renderH, renderX, renderY;
+
+    if (imgRatio > canvasRatio) {
+      renderH = height;
+      renderW = height * imgRatio;
+      renderX = (width - renderW) / 2;
+      renderY = 0;
+    } else {
+      renderW = width;
+      renderH = width / imgRatio;
+      renderX = 0;
+      renderY = (height - renderH) / 2;
+    }
+
+    ctx.drawImage(storyUploadedImage, renderX, renderY, renderW, renderH);
+
+    // Dark cinematic gradient overlay for 100% readability
+    const topGrad = ctx.createLinearGradient(0, 0, 0, 480);
+    topGrad.addColorStop(0, "rgba(0, 0, 0, 0.85)");
+    topGrad.addColorStop(1, "rgba(0, 0, 0, 0.15)");
+    ctx.fillStyle = topGrad;
+    ctx.fillRect(0, 0, width, 480);
+
+    const bottomGrad = ctx.createLinearGradient(0, 750, 0, height);
+    bottomGrad.addColorStop(0, "rgba(0, 0, 0, 0.1)");
+    bottomGrad.addColorStop(0.3, "rgba(5, 7, 12, 0.75)");
+    bottomGrad.addColorStop(1, "rgba(2, 3, 6, 0.95)");
+    ctx.fillStyle = bottomGrad;
+    ctx.fillRect(0, 750, width, height - 750);
+  } else {
+    // Luxury Mesh Athletic Background
+    const bgGrad = ctx.createLinearGradient(0, 0, width, height);
+    bgGrad.addColorStop(0, theme.bg1);
+    bgGrad.addColorStop(1, theme.bg2);
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, width, height);
+
+    // Ambient radial glow 1 (Top Right)
+    const glow1 = ctx.createRadialGradient(width * 0.85, height * 0.15, 50, width * 0.85, height * 0.15, 600);
+    glow1.addColorStop(0, theme.accentGlow);
+    glow1.addColorStop(1, "transparent");
+    ctx.fillStyle = glow1;
+    ctx.fillRect(0, 0, width, height);
+
+    // Ambient radial glow 2 (Bottom Left)
+    const glow2 = ctx.createRadialGradient(width * 0.15, height * 0.8, 50, width * 0.15, height * 0.8, 700);
+    glow2.addColorStop(0, theme.accentGlow);
+    glow2.addColorStop(1, "transparent");
+    ctx.fillStyle = glow2;
+    ctx.fillRect(0, 0, width, height);
+
+    // Grid lines accent
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.04)";
+    ctx.lineWidth = 2;
+    for (let x = 80; x < width; x += 120) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, height);
+      ctx.stroke();
+    }
+  }
+
+  // Helper function: Rounded Rectangle
+  function drawRoundedRect(x, y, w, h, radius, fillStyle, strokeStyle, lineWidth = 1) {
+    ctx.beginPath();
+    ctx.roundRect(x, y, w, h, radius);
+    if (fillStyle) {
+      ctx.fillStyle = fillStyle;
+      ctx.fill();
+    }
+    if (strokeStyle) {
+      ctx.strokeStyle = strokeStyle;
+      ctx.lineWidth = lineWidth;
+      ctx.stroke();
+    }
+  }
+
+  // GATHER DATA
+  const today = new Date();
+  const dayNames = ["DOMINGO", "LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO"];
+  const monthNames = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
+  const dayStr = `${dayNames[today.getDay()]} · ${today.getDate()} DE ${monthNames[today.getMonth()]}`;
+
+  const currentRoutine = (routineData && routineData[activeTab]) || { title: "Entrenamiento General", day: "Hoy" };
+  const routineTitle = (currentRoutine.title || "Entrenamiento").toUpperCase();
+
+  const duration = document.getElementById("session-stopwatch")?.textContent || "00:45:00";
+  const volNaty = calculateSessionVolume("naty") || 0;
+  const streak = (gamification && gamification.naty && gamification.naty.streak) || 1;
+
+  // Compute Weekly Completed Days
+  const currentDayOfWeek = today.getDay(); // 0=Dom, 1=Lun...
+  const mondayOffset = currentDayOfWeek === 0 ? -6 : 1 - currentDayOfWeek;
+  const monday = new Date(today);
+  monday.setDate(today.getDate() + mondayOffset);
+
+  const weekDayLetters = ["L", "M", "M", "J", "V", "S", "D"];
+  const weeklyStatus = [];
+  let weekCompletedCount = 0;
+  const todayKey = getDateKey(today);
+
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    const dKey = getDateKey(d);
+    const hasTrained = (trainingHistory && trainingHistory[dKey] && trainingHistory[dKey].naty && !trainingHistory[dKey].deleted) || (dKey === todayKey);
+    if (hasTrained) weekCompletedCount++;
+    weeklyStatus.push({
+      letter: weekDayLetters[i],
+      completed: !!hasTrained,
+      isToday: dKey === todayKey
+    });
+  }
+
+  // ==========================================
+  // 2. TOP HEADER (VITAL LOGO & DATE)
+  // ==========================================
+  
+  // App Brand Pill (Top Left)
+  drawRoundedRect(70, 100, 240, 72, 36, "rgba(15, 23, 42, 0.85)", "rgba(255, 255, 255, 0.16)", 2);
+  
+  // Violet Brand Dot
+  ctx.fillStyle = theme.accent;
+  ctx.beginPath();
+  ctx.arc(106, 136, 12, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "900 28px 'Outfit', sans-serif";
+  ctx.textAlign = "left";
+  ctx.fillText("VITAL", 132, 145);
+
+  // User & Date Badge (Top Right)
+  drawRoundedRect(width - 450, 100, 380, 72, 36, "rgba(15, 23, 42, 0.85)", "rgba(255, 255, 255, 0.16)", 2);
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "800 18px 'Outfit', sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText(`NATY · ${dayStr}`, width - 260, 144);
+
+  // ==========================================
+  // 3. MAIN HERO BANNER (ROUTINE TITLE)
+  // ==========================================
+
+  // Session Completed Pill
+  drawRoundedRect(70, 230, 280, 52, 26, "rgba(16, 185, 129, 0.2)", "rgba(16, 185, 129, 0.6)", 2);
+  ctx.fillStyle = "#34d399";
+  ctx.font = "900 18px 'Outfit', sans-serif";
+  ctx.textAlign = "left";
+  ctx.fillText("✓ SESIÓN COMPLETADA", 98, 263);
+
+  // Big Routine Title
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "900 62px 'Outfit', sans-serif";
+  ctx.textAlign = "left";
+  
+  // Text wrap for long routine titles
+  const maxTitleWidth = width - 140;
+  if (ctx.measureText(routineTitle).width > maxTitleWidth) {
+    ctx.font = "900 48px 'Outfit', sans-serif";
+  }
+  ctx.fillText(routineTitle, 70, 350);
+
+  // Subtitle
+  ctx.fillStyle = "rgba(255, 255, 255, 0.75)";
+  ctx.font = "600 22px 'Plus Jakarta Sans', sans-serif";
+  ctx.fillText("Entrenamiento de Fuerza & Hipertrofia", 70, 395);
+
+  // ==========================================
+  // 4. MAIN HUD STATS GLASS CARD
+  // ==========================================
+  const cardX = 70;
+  const cardY = 920;
+  const cardW = width - 140;
+  const cardH = 750;
+  const cardRadius = 46;
+
+  // Background Glass
+  drawRoundedRect(cardX, cardY, cardW, cardH, cardRadius, "rgba(10, 14, 24, 0.88)", "rgba(255, 255, 255, 0.16)", 2);
+
+  // Inside Card: STREAK BANNER
+  const streakBannerY = cardY + 45;
+  drawRoundedRect(cardX + 35, streakBannerY, cardW - 70, 90, 28, "rgba(245, 158, 11, 0.14)", "rgba(245, 158, 11, 0.5)", 2);
+  
+  ctx.fillStyle = "#fbbf24";
+  ctx.font = "900 32px 'Outfit', sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText(`RACHA ACTIVA: ${streak} ${streak === 1 ? 'DÍA' : 'DÍAS'} SEGUIDOS`, width / 2, streakBannerY + 56);
+
+  // Inside Card: WEEKLY PROGRESS TRACKER
+  const trackerY = streakBannerY + 130;
+  
+  ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+  ctx.font = "800 18px 'Outfit', sans-serif";
+  ctx.textAlign = "left";
+  ctx.fillText("PROGRESO DE LA SEMANA", cardX + 45, trackerY);
+
+  ctx.fillStyle = theme.accent;
+  ctx.font = "800 18px 'Outfit', sans-serif";
+  ctx.textAlign = "right";
+  ctx.fillText(`${weekCompletedCount}/4 DÍAS OBJETIVO`, cardX + cardW - 45, trackerY);
+
+  // 7 Week Day Bubbles
+  const bubbleSpacing = (cardW - 80) / 7;
+  const bubbleRadius = 30;
+  const bubblesCenterY = trackerY + 65;
+
+  weeklyStatus.forEach((item, idx) => {
+    const bubbleCenterX = cardX + 40 + (idx * bubbleSpacing) + (bubbleSpacing / 2);
+    
+    // Bubble Circle
+    if (item.completed) {
+      // Completed: Glowing Emerald/Amber
+      const circleGrad = ctx.createLinearGradient(bubbleCenterX - 30, bubblesCenterY - 30, bubbleCenterX + 30, bubblesCenterY + 30);
+      circleGrad.addColorStop(0, "#10b981");
+      circleGrad.addColorStop(1, "#059669");
+      ctx.fillStyle = circleGrad;
+      ctx.beginPath();
+      ctx.arc(bubbleCenterX, bubblesCenterY, bubbleRadius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Inner Checkmark
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "900 24px 'Outfit', sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("✓", bubbleCenterX, bubblesCenterY + 8);
+    } else if (item.isToday) {
+      // Today Pending
+      ctx.fillStyle = "rgba(245, 158, 11, 0.15)";
+      ctx.beginPath();
+      ctx.arc(bubbleCenterX, bubblesCenterY, bubbleRadius, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = "#fbbf24";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      ctx.fillStyle = "#fbbf24";
+      ctx.font = "800 20px 'Outfit', sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(item.letter, bubbleCenterX, bubblesCenterY + 7);
+    } else {
+      // Incomplete Future/Past
+      ctx.fillStyle = "rgba(255, 255, 255, 0.06)";
+      ctx.beginPath();
+      ctx.arc(bubbleCenterX, bubblesCenterY, bubbleRadius, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+      ctx.font = "700 20px 'Outfit', sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(item.letter, bubbleCenterX, bubblesCenterY + 7);
+    }
+  });
+
+  // Divider line
+  const dividerY = bubblesCenterY + 60;
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(cardX + 35, dividerY);
+  ctx.lineTo(cardX + cardW - 35, dividerY);
+  ctx.stroke();
+
+  // Inside Card: STATS HIGHLIGHTS (Volume & Duration)
+  const statsBoxY = dividerY + 30;
+  const statsBoxW = (cardW - 90) / 2;
+  const statsBoxH = 175;
+
+  // Box 1: Total Volume
+  drawRoundedRect(cardX + 35, statsBoxY, statsBoxW, statsBoxH, 26, "rgba(255, 255, 255, 0.05)", "rgba(255, 255, 255, 0.12)", 1.5);
+  ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+  ctx.font = "800 16px 'Outfit', sans-serif";
+  ctx.textAlign = "left";
+  ctx.fillText("VOLUMEN TOTAL", cardX + 60, statsBoxY + 45);
+
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "900 44px 'Outfit', sans-serif";
+  ctx.fillText(`${volNaty.toLocaleString()}`, cardX + 60, statsBoxY + 105);
+
+  ctx.fillStyle = theme.accent;
+  ctx.font = "800 22px 'Outfit', sans-serif";
+  ctx.fillText("KG", cardX + 60 + ctx.measureText(`${volNaty.toLocaleString()}`).width + 10, statsBoxY + 105);
+
+  ctx.fillStyle = "rgba(255, 255, 255, 0.45)";
+  ctx.font = "600 15px 'Plus Jakarta Sans', sans-serif";
+  ctx.fillText("Peso levantado", cardX + 60, statsBoxY + 140);
+
+  // Box 2: Total Time / Duration
+  drawRoundedRect(cardX + 55 + statsBoxW, statsBoxY, statsBoxW, statsBoxH, 26, "rgba(255, 255, 255, 0.05)", "rgba(255, 255, 255, 0.12)", 1.5);
+  ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+  ctx.font = "800 16px 'Outfit', sans-serif";
+  ctx.textAlign = "left";
+  ctx.fillText("DURACIÓN", cardX + 80 + statsBoxW, statsBoxY + 45);
+
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "900 40px 'JetBrains Mono', monospace";
+  ctx.fillText(`${duration}`, cardX + 80 + statsBoxW, statsBoxY + 105);
+
+  ctx.fillStyle = "rgba(255, 255, 255, 0.45)";
+  ctx.font = "600 15px 'Plus Jakarta Sans', sans-serif";
+  ctx.fillText("Tiempo de sesión", cardX + 80 + statsBoxW, statsBoxY + 140);
+
+  // Inside Card: Motivational Quote (Bottom of Card)
+  const quote = getDailyMotivationQuote();
+  const quoteBoxY = statsBoxY + statsBoxH + 25;
+  drawRoundedRect(cardX + 35, quoteBoxY, cardW - 70, 75, 20, "rgba(139, 92, 246, 0.12)", "rgba(139, 92, 246, 0.3)", 1);
+  
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "italic 600 18px 'Plus Jakarta Sans', sans-serif";
+  ctx.textAlign = "center";
+  
+  // Truncate quote if needed
+  let displayQuote = `"${quote}"`;
+  if (ctx.measureText(displayQuote).width > (cardW - 120)) {
+    displayQuote = `"${quote.substring(0, 65)}..."`;
+  }
+  ctx.fillText(displayQuote, width / 2, quoteBoxY + 45);
+
+  // ==========================================
+  // 5. FOOTER WATERMARK
+  // ==========================================
+  ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+  ctx.font = "800 18px 'Outfit', sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText("VITAL ATHLETIC APP · REGISTRO DE ENTRENAMIENTO", width / 2, 1840);
+}
+
+function shareStoryImage() {
+  const canvas = document.getElementById("story-export-canvas");
+  if (!canvas) return;
+
+  canvas.toBlob((blob) => {
+    if (!blob) {
+      downloadStoryImage();
+      return;
+    }
+
+    const file = new File([blob], "vital-historia-naty.png", { type: "image/png" });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({
+        files: [file],
+        title: "Mi Entrenamiento en Vital",
+        text: "¡Sesión completada en Vital! 💪",
+      }).catch((err) => {
+        if (err.name !== "AbortError") {
+          downloadStoryImage();
+        }
+      });
+    } else {
+      downloadStoryImage();
+    }
+  }, "image/png", 0.95);
+}
+
+function downloadStoryImage() {
+  const canvas = document.getElementById("story-export-canvas");
+  if (!canvas) return;
+
+  try {
+    const dataUrl = canvas.toDataURL("image/png");
+    const link = document.createElement("a");
+    link.download = `Vital_Historia_Naty_${getDateKey(new Date())}.png`;
+    link.href = dataUrl;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    if (typeof showToast === "function") {
+      showToast("download", "text-emerald-400", "Historia guardada en tu galería.");
+    }
+  } catch (e) {
+    console.error("Error downloading story image:", e);
+  }
+}
+
+window.openInstagramStoryModal = openInstagramStoryModal;
+window.closeInstagramStoryModal = closeInstagramStoryModal;
+window.toggleStoryBackgroundStyle = toggleStoryBackgroundStyle;
+window.handleStoryPhotoUpload = handleStoryPhotoUpload;
+window.shareStoryImage = shareStoryImage;
+window.downloadStoryImage = downloadStoryImage;
+window.renderStoryCanvas = renderStoryCanvas;
