@@ -5461,8 +5461,9 @@ function updateExerciseHeaderUI(tabIdx, exerciseIdx) {
   }
   const isFullyCompleted = exerciseCompletedChecks === numSets;
 
-  const cards = document.querySelectorAll("#exercises-list .exercise-card");
-  const card = cards[exerciseIdx];
+  const card = document.querySelector(`.exercise-card[data-exercise-idx="${exerciseIdx}"]`) 
+            || document.querySelectorAll("#exercises-list .exercise-card")[exerciseIdx];
+            
   if (card) {
     if (isFullyCompleted) {
       card.classList.add("opacity-60");
@@ -5704,8 +5705,9 @@ function renderContent(skipAnimations = false) {
     const isExerciseCompleted = exerciseCompletedChecks === numSets;
 
     const card = document.createElement("div");
+    card.setAttribute("data-exercise-idx", idx);
     const staggerClass = (!skipAnimations && idx < 6) ? `stagger-${idx + 1}` : "";
-    let cardClasses = `${!skipAnimations ? 'animate-slide-up' : ''} ${staggerClass} relative bg-[var(--bg-card)] border border-[var(--border-strong)] rounded-3xl p-1 mb-6 flex flex-col transition-all shadow-sm `;
+    let cardClasses = `exercise-card ${!skipAnimations ? 'animate-slide-up' : ''} ${staggerClass} relative bg-[var(--bg-card)] border border-[var(--border-strong)] rounded-3xl p-1 mb-6 flex flex-col transition-all shadow-sm `;
     
     if (isExerciseCompleted) {
       cardClasses += `opacity-60`;
