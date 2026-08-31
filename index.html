@@ -24,9 +24,27 @@
     <script src="config.js"></script>
     <script src="capacitor.js"></script>
     
+    <!-- Instant Theme Resolver (0ms FOUC) -->
+    <script>
+        (function() {
+            try {
+                var theme = localStorage.getItem('gym_theme') || 'dark';
+                if (theme === 'light') {
+                    document.documentElement.classList.remove('dark');
+                    document.documentElement.classList.add('light');
+                    document.documentElement.setAttribute('data-theme', 'light');
+                } else {
+                    document.documentElement.classList.remove('light');
+                    document.documentElement.classList.add('dark');
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    
     <!-- Precompiled Static Tailwind CSS + Theme Styles (Instant, 0ms JS Overhead) -->
     <link rel="stylesheet" href="tailwind.compiled.css">
-    <link rel="stylesheet" href="styles.css?v=3">
+    <link rel="stylesheet" href="styles.css?v=4">
     <!-- Lucide Icons -->
     <script src="lucide.min.js"></script>
 
@@ -46,20 +64,23 @@
 
 <body
     class="transition-colors duration-300 selection:bg-violet-500/30 selection:text-violet-200 h-[100dvh] w-[100vw] overflow-hidden flex flex-col">
-    <!-- App Initial Startup Loader -->
+    <!-- App Initial Startup Loader (Theme-Adaptive & Ultra-High Contrast) -->
     <div id="app-initial-loader"
-        class="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-[#070b14] transition-opacity duration-500 pointer-events-auto">
-        <div class="relative w-20 h-20 rounded-3xl bg-gradient-to-br from-violet-600 to-indigo-700 p-0.5 shadow-2xl shadow-violet-500/40 mb-5 flex items-center justify-center animate-pulse">
-            <div class="w-full h-full bg-[#0a0f1d] rounded-[22px] flex items-center justify-center p-3">
-                <img src="favicon.svg" class="w-full h-full object-contain" alt="Vital">
-            </div>
+        class="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-[var(--bg-base)] text-[var(--text-main)] transition-opacity duration-500 pointer-events-auto">
+        <!-- Logo Card -->
+        <div class="relative w-20 h-20 rounded-3xl bg-[var(--bg-card)] border-2 border-[var(--border-strong)] p-3 shadow-2xl mb-5 flex items-center justify-center animate-pulse">
+            <img src="favicon.svg" class="w-full h-full object-contain drop-shadow" alt="Vital">
         </div>
+        
+        <!-- Brand Title & Badge -->
         <div class="flex items-center gap-2.5 mb-3">
-            <h1 class="text-3xl font-black text-white leading-none tracking-widest font-mono drop-shadow-[0_2px_10px_rgba(255,255,255,0.4)]">VITAL</h1>
-            <span class="bg-gradient-to-r from-violet-500 to-indigo-600 text-white text-[10px] px-2 py-0.5 rounded-full font-extrabold tracking-widest uppercase shadow-md shadow-violet-500/30">V1.7</span>
+            <h1 class="text-3xl font-black text-[var(--text-main)] leading-none tracking-widest font-mono">VITAL</h1>
+            <span class="bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-[10px] px-2.5 py-0.5 rounded-full font-black tracking-widest uppercase shadow-md shadow-violet-500/25">V1.7</span>
         </div>
-        <div class="flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-slate-800 text-xs text-slate-300 font-medium shadow-inner mt-1">
-            <div class="w-2 h-2 rounded-full bg-violet-400 animate-ping"></div>
+        
+        <!-- Status Indicator Pill -->
+        <div class="flex items-center gap-2.5 px-4 py-2 rounded-full bg-[var(--bg-panel-alt)] border border-[var(--border-strong)] text-xs text-[var(--text-dim)] font-bold shadow-sm mt-1">
+            <div class="w-2 h-2 rounded-full bg-violet-500 animate-ping"></div>
             <span>Iniciando entrenamiento...</span>
         </div>
     </div>

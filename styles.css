@@ -334,6 +334,40 @@ html.dark #timer-ring-bg {
   opacity: 1 !important;
 }
 
+/* ==========================================================================
+   APP INITIAL STARTUP LOADER (THEME AWARE & ULTRA-CRISP)
+   ========================================================================== */
+#app-initial-loader {
+  background-color: var(--bg-base) !important;
+  color: var(--text-main) !important;
+}
+
+html.light #app-initial-loader,
+body.light #app-initial-loader,
+[data-theme="light"] #app-initial-loader {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+html.light #app-initial-loader h1,
+body.light #app-initial-loader h1,
+[data-theme="light"] #app-initial-loader h1 {
+  color: #0f172a !important;
+}
+
+html.dark #app-initial-loader,
+body.dark #app-initial-loader,
+[data-theme="dark"] #app-initial-loader {
+  background-color: #0b0f19 !important;
+  color: #ffffff !important;
+}
+
+html.dark #app-initial-loader h1,
+body.dark #app-initial-loader h1,
+[data-theme="dark"] #app-initial-loader h1 {
+  color: #ffffff !important;
+}
+
 #timer-minimize-btn {
   background-color: var(--bg-panel-alt) !important;
   color: var(--text-main) !important;
