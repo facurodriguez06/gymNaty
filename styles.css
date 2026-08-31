@@ -439,7 +439,128 @@ body.light #timer-skip-btn,
   box-shadow: var(--glow-naty) !important;
 }
 
-.active-nav-item i, .active-filter i {
+.active-nav-item i, .active-filter i,
+.active-nav-item svg, .active-filter svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* ==========================================================================
+   SOLID & GRADIENT COLORED BUTTONS (HIGH CONTRAST WHITE TYPOGRAPHY)
+   Ensures that in Light Mode and Dark Mode, all violet, emerald, purple,
+   indigo, blue, amber, and gradient buttons display crystal-clear white text.
+   ========================================================================== */
+
+button.text-white,
+button[class*="bg-violet-"],
+button[class*="from-violet-"],
+button[class*="bg-purple-"],
+button[class*="from-purple-"],
+button[class*="bg-emerald-"],
+button[class*="from-emerald-"],
+button[class*="bg-green-"],
+button[class*="from-green-"],
+button[class*="bg-indigo-"],
+button[class*="from-indigo-"],
+button[class*="bg-blue-"],
+button[class*="from-blue-"],
+button[class*="bg-cyan-"],
+button[class*="from-cyan-"],
+button[class*="bg-teal-"],
+button[class*="from-teal-"],
+button[class*="bg-orange-"],
+button[class*="from-orange-"],
+button[class*="bg-red-"],
+button[class*="from-red-"],
+button[class*="bg-rose-"],
+button[class*="from-rose-"],
+.btn-primary,
+.set-btn[class*="from-violet-"],
+.set-btn[class*="bg-violet-"],
+#accept-motivation-btn,
+#timer-start-btn,
+#shop-buy-btn-1,
+#btn-finish-workout,
+.btn-ai-routine {
+  color: #ffffff !important;
+}
+
+button.text-white *,
+button[class*="bg-violet-"] *,
+button[class*="from-violet-"] *,
+button[class*="bg-purple-"] *,
+button[class*="from-purple-"] *,
+button[class*="bg-emerald-"] *,
+button[class*="from-emerald-"] *,
+button[class*="bg-green-"] *,
+button[class*="from-green-"] *,
+button[class*="bg-indigo-"] *,
+button[class*="from-indigo-"] *,
+button[class*="bg-blue-"] *,
+button[class*="from-blue-"] *,
+button[class*="bg-cyan-"] *,
+button[class*="from-cyan-"] *,
+button[class*="bg-teal-"] *,
+button[class*="from-teal-"] *,
+.btn-primary *,
+.set-btn[class*="from-violet-"] *,
+.set-btn[class*="bg-violet-"] *,
+#accept-motivation-btn *,
+#timer-start-btn *,
+#shop-buy-btn-1 *,
+.btn-ai-routine * {
+  color: #ffffff !important;
+}
+
+button.text-white svg,
+button.text-white i,
+button[class*="bg-violet-"] svg,
+button[class*="bg-violet-"] i,
+button[class*="from-violet-"] svg,
+button[class*="from-violet-"] i,
+button[class*="bg-purple-"] svg,
+button[class*="bg-purple-"] i,
+button[class*="from-purple-"] svg,
+button[class*="from-purple-"] i,
+button[class*="bg-emerald-"] svg,
+button[class*="bg-emerald-"] i,
+button[class*="from-emerald-"] svg,
+button[class*="from-emerald-"] i,
+button[class*="bg-green-"] svg,
+button[class*="bg-green-"] i,
+button[class*="from-green-"] svg,
+button[class*="from-green-"] i,
+button[class*="bg-indigo-"] svg,
+button[class*="bg-indigo-"] i,
+button[class*="from-indigo-"] svg,
+button[class*="from-indigo-"] i,
+button[class*="bg-blue-"] svg,
+button[class*="bg-blue-"] i,
+button[class*="from-blue-"] svg,
+button[class*="from-blue-"] i,
+button[class*="bg-cyan-"] svg,
+button[class*="bg-cyan-"] i,
+button[class*="from-cyan-"] svg,
+button[class*="from-cyan-"] i,
+button[class*="bg-teal-"] svg,
+button[class*="bg-teal-"] i,
+button[class*="from-teal-"] svg,
+button[class*="from-teal-"] i,
+.btn-primary svg,
+.btn-primary i,
+.set-btn[class*="from-violet-"] svg,
+.set-btn[class*="from-violet-"] i,
+.set-btn[class*="bg-violet-"] svg,
+.set-btn[class*="bg-violet-"] i,
+#accept-motivation-btn svg,
+#accept-motivation-btn i,
+#timer-start-btn svg,
+#timer-start-btn i,
+#shop-buy-btn-1 svg,
+#shop-buy-btn-1 i,
+.btn-ai-routine svg,
+.btn-ai-routine i {
+  stroke: #ffffff !important;
   color: #ffffff !important;
 }
 
