@@ -5448,6 +5448,41 @@ function updateTimerDOM(id) {
   }
 }
 
+function updateExerciseHeaderUI(tabIdx, exerciseIdx) {
+  const dayData = routineData[tabIdx];
+  if (!dayData || !dayData.exercises || !dayData.exercises[exerciseIdx]) return;
+  const numSets = parseInt(dayData.exercises[exerciseIdx].sets) || 3;
+  
+  let exerciseCompletedChecks = 0;
+  for (let s = 0; s < numSets; s++) {
+    const setKey = `${tabIdx}-${exerciseIdx}-${s}`;
+    const setData = completedSets[setKey] || { naty: false, alma: false };
+    if (setData.naty) exerciseCompletedChecks++;
+  }
+  const isFullyCompleted = exerciseCompletedChecks === numSets;
+
+  const cards = document.querySelectorAll("#exercises-list .exercise-card");
+  const card = cards[exerciseIdx];
+  if (card) {
+    if (isFullyCompleted) {
+      card.classList.add("opacity-60");
+    } else {
+      card.classList.remove("opacity-60");
+    }
+
+    const toggleBtn = card.querySelector(".btn-toggle-exercise-all");
+    if (toggleBtn) {
+      toggleBtn.className = `btn-toggle-exercise-all text-xs font-bold px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer ml-auto ${isFullyCompleted ? 'completed-state' : 'active-state'}`;
+      toggleBtn.setAttribute("onclick", `toggleExerciseComplete('${tabIdx}', ${exerciseIdx}, ${numSets}, ${isFullyCompleted})`);
+      toggleBtn.innerHTML = `
+        <i data-lucide="${isFullyCompleted ? 'rotate-ccw' : 'check-circle-2'}" class="w-3.5 h-3.5"></i>
+        <span>${isFullyCompleted ? 'Deshacer' : 'Completar todo'}</span>
+      `;
+      safeCreateIcons(toggleBtn);
+    }
+  }
+}
+
 function updateSingleSetUI(setKey, user, isCompleted, clickedBtn) {
   const btn = clickedBtn || document.querySelector(`.set-btn[data-set-key="${setKey}"][data-user="${user}"]`);
   if (btn) {
@@ -5473,6 +5508,14 @@ function updateSingleSetUI(setKey, user, isCompleted, clickedBtn) {
         numberBadge.className = "w-8 h-8 rounded-xl bg-[var(--bg-input)] text-[var(--text-dim)] border border-[var(--border-strong)] font-bold text-xs flex items-center justify-center shrink-0 font-mono transition-colors";
       }
     }
+  }
+
+  // Sync exercise header toggle button state
+  const parts = setKey.split('-');
+  if (parts.length >= 2) {
+    const tIdx = parseInt(parts[0]);
+    const eIdx = parseInt(parts[1]);
+    updateExerciseHeaderUI(tIdx, eIdx);
   }
 
   // Recalculate progress without rebuilding DOM
@@ -5525,6 +5568,7 @@ window.toggleExerciseComplete = function(tabIdx, exerciseIdx, numSets, isComplet
     completedSets[setKey].naty = nextState;
     updateSingleSetUI(setKey, "naty", nextState);
   }
+  updateExerciseHeaderUI(tabIdx, exerciseIdx);
   localStorage.setItem("gymRoutineSets_" + activeRoutineId, JSON.stringify(completedSets));
   
   const today = getDateKey(new Date());
