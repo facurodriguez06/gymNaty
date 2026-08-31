@@ -1,17 +1,28 @@
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
+
+console.log('Compiling Tailwind CSS statically...');
+try {
+  execSync('npx tailwindcss -i ./src/input.css -o ./tailwind.compiled.css --minify', { stdio: 'inherit' });
+  console.log('[OK] Tailwind CSS compiled to tailwind.compiled.css');
+} catch (err) {
+  console.error('[ERROR] Failed to compile Tailwind CSS:', err);
+}
 
 const filesToCopy = [
   'index.html',
   'script.js',
   'styles.css',
+  'tailwind.compiled.css',
   'manifest.json',
   'favicon.svg',
+  'favicon.png',
   'sw.js',
   'recovery_script.js',
   'config.js',
-  'tailwind.min.js',
-  'lucide.min.js'
+  'lucide.min.js',
+  'motivational_quotes.js'
 ];
 
 const destDir = path.join(__dirname, 'www');

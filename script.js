@@ -1287,7 +1287,7 @@ function startCloudPolling() {
     } catch (e) {
       console.warn("Background sync poll failed", e);
     }
-  }, 4000);
+  }, 25000);
 }
 
 // Start polling on boot
@@ -5420,16 +5420,82 @@ function updateTimerDOM(id) {
   }
 }
 
+function updateSingleSetUI(setKey, user, isCompleted, clickedBtn) {
+  const btn = clickedBtn || document.querySelector(`.set-btn[data-set-key="${setKey}"][data-user="${user}"]`);
+  if (btn) {
+    const row = btn.closest(".flex.items-center.justify-between");
+    const numberBadge = row ? row.querySelector(".w-8.h-8") : null;
+    
+    if (isCompleted) {
+      btn.className = "set-btn shrink-0 w-11 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-500/30 active:scale-95";
+      btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+      if (row) {
+        row.className = "flex items-center justify-between p-2.5 sm:p-3 rounded-2xl transition-all duration-200 border bg-violet-950/20 border-violet-500/40 shadow-[0_0_15px_rgba(139,92,246,0.1)]";
+      }
+      if (numberBadge) {
+        numberBadge.className = "w-8 h-8 rounded-xl bg-violet-600 text-white font-black text-xs flex items-center justify-center shrink-0 font-mono transition-colors";
+      }
+    } else {
+      btn.className = "set-btn shrink-0 w-11 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer bg-[var(--bg-input)] text-[var(--text-dim)] border border-[var(--border-strong)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card)]";
+      btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+      if (row) {
+        row.className = "flex items-center justify-between p-2.5 sm:p-3 rounded-2xl transition-all duration-200 border bg-[var(--bg-panel-alt)] border-[var(--border-strong)] hover:border-violet-500/30";
+      }
+      if (numberBadge) {
+        numberBadge.className = "w-8 h-8 rounded-xl bg-[var(--bg-input)] text-[var(--text-dim)] border border-[var(--border-strong)] font-bold text-xs flex items-center justify-center shrink-0 font-mono transition-colors";
+      }
+    }
+  }
+
+  // Recalculate progress without rebuilding DOM
+  const dayData = routineData[activeTab];
+  if (!dayData) return;
+  
+  let totalSets = 0;
+  let completedSetsCount = 0;
+  dayData.exercises.forEach((exercise, idx) => {
+    const numSets = parseInt(exercise.sets) || 3;
+    totalSets += numSets;
+    for (let s = 0; s < numSets; s++) {
+      const k = `${activeTab}-${idx}-${s}`;
+      const d = completedSets[k] || { naty: false, alma: false };
+      if (d.naty) completedSetsCount++;
+    }
+  });
+
+  const progress = totalSets === 0 ? 0 : Math.round((completedSetsCount / totalSets) * 100);
+  const progressText = document.getElementById("progress-text");
+  const progressBar = document.getElementById("progress-bar");
+  if (progressText) progressText.textContent = `${progress}%`;
+  if (progressBar) progressBar.style.width = `${progress}%`;
+  
+  const completionMsg = document.getElementById("completion-message");
+  if (completionMsg) {
+    if (progress === 100) {
+      completionMsg.classList.remove("hidden");
+      if (typeof openWorkoutSummaryModal === "function") {
+        setTimeout(openWorkoutSummaryModal, 600);
+      }
+    } else {
+      completionMsg.classList.add("hidden");
+    }
+  }
+
+  if (typeof updateLiveVolumeUI === "function") updateLiveVolumeUI();
+}
+
 window.toggleWarmupTimer = toggleWarmupTimer;
 window.resetWarmupTimer = resetWarmupTimer;
 window.skipWarmupTimer = skipWarmupTimer;
 window.toggleExerciseComplete = function(tabIdx, exerciseIdx, numSets, isCompleted) {
+  const nextState = !isCompleted;
   for (let s = 0; s < numSets; s++) {
     const setKey = `${tabIdx}-${exerciseIdx}-${s}`;
     if (!completedSets[setKey]) {
       completedSets[setKey] = { naty: false, alma: false };
     }
-    completedSets[setKey].naty = !isCompleted;
+    completedSets[setKey].naty = nextState;
+    updateSingleSetUI(setKey, "naty", nextState);
   }
   localStorage.setItem("gymRoutineSets_" + activeRoutineId, JSON.stringify(completedSets));
   
@@ -5440,11 +5506,9 @@ window.toggleExerciseComplete = function(tabIdx, exerciseIdx, numSets, isComplet
   trainingHistory[today].completed_sets = completedSets;
   if (typeof debouncedSaveToCloud === 'function') debouncedSaveToCloud(1000);
   
-  if (!isCompleted && typeof isSessionTimerRunning !== "undefined" && !isSessionTimerRunning) {
+  if (nextState && typeof isSessionTimerRunning !== "undefined" && !isSessionTimerRunning) {
     if (typeof startWorkoutSession === "function") startWorkoutSession();
   }
-  renderContent(true);
-  if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
   triggerHaptic();
 };
 
@@ -5821,7 +5885,8 @@ function renderContent(skipAnimations = false) {
       };
       
       debouncedSaveToCloud(1000);
-      renderContent(true);
+      updateSingleSetUI(setKey, user, completedSets[setKey][user], btn);
+      if (typeof triggerHaptic === "function") triggerHaptic();
     });
   });
 

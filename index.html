@@ -26,18 +26,11 @@
     <script src="config.js"></script>
     <script src="capacitor.js"></script>
     
-    <!-- Tailwind CSS (Local Bundle - 100% Offline & Instant) -->
-    <script src="tailwind.min.js"></script>
-    <script>
-        if (typeof tailwind !== "undefined") {
-            tailwind.config = {
-                darkMode: 'class',
-            }
-        }
-    </script>
-    <!-- Lucide Icons (Local Bundle - 100% Offline & Instant) -->
+    <!-- Precompiled Static Tailwind CSS + Theme Styles (Instant, 0ms JS Overhead) -->
+    <link rel="stylesheet" href="tailwind.compiled.css">
+    <link rel="stylesheet" href="styles.css?v=3">
+    <!-- Lucide Icons -->
     <script src="lucide.min.js"></script>
-    <link rel="stylesheet" href="styles.css?v=2">
 
     <style>
         /* Hide Number Input Spinners */
