@@ -183,10 +183,44 @@ h1, h2, h3, h4, h5, h6, #day-title {
   border-bottom: 1px solid var(--border-dim) !important;
 }
 
+#sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(2, 6, 23, 0.85);
+  z-index: 90;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+#sidebar-overlay.open {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
 #sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 18rem;
+  max-width: 85vw;
+  height: 100dvh;
   background-color: var(--bg-panel-solid) !important;
   border-right: 1px solid var(--border-dim) !important;
-  box-shadow: 10px 0 40px rgba(0, 0, 0, 0.4) !important;
+  z-index: 100;
+  transform: translateX(-100%) !important;
+  visibility: hidden;
+  pointer-events: none;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.3s ease;
+  box-shadow: 10px 0 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+#sidebar.open {
+  transform: translateX(0) !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
 }
 
 /* Navigation active tab pill */

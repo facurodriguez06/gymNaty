@@ -1721,32 +1721,25 @@ function toggleSidebar() {
   const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("sidebar-overlay");
   if (!sidebar) return;
-  const isOpen = !sidebar.classList.contains("-translate-x-full");
+  const isOpen = sidebar.classList.contains("open");
 
   if (isOpen) {
-    sidebar.classList.add("-translate-x-full");
-    if (overlay) {
-      overlay.classList.remove("opacity-100");
-      setTimeout(() => overlay.classList.add("hidden"), 300);
-    }
+    sidebar.classList.remove("open");
+    if (overlay) overlay.classList.remove("open");
   } else {
-    if (overlay) {
-      overlay.classList.remove("hidden");
-      setTimeout(() => overlay.classList.add("opacity-100"), 10);
-    }
-    sidebar.classList.remove("-translate-x-full");
+    sidebar.classList.add("open");
+    if (overlay) overlay.classList.add("open");
   }
+  safeCreateIcons();
+  if (typeof triggerHaptic === "function") triggerHaptic();
 }
 
 function closeSidebarIfOpen() {
   const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("sidebar-overlay");
-  if (sidebar && !sidebar.classList.contains("-translate-x-full")) {
-    sidebar.classList.add("-translate-x-full");
-    if (overlay) {
-      overlay.classList.remove("opacity-100");
-      setTimeout(() => overlay.classList.add("hidden"), 300);
-    }
+  if (sidebar && sidebar.classList.contains("open")) {
+    sidebar.classList.remove("open");
+    if (overlay) overlay.classList.remove("open");
   }
 }
 
@@ -1836,7 +1829,7 @@ function navigateTo(view) {
 
   // Close Sidebar on Mobile
   const sidebar = document.getElementById("sidebar");
-  if (sidebar && !sidebar.classList.contains("-translate-x-full")) {
+  if (sidebar && sidebar.classList.contains("open")) {
     toggleSidebar();
   }
 
@@ -1862,7 +1855,7 @@ document.addEventListener("touchend", (e) => {
   
   if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 60) {
     const sidebar = document.getElementById("sidebar");
-    const isOpen = sidebar && !sidebar.classList.contains("-translate-x-full");
+    const isOpen = sidebar && sidebar.classList.contains("open");
     
     // Swipe Right from edge -> Open
     if (deltaX > 0 && touchStartX < 50 && !isOpen) {
