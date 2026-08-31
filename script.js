@@ -1816,17 +1816,6 @@ function navigateTo(view) {
     }
   });
 
-  // Update Bottom Nav Active State
-  const bottomNavBtns = document.querySelectorAll(".bottom-nav-btn[data-nav-target]");
-  bottomNavBtns.forEach((btn) => {
-    const target = btn.dataset.navTarget;
-    if (target === view) {
-      btn.className = "bottom-nav-btn flex flex-col items-center justify-center flex-1 py-1 px-1 rounded-2xl transition-all text-violet-400 font-bold active:scale-90 cursor-pointer";
-    } else {
-      btn.className = "bottom-nav-btn flex flex-col items-center justify-center flex-1 py-1 px-1 rounded-2xl transition-all text-slate-400 hover:text-slate-200 font-medium active:scale-90 cursor-pointer";
-    }
-  });
-
   // Close Sidebar on Mobile
   const sidebar = document.getElementById("sidebar");
   if (sidebar && sidebar.classList.contains("open")) {

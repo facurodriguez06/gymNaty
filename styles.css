@@ -555,32 +555,16 @@ div[onclick*="openImageModal"]:hover img,
   padding-bottom: 0.75rem;
 }
 
-/* Mobile Safe Areas and Fluid Scaling */
-.content-safe-bottom,
+/* Mobile Safe Areas and Fluid Scrolling */
 #app-content {
-  padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 20px));
-}
-
-#bottom-nav {
-  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 12px));
-  background-color: var(--bg-header) !important;
-  border-top: 1px solid var(--border-dim) !important;
-}
-
-.bottom-nav-btn {
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
+  padding-bottom: calc(2rem + env(safe-area-inset-bottom, 16px));
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 }
 
 button, input, a, select {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-}
-
-/* GPU Acceleration & Performance for Smooth 60/120fps Scrolling (Moto G60s) */
-#app-content {
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
 }
 
 .exercise-card {

@@ -189,9 +189,9 @@
             <div class="flex items-center justify-between min-h-[56px] py-1.5">
                 <div class="flex items-center gap-3">
                     <!-- Menu Button -->
-                    <button onclick="toggleSidebar()"
-                        class="p-2 -ml-2 rounded-lg text-[var(--text-dim)] hover:text-[var(--text-main)] hover:bg-[var(--bg-panel-alt)] transition-colors">
-                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    <button onclick="toggleSidebar()" aria-label="Abrir menú"
+                        class="p-2 -ml-1 rounded-xl text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 active:scale-95 transition-all cursor-pointer flex items-center justify-center shadow-sm">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
                     </button>
 
                     <!-- Title Group -->
@@ -244,7 +244,7 @@
         </div>
     </header>
 
-    <main class="flex flex-col max-w-5xl mx-auto px-4 py-6 md:py-8 w-full flex-1 overflow-y-auto overflow-x-hidden">
+    <main class="flex flex-col max-w-5xl mx-auto px-4 py-6 md:py-8 w-full flex-1">
 
         <!-- ROUTINE VIEW -->
         <div id="routine-view" class="flex flex-col md:flex-row gap-6">
@@ -804,37 +804,6 @@
 
     </main>
 </div>
-
-    <!-- Mobile Bottom Navigation Bar (Ultra-Fluid Ergonomic Thumb Navigation) -->
-    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 border-t border-slate-800/80 px-2 py-1.5 flex items-center justify-around shadow-[0_-4px_25px_rgba(0,0,0,0.4)] md:hidden">
-        <button onclick="navigateTo('routine')" data-nav-target="routine" class="bottom-nav-btn flex flex-col items-center justify-center flex-1 py-1 px-1 rounded-2xl transition-all text-violet-400 active:scale-90 cursor-pointer">
-            <i data-lucide="dumbbell" class="w-5 h-5 mb-0.5"></i>
-            <span class="text-[10px] font-bold tracking-tight">Rutina</span>
-        </button>
-        
-        <button onclick="navigateTo('history')" data-nav-target="history" class="bottom-nav-btn flex flex-col items-center justify-center flex-1 py-1 px-1 rounded-2xl transition-all text-slate-400 hover:text-slate-200 active:scale-90 cursor-pointer">
-            <i data-lucide="calendar" class="w-5 h-5 mb-0.5"></i>
-            <span class="text-[10px] font-medium tracking-tight">Historial</span>
-        </button>
-        
-        <button onclick="navigateTo('water')" data-nav-target="water" class="bottom-nav-btn flex flex-col items-center justify-center flex-1 py-1 px-1 rounded-2xl transition-all text-slate-400 hover:text-slate-200 active:scale-90 cursor-pointer">
-            <div class="relative">
-                <i data-lucide="droplets" class="w-5 h-5 mb-0.5"></i>
-                <span id="bottom-nav-water-dot" class="absolute -top-0.5 -right-1 w-2 h-2 bg-sky-400 rounded-full hidden"></span>
-            </div>
-            <span class="text-[10px] font-medium tracking-tight">Agua</span>
-        </button>
-        
-        <button onclick="navigateTo('stats')" data-nav-target="stats" class="bottom-nav-btn flex flex-col items-center justify-center flex-1 py-1 px-1 rounded-2xl transition-all text-slate-400 hover:text-slate-200 active:scale-90 cursor-pointer">
-            <i data-lucide="line-chart" class="w-5 h-5 mb-0.5"></i>
-            <span class="text-[10px] font-medium tracking-tight">Progreso</span>
-        </button>
-        
-        <button onclick="toggleSidebar()" class="bottom-nav-btn flex flex-col items-center justify-center flex-1 py-1 px-1 rounded-2xl transition-all text-slate-400 hover:text-slate-200 active:scale-90 cursor-pointer">
-            <i data-lucide="menu" class="w-5 h-5 mb-0.5"></i>
-            <span class="text-[10px] font-medium tracking-tight">Menú</span>
-        </button>
-    </nav>
 
     <!-- Rest Timer Modal -->
     <div id="timer-modal"
