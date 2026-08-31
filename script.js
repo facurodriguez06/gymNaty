@@ -5739,7 +5739,7 @@ function renderContent(skipAnimations = false) {
         <div class="p-4 sm:p-5 flex items-start gap-4">
             <!-- Thumbnail -->
             <div class="w-20 h-20 rounded-2xl bg-black flex items-center justify-center shrink-0 overflow-hidden relative cursor-pointer border border-slate-800/80 hover:border-violet-500/50 transition-all shadow-md group" onclick='event.stopPropagation(); openImageModal("${getExerciseImage(exercise)}", "${(exercise.name || "").replace(/"/g, "&quot;")}")'>
-                <img src="${getExerciseImage(exercise)}" alt="${exercise.name}" class="w-full h-full object-cover grayscale opacity-90 transition-all duration-300 group-hover:opacity-100 group-hover:scale-105" onerror="this.onerror=null; this.src='./assets/exercises/squat.jpg';" />
+                <img src="${getExerciseImage(exercise)}" alt="${exercise.name}" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale opacity-90 transition-all duration-300 group-hover:opacity-100 group-hover:scale-105" onerror="this.onerror=null; this.src='./assets/exercises/squat.jpg';" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-1">
                     <i data-lucide="maximize-2" class="w-3.5 h-3.5 text-white drop-shadow"></i>
                 </div>

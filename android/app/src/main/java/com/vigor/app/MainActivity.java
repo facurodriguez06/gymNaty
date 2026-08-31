@@ -27,6 +27,7 @@ public class MainActivity extends BridgeActivity {
             settings.setDatabaseEnabled(true);
             settings.setCacheMode(WebSettings.LOAD_DEFAULT);
             settings.setEnableSmoothTransition(true);
+            settings.setOffscreenPreRaster(true);
         }
     }
 }
