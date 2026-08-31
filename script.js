@@ -5650,7 +5650,8 @@ function renderContent(skipAnimations = false) {
     warmupContainer.appendChild(renderTimerCard(ex));
   });
 
-  listContainer.appendChild(warmupContainer);
+  const fragment = document.createDocumentFragment();
+  fragment.appendChild(warmupContainer);
 
   dayData.exercises.forEach((exercise, idx) => {
     const numSets = parseInt(exercise.sets) || 3;
@@ -5668,7 +5669,7 @@ function renderContent(skipAnimations = false) {
 
     const card = document.createElement("div");
     const staggerClass = (!skipAnimations && idx < 6) ? `stagger-${idx + 1}` : "";
-    let cardClasses = `${!skipAnimations ? 'animate-slide-up' : ''} ${staggerClass} relative bg-slate-950 flex flex-col mb-8 `;
+    let cardClasses = `${!skipAnimations ? 'animate-slide-up' : ''} ${staggerClass} relative bg-[var(--bg-card)] border border-[var(--border-strong)] rounded-3xl p-1 mb-6 flex flex-col transition-all shadow-sm `;
     
     if (isExerciseCompleted) {
       cardClasses += `opacity-60`;
@@ -5749,8 +5750,8 @@ function renderContent(skipAnimations = false) {
             <!-- Title & Metadata -->
             <div class="flex-1 min-w-0">
                 <div class="flex justify-between items-start gap-2">
-                    <h3 class="font-extrabold text-lg sm:text-xl text-white leading-tight tracking-tight">${exercise.name}</h3>
-                    <button onclick="event.stopPropagation(); showExerciseHistory('${exercise.name}')" title="Ver historial del ejercicio" class="text-slate-400 hover:text-violet-400 p-1.5 rounded-full hover:bg-slate-800 transition-colors shrink-0">
+                    <h3 class="font-extrabold text-lg sm:text-xl text-[var(--text-main)] leading-tight tracking-tight">${exercise.name}</h3>
+                    <button onclick="event.stopPropagation(); showExerciseHistory('${exercise.name}')" title="Ver historial del ejercicio" class="text-[var(--text-dim)] hover:text-violet-400 p-1.5 rounded-full hover:bg-[var(--bg-panel-alt)] transition-colors shrink-0">
                         <i data-lucide="info" class="w-4 h-4"></i>
                     </button>
                 </div>
@@ -5758,8 +5759,8 @@ function renderContent(skipAnimations = false) {
                     <span class="text-xs font-semibold text-violet-400 bg-violet-500/10 border border-violet-500/20 px-2.5 py-0.5 rounded-full">
                         ${exercise.muscles.primary.join(", ")}
                     </span>
-                    <span class="text-xs text-slate-400 flex items-center gap-1 font-medium">
-                        <i data-lucide="timer" class="w-3 h-3 text-slate-400"></i> ${restTime >= 60 ? Math.floor(restTime/60) + ' min' : restTime + 's'}
+                    <span class="text-xs text-[var(--text-dim)] flex items-center gap-1 font-medium">
+                        <i data-lucide="timer" class="w-3 h-3 text-[var(--text-dim)]"></i> ${restTime >= 60 ? Math.floor(restTime/60) + ' min' : restTime + 's'}
                     </span>
                 </div>
             </div>
@@ -5773,7 +5774,7 @@ function renderContent(skipAnimations = false) {
             </div>
             
             <button onclick="toggleExerciseComplete('${activeTab}', ${idx}, ${numSets}, ${isExerciseCompleted})" 
-                class="text-xs font-bold px-3 py-1 rounded-full transition-all flex items-center gap-1.5 cursor-pointer ml-auto ${isExerciseCompleted ? 'bg-slate-800 border border-slate-700 text-slate-400' : 'bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/25'}">
+                class="text-xs font-bold px-3 py-1 rounded-full transition-all flex items-center gap-1.5 cursor-pointer ml-auto ${isExerciseCompleted ? 'bg-[var(--bg-panel-alt)] border border-[var(--border-strong)] text-[var(--text-dim)]' : 'bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/25'}">
                 <i data-lucide="${isExerciseCompleted ? 'rotate-ccw' : 'check-circle-2'}" class="w-3.5 h-3.5"></i>
                 ${isExerciseCompleted ? 'Deshacer' : 'Completar todo'}
             </button>
@@ -5807,7 +5808,7 @@ function renderContent(skipAnimations = false) {
             </div>
         </div>
     `;
-    listContainer.appendChild(card);
+    fragment.appendChild(card);
   });
 
   // RESET BUTTON
@@ -5815,12 +5816,14 @@ function renderContent(skipAnimations = false) {
   resetBtnContainer.className =
     "mt-8 mb-12 flex justify-center opacity-80 hover:opacity-100 transition-opacity";
   resetBtnContainer.innerHTML = `
-                <button id="reset-progress-btn" class="flex items-center gap-2 px-6 py-3 bg-slate-800/50 text-slate-400 border border-slate-700/50 rounded-xl hover:bg-red-900/20 hover:text-red-400 hover:border-red-900/50 transition-all duration-300 shadow-sm hover:shadow-red-500/10 active:scale-95 touch-manipulation">
+                <button id="reset-progress-btn" class="flex items-center gap-2 px-6 py-3 bg-[var(--bg-panel-alt)] text-[var(--text-dim)] border border-[var(--border-strong)] rounded-2xl hover:bg-red-900/20 hover:text-red-400 hover:border-red-900/50 transition-all duration-300 shadow-sm hover:shadow-red-500/10 active:scale-95 touch-manipulation">
                     <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
                     <span class="font-medium">Reiniciar Entrenamiento</span>
                 </button>
             `;
-  listContainer.appendChild(resetBtnContainer);
+  fragment.appendChild(resetBtnContainer);
+  listContainer.appendChild(fragment);
+  safeCreateIcons(listContainer);
 
   // Listener for reset
   setTimeout(() => {
