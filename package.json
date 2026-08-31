@@ -9,6 +9,7 @@
     "start": "node server.js",
     "cap:sync": "npm run build && npx cap sync",
     "apk:build": "npm run cap:sync && cd android && gradlew assembleDebug",
+    "apk:release": "npm run cap:sync && cd android && gradlew assembleRelease",
     "ios:sync": "npm run build && set CLOUD_API_URL=%CLOUD_API_URL% && npx cap sync ios",
     "ios:open": "npx cap open ios",
     "ios:build": "npm run ios:sync && cd ios && xcodebuild -workspace App/App.xcworkspace -scheme App -configuration Release"
