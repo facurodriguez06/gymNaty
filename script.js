@@ -1657,6 +1657,7 @@ function toggleTheme() {
   currentTheme = currentTheme === "dark" ? "light" : "dark";
   applyTheme();
   localStorage.setItem("gymTheme", currentTheme);
+  localStorage.setItem("gym_theme", currentTheme);
 }
 
 function applyTheme() {

@@ -7,14 +7,16 @@
     <script>
         (function() {
             try {
-                var theme = localStorage.getItem('gym_theme') || 'dark';
+                var theme = localStorage.getItem('gymTheme') || localStorage.getItem('gym_theme') || 'dark';
                 var d = document.documentElement;
                 if (theme === 'light') {
                     d.className = 'light';
                     d.setAttribute('data-theme', 'light');
+                    document.write('<style id="early-theme-css">html,body,#app-initial-loader{background-color:#f8fafc!important;color:#0f172a!important;}</style>');
                 } else {
                     d.className = 'dark';
                     d.setAttribute('data-theme', 'dark');
+                    document.write('<style id="early-theme-css">html,body,#app-initial-loader{background-color:#000000!important;color:#ffffff!important;}</style>');
                 }
             } catch (e) {}
         })();
