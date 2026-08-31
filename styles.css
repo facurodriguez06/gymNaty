@@ -183,6 +183,18 @@ h1, h2, h3, h4, h5, h6, #day-title {
   border-bottom: 1px solid var(--border-dim) !important;
 }
 
+#header-menu-btn {
+  background-color: var(--bg-panel-alt) !important;
+  color: var(--text-main) !important;
+  border-color: var(--border-strong) !important;
+}
+
+#header-menu-btn svg,
+#header-menu-btn i {
+  stroke: var(--text-main) !important;
+  color: var(--text-main) !important;
+}
+
 #sidebar-overlay {
   position: fixed;
   inset: 0;

@@ -83,7 +83,7 @@
                     </div>
                 </div>
                 <!-- Close Button -->
-                <button onclick="toggleSidebar()" class="p-2 -mr-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors cursor-pointer" title="Cerrar menú">
+                <button onclick="toggleSidebar()" class="p-2 -mr-2 text-[var(--text-dim)] hover:text-[var(--text-main)] rounded-xl hover:bg-[var(--bg-panel-alt)] transition-colors cursor-pointer" title="Cerrar menú">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
@@ -187,9 +187,9 @@
             <div class="flex items-center justify-between min-h-[56px] py-1.5">
                 <div class="flex items-center gap-3">
                     <!-- Menu Button -->
-                    <button onclick="toggleSidebar()" aria-label="Abrir menú"
-                        class="p-2 -ml-1 rounded-xl text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 active:scale-95 transition-all cursor-pointer flex items-center justify-center shadow-sm">
-                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    <button onclick="toggleSidebar()" aria-label="Abrir menú" id="header-menu-btn"
+                        class="p-2 -ml-1 rounded-xl text-[var(--text-main)] bg-[var(--bg-panel-alt)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-strong)] active:scale-95 transition-all cursor-pointer flex items-center justify-center shadow-sm">
+                        <i data-lucide="menu" class="w-5 h-5 stroke-[2.2]"></i>
                     </button>
 
                     <!-- Title Group -->
