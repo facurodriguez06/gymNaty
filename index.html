@@ -48,17 +48,19 @@
     class="transition-colors duration-300 selection:bg-violet-500/30 selection:text-violet-200 h-[100dvh] w-[100vw] overflow-hidden flex flex-col">
     <!-- App Initial Startup Loader -->
     <div id="app-initial-loader"
-        class="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-[#020617] transition-opacity duration-500 pointer-events-auto">
-        <div class="w-16 h-16 rounded-2xl shadow-2xl shadow-violet-500/30 overflow-hidden mb-4 animate-pulse">
-            <img src="favicon.svg" class="w-full h-full object-cover" alt="Vital">
+        class="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-[#070b14] transition-opacity duration-500 pointer-events-auto">
+        <div class="relative w-20 h-20 rounded-3xl bg-gradient-to-br from-violet-600 to-indigo-700 p-0.5 shadow-2xl shadow-violet-500/40 mb-5 flex items-center justify-center animate-pulse">
+            <div class="w-full h-full bg-[#0a0f1d] rounded-[22px] flex items-center justify-center p-3">
+                <img src="favicon.svg" class="w-full h-full object-contain" alt="Vital">
+            </div>
         </div>
-        <div class="flex items-center gap-2 mb-2">
-            <h1 class="text-xl font-black text-white leading-none tracking-wider font-mono">VITAL</h1>
-            <span class="bg-violet-500/20 text-violet-300 text-[9px] px-1.5 py-0.5 rounded font-bold tracking-widest">V1.7</span>
+        <div class="flex items-center gap-2.5 mb-3">
+            <h1 class="text-3xl font-black text-white leading-none tracking-widest font-mono drop-shadow-[0_2px_10px_rgba(255,255,255,0.4)]">VITAL</h1>
+            <span class="bg-gradient-to-r from-violet-500 to-indigo-600 text-white text-[10px] px-2 py-0.5 rounded-full font-extrabold tracking-widest uppercase shadow-md shadow-violet-500/30">V1.7</span>
         </div>
-        <div class="flex items-center gap-2 text-xs text-slate-400 font-medium">
-            <div class="w-1.5 h-1.5 rounded-full bg-violet-400 animate-ping"></div>
-            <span>Cargando rutina...</span>
+        <div class="flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-slate-800 text-xs text-slate-300 font-medium shadow-inner mt-1">
+            <div class="w-2 h-2 rounded-full bg-violet-400 animate-ping"></div>
+            <span>Iniciando entrenamiento...</span>
         </div>
     </div>
     <!-- Sidebar Overlay Backdrop -->

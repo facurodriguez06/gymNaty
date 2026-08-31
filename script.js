@@ -6994,12 +6994,9 @@ function updateDailyMotivationBanner() {
 
 function checkAndShowDailyMotivation() {
   updateDailyMotivationBanner();
-  const today = getDateKey(new Date());
-  const accepted = localStorage.getItem("natyDailyPledgeAccepted_" + today);
-  
-  if (!accepted) {
+  setTimeout(() => {
     openDailyMotivationModal(false);
-  }
+  }, 150);
 }
 
 function openDailyMotivationModal(isManual = false) {
@@ -7028,8 +7025,8 @@ function openDailyMotivationModal(isManual = false) {
     }
   }
   
-  modal.classList.remove("hidden");
-  modal.classList.add("flex");
+  modal.classList.remove("hidden", "opacity-0");
+  modal.classList.add("flex", "opacity-100");
   safeCreateIcons();
 }
 
