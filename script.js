@@ -2640,6 +2640,7 @@ function triggerConfetti() {
 
 // --- PROFILE MODAL FUNCTIONS ---
 function openProfileModal() {
+  closeSidebarIfOpen();
   const wEl = document.getElementById("profile-weight-naty");
   const hEl = document.getElementById("profile-height-naty");
   const aEl = document.getElementById("profile-age-naty");
@@ -6284,6 +6285,7 @@ if (exportBtn) {
 
 // --- PLATE CALCULATOR ---
 function openCalculatorModal() {
+  closeSidebarIfOpen();
   savedScrollY = window.scrollY; // Capture current scroll position
   const modal = document.getElementById("calculator-modal");
   modal.classList.remove("hidden");
@@ -6451,6 +6453,7 @@ function updateGamificationUI() {
 }
 
 function openStreakModal(user) {
+  closeSidebarIfOpen();
   currentStreakUser = user || (whoTrainsToday === "alma" ? "alma" : "naty");
   const userData = gamification[currentStreakUser] || { streak: 0, points: 0, freezes: 0, frozenDays: [] };
   const streak = userData.streak || 0;
@@ -6863,6 +6866,7 @@ function confirmRescue() {
 
 // --- SHOP / TIENDA DE GEMAS ---
 function openShopModal(user = "naty") {
+  closeSidebarIfOpen();
   const modal = document.getElementById("shop-modal");
   if (!modal) return;
 
@@ -6970,6 +6974,7 @@ function checkAndShowDailyMotivation() {
 }
 
 function openDailyMotivationModal(isManual = false) {
+  closeSidebarIfOpen();
   const modal = document.getElementById("daily-motivation-modal");
   const quoteEl = document.getElementById("daily-motivation-quote-text");
   const btn = document.getElementById("accept-motivation-btn");
@@ -7658,6 +7663,7 @@ function updateWeatherUI(tempText, elements) {
 // --- MULTIPLE ROUTINES MANAGER FUNCTIONS ---
 
 function openRoutinesManagerModal() {
+  closeSidebarIfOpen();
   const modal = document.getElementById("routines-manager-modal");
   if (modal) {
     modal.classList.remove("hidden");

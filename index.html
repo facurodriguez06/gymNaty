@@ -126,7 +126,7 @@
                     <i data-lucide="trophy" class="w-5 h-5 group-hover:text-fuchsia-400 transition-colors"></i>
                     <span class="font-medium">Logros</span>
                 </button>
-                <button onclick="toggleSidebar(); openShopModal('naty')"
+                <button onclick="closeSidebarIfOpen(); openShopModal('naty')"
                     class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-[var(--text-dim)] hover:bg-[var(--bg-panel-alt)] hover:text-[var(--text-main)] transition-all group">
                     <div class="flex items-center gap-3">
                         <i data-lucide="shopping-bag" class="w-5 h-5 text-emerald-400 group-hover:scale-110 transition-transform"></i>
@@ -136,7 +136,7 @@
                         <i data-lucide="gem" class="w-3 h-3"></i> <span id="sidebar-gems-count">0</span>
                     </span>
                 </button>
-                <button onclick="toggleSidebar(); openDailyMotivationModal(true)"
+                <button onclick="closeSidebarIfOpen(); openDailyMotivationModal(true)"
                     class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 transition-all group">
                     <i data-lucide="flame" class="w-5 h-5 text-amber-400 group-hover:scale-110 transition-transform"></i>
                     <span class="font-bold">Mantra de Hoy</span>
@@ -150,18 +150,18 @@
                     </div>
                     <span class="font-medium">Hidratación</span>
                 </button>
-                <button onclick="openRoutinesManagerModal()"
+                <button onclick="closeSidebarIfOpen(); openRoutinesManagerModal()"
                     class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[var(--text-dim)] hover:bg-[var(--bg-panel-alt)] hover:text-[var(--text-main)] transition-all group">
                     <i data-lucide="folder-cog" class="w-5 h-5 group-hover:text-blue-400 transition-colors"></i>
                     <span class="font-medium">Mis Rutinas</span>
                 </button>
                 <div class="my-4 border-t border-slate-800/50"></div>
-                <button onclick="openCalculatorModal()"
+                <button onclick="closeSidebarIfOpen(); openCalculatorModal()"
                     class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[var(--text-dim)] hover:bg-[var(--bg-panel-alt)] hover:text-[var(--text-main)] transition-all group">
                     <i data-lucide="calculator" class="w-5 h-5 group-hover:text-violet-400 transition-colors"></i>
                     <span class="font-medium">Calculadora</span>
                 </button>
-                <button onclick="openProfileModal()"
+                <button onclick="closeSidebarIfOpen(); openProfileModal()"
                     class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[var(--text-dim)] hover:bg-[var(--bg-panel-alt)] hover:text-[var(--text-main)] transition-all group">
                     <i data-lucide="user-cog" class="w-5 h-5 group-hover:text-pink-400 transition-colors"></i>
                     <span class="font-medium">Perfil</span>
