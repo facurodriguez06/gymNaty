@@ -727,6 +727,7 @@ function buildCloudPayload() {
     deleted: !!entry?.deleted,
     water: entry?.water || null,
     weights: entry?.weights || null,
+    reps: entry?.reps || null,
     completed_sets: entry?.completed_sets || null,
   }));
 
@@ -857,7 +858,6 @@ function loadActiveRoutineStateFromHistory(triggerTimers = false) {
     if (todayRecord.weights) {
       const cloudWeights = todayRecord.weights;
       const mergedWeights = { ...setWeights };
-      const mergedReps = { ...setReps };
       let weightsChanged = false;
       
       Object.keys(cloudWeights).forEach((key) => {
@@ -897,6 +897,50 @@ function loadActiveRoutineStateFromHistory(triggerTimers = false) {
         changed = true;
       }
     }
+
+    // 3. Merge reps
+    if (todayRecord.reps) {
+      const cloudReps = todayRecord.reps;
+      const mergedReps = { ...setReps };
+      let repsChanged = false;
+
+      Object.keys(cloudReps).forEach((key) => {
+        if (key.endsWith("_ts")) return;
+
+        if (!mergedReps[key]) {
+          mergedReps[key] = { naty: "", alma: "" };
+        }
+        if (!mergedReps[key + "_ts"]) {
+          mergedReps[key + "_ts"] = { naty: 0, alma: 0 };
+        }
+
+        if (typeof cloudReps[key] === "object" && cloudReps[key] !== null) {
+          ["naty", "alma"].forEach((u) => {
+            const localUpdateKey = `${key}-${u}-reps`;
+            if (Date.now() - (lastLocalUpdates[localUpdateKey] || 0) < 6000) {
+              return;
+            }
+
+            const cloudVal = cloudReps[key][u];
+            const cloudTs = (cloudReps[key + "_ts"] && cloudReps[key + "_ts"][u]) || 0;
+            const localVal = mergedReps[key][u];
+            const localTs = (mergedReps[key + "_ts"] && mergedReps[key + "_ts"][u]) || 0;
+
+            if (cloudTs > localTs || (cloudTs === localTs && localVal !== cloudVal)) {
+              mergedReps[key][u] = cloudVal;
+              mergedReps[key + "_ts"][u] = cloudTs;
+              repsChanged = true;
+            }
+          });
+        }
+      });
+
+      if (repsChanged) {
+        setReps = mergedReps;
+        localStorage.setItem("gymRoutineReps_" + activeRoutineId, JSON.stringify(setReps));
+        changed = true;
+      }
+    }
     
     return changed;
   }
@@ -924,6 +968,18 @@ function updateDOMInPlace() {
     
     const val = (setWeights[setKey] && setWeights[setKey][user]) || "";
     if (document.activeElement !== input && input.value !== String(val)) {
+      input.value = val;
+    }
+  });
+
+  // 2.1 Update reps inputs
+  document.querySelectorAll(".reps-input").forEach((input) => {
+    const setKey = input.dataset.setKey;
+    const user = input.dataset.user;
+    if (!setKey || !user) return;
+    
+    const val = (setReps[setKey] && setReps[setKey][user]) || "";
+    if (document.activeElement !== input && val && input.value !== String(val)) {
       input.value = val;
     }
   });
@@ -5119,7 +5175,7 @@ function init() {
     }
   });
 
-  // Global Event Listener for Weight Inputs (Delegation)
+  // Global Event Listener for Weight & Reps Inputs (Delegation)
   document.body.addEventListener("input", (e) => {
     if (e.target.classList.contains("weight-input")) {
       const key = e.target.getAttribute("data-set-key");
@@ -5131,6 +5187,39 @@ function init() {
         setWeights[key][user] = value;
         lastLocalUpdates[`${key}-${user}-weight`] = Date.now();
         localStorage.setItem("gymRoutineWeights_" + activeRoutineId, JSON.stringify(setWeights));
+        
+        const today = getDateKey(new Date());
+        if (!trainingHistory[today]) {
+          trainingHistory[today] = { alma: false, naty: false, weights: {}, reps: {}, completed_sets: {} };
+        }
+        if (!trainingHistory[today].weights) trainingHistory[today].weights = {};
+        trainingHistory[today].weights[key] = { ...(trainingHistory[today].weights[key] || {}), [user]: value };
+        localStorage.setItem("gymTrainingHistory", JSON.stringify(trainingHistory));
+
+        debouncedSaveToCloud(3000); // Batch cloud sync while typing
+        if (typeof updateLiveVolumeUI === "function") {
+          updateLiveVolumeUI();
+        }
+      }
+    } else if (e.target.classList.contains("reps-input")) {
+      const key = e.target.getAttribute("data-set-key");
+      const user = e.target.getAttribute("data-user");
+      const value = e.target.value;
+
+      if (key && user) {
+        if (!setReps[key]) setReps[key] = {};
+        setReps[key][user] = value;
+        lastLocalUpdates[`${key}-${user}-reps`] = Date.now();
+        localStorage.setItem("gymRoutineReps_" + activeRoutineId, JSON.stringify(setReps));
+        
+        const today = getDateKey(new Date());
+        if (!trainingHistory[today]) {
+          trainingHistory[today] = { alma: false, naty: false, weights: {}, reps: {}, completed_sets: {} };
+        }
+        if (!trainingHistory[today].reps) trainingHistory[today].reps = {};
+        trainingHistory[today].reps[key] = { ...(trainingHistory[today].reps[key] || {}), [user]: value };
+        localStorage.setItem("gymTrainingHistory", JSON.stringify(trainingHistory));
+
         debouncedSaveToCloud(3000); // Batch cloud sync while typing
         if (typeof updateLiveVolumeUI === "function") {
           updateLiveVolumeUI();
@@ -5948,17 +6037,38 @@ function renderContent(skipAnimations = false) {
         }
       }
 
+      // Read and preserve input values from the clicked row
+      const row = btn.closest(".flex.items-center.justify-between");
+      if (row) {
+        const repsInput = row.querySelector(".reps-input");
+        if (repsInput && repsInput.value) {
+          if (!setReps[setKey]) setReps[setKey] = { naty: "", alma: "" };
+          setReps[setKey][user] = repsInput.value;
+          localStorage.setItem("gymRoutineReps_" + activeRoutineId, JSON.stringify(setReps));
+        }
+        const weightInput = row.querySelector(".weight-input");
+        if (weightInput && weightInput.value) {
+          if (!setWeights[setKey]) setWeights[setKey] = { naty: "", alma: "" };
+          setWeights[setKey][user] = weightInput.value;
+          localStorage.setItem("gymRoutineWeights_" + activeRoutineId, JSON.stringify(setWeights));
+        }
+      }
+
       localStorage.setItem("gymRoutineSets_" + activeRoutineId, JSON.stringify(completedSets));
 
       // Real-time synchronization
       const today = getDateKey(new Date());
       if (!trainingHistory[today]) {
-        trainingHistory[today] = { alma: false, naty: false, weights: {}, completed_sets: {} };
+        trainingHistory[today] = { alma: false, naty: false, weights: {}, reps: {}, completed_sets: {} };
       }
       trainingHistory[today].completed_sets = completedSets;
       trainingHistory[today].weights = {
         ...trainingHistory[today].weights,
         ...setWeights,
+      };
+      trainingHistory[today].reps = {
+        ...trainingHistory[today].reps,
+        ...setReps,
       };
       
       debouncedSaveToCloud(1000);
@@ -5990,11 +6100,62 @@ function renderContent(skipAnimations = false) {
       // Real-time synchronization
       const today = getDateKey(new Date());
       if (!trainingHistory[today]) {
-        trainingHistory[today] = { alma: false, naty: false, weights: {}, completed_sets: {} };
+        trainingHistory[today] = { alma: false, naty: false, weights: {}, reps: {}, completed_sets: {} };
       }
       trainingHistory[today].weights = {
         ...trainingHistory[today].weights,
         ...setWeights,
+      };
+      trainingHistory[today].reps = {
+        ...trainingHistory[today].reps,
+        ...setReps,
+      };
+      trainingHistory[today].completed_sets = completedSets;
+
+      debouncedSaveToCloud(1500);
+      if (typeof updateLiveVolumeUI === "function") {
+        updateLiveVolumeUI();
+      }
+    });
+
+    // Auto-select on focus
+    input.addEventListener("focus", (e) => e.target.select());
+    // Stop propagation of clicks to prevent triggering exercise completion or other bubbling
+    input.addEventListener("click", (e) => e.stopPropagation());
+  });
+
+  // Handle Reps Inputs
+  document.querySelectorAll(".reps-input").forEach((input) => {
+    input.addEventListener("change", (e) => {
+      const setKey = e.target.dataset.setKey;
+      const user = e.target.dataset.user;
+      const val = e.target.value;
+
+      if (!setReps[setKey]) {
+        setReps[setKey] = { naty: "", alma: "" };
+      }
+      setReps[setKey][user] = val;
+      const now = Date.now();
+      lastLocalUpdates[`${setKey}-${user}-reps`] = now;
+      if (!setReps[setKey + "_ts"]) {
+        setReps[setKey + "_ts"] = {};
+      }
+      setReps[setKey + "_ts"][user] = now;
+
+      localStorage.setItem("gymRoutineReps_" + activeRoutineId, JSON.stringify(setReps));
+
+      // Real-time synchronization
+      const today = getDateKey(new Date());
+      if (!trainingHistory[today]) {
+        trainingHistory[today] = { alma: false, naty: false, weights: {}, reps: {}, completed_sets: {} };
+      }
+      trainingHistory[today].weights = {
+        ...trainingHistory[today].weights,
+        ...setWeights,
+      };
+      trainingHistory[today].reps = {
+        ...trainingHistory[today].reps,
+        ...setReps,
       };
       trainingHistory[today].completed_sets = completedSets;
 
@@ -8522,7 +8683,7 @@ function calculateSessionVolume(user) {
   
   dayData.exercises.forEach((exercise, idx) => {
     const numSets = parseInt(exercise.sets) || 3;
-    const repsVal = parseReps(exercise.reps);
+    const defaultRepsVal = parseReps(exercise.reps);
     for (let s = 0; s < numSets; s++) {
       const setKey = `${activeTab}-${idx}-${s}`;
       const isCompleted = completedSets[setKey] && completedSets[setKey][user];
@@ -8532,6 +8693,11 @@ function calculateSessionVolume(user) {
           weight = getLastWeight(exercise.name, user, activeTab) || "0";
         }
         const weightVal = parseFloat(weight) || 0;
+        let reps = setReps[setKey] && setReps[setKey][user];
+        if (!reps) {
+          reps = getLastReps(exercise.name, user, activeTab);
+        }
+        const repsVal = parseFloat(reps) || defaultRepsVal;
         totalVolume += weightVal * repsVal;
       }
     }
@@ -8642,12 +8808,14 @@ function getLastSessionVolume(user) {
     
     dayData.exercises.forEach((exercise, idx) => {
       const numSets = parseInt(exercise.sets) || 3;
-      const repsVal = parseReps(exercise.reps);
+      const defaultRepsVal = parseReps(exercise.reps);
       for (let s = 0; s < numSets; s++) {
         const setKey = `${activeTab}-${idx}-${s}`;
         const w = dayRecord.weights[setKey];
         if (w && w[user]) {
           const weightVal = parseFloat(w[user]) || 0;
+          let r = dayRecord.reps && dayRecord.reps[setKey] && dayRecord.reps[setKey][user];
+          const repsVal = parseFloat(r) || defaultRepsVal;
           computedVolume += weightVal * repsVal;
           userCompletedSets++;
         }
