@@ -7193,6 +7193,15 @@ function checkAndShowDailyMotivation() {
 }
 
 function openDailyMotivationModal(isManual = false) {
+  const today = getDateKey(new Date());
+  const alreadyAccepted = localStorage.getItem("natyDailyPledgeAccepted_" + today) === "true";
+  
+  // If not manually opened and already accepted/started today, never show modal
+  if (!isManual && alreadyAccepted) {
+    updateDailyMotivationBanner();
+    return;
+  }
+
   closeSidebarIfOpen();
   const modal = document.getElementById("daily-motivation-modal");
   const quoteEl = document.getElementById("daily-motivation-quote-text");
@@ -7200,13 +7209,9 @@ function openDailyMotivationModal(isManual = false) {
   
   if (!modal || !quoteEl) return;
   
-  const today = getDateKey(new Date());
   const quote = getDailyMotivationQuote(today);
-  
   quoteEl.textContent = quote;
   updateDailyMotivationBanner();
-  
-  const alreadyAccepted = localStorage.getItem("natyDailyPledgeAccepted_" + today) === "true";
   
   if (btn) {
     if (isManual && alreadyAccepted) {
@@ -7228,9 +7233,9 @@ function acceptDailyMotivation() {
   const today = getDateKey(new Date());
   const alreadyAccepted = localStorage.getItem("natyDailyPledgeAccepted_" + today) === "true";
   
+  localStorage.setItem("natyDailyPledgeAccepted_" + today, "true");
+  
   if (!alreadyAccepted) {
-    localStorage.setItem("natyDailyPledgeAccepted_" + today, "true");
-    
     // Reward Naty with +10 points for daily pledge commitment
     let currentGems = parseInt(localStorage.getItem("naty_gems_balance") || "0", 10);
     currentGems += 10;
@@ -7244,6 +7249,13 @@ function acceptDailyMotivation() {
     if (typeof triggerHaptic === "function") triggerHaptic();
     if (typeof showToast === "function") {
       showToast("check-circle", "text-emerald-400", "Enfoque registrado (+10 pts).");
+    }
+  }
+
+  // Auto-start active session timer if not running
+  if (typeof isSessionTimerRunning !== "undefined" && !isSessionTimerRunning) {
+    if (typeof startWorkoutSession === "function") {
+      startWorkoutSession();
     }
   }
   
@@ -8582,6 +8594,9 @@ function initSessionStopwatch() {
 }
 
 function startWorkoutSession() {
+  const today = getDateKey(new Date());
+  localStorage.setItem("natyDailyPledgeAccepted_" + today, "true");
+
   if (isSessionTimerRunning) return;
   
   sessionStartTime = Date.now();
