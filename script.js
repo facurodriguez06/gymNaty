@@ -767,13 +767,13 @@ function buildCloudPayload() {
         user_id: getCloudUserId(),
         current_water_ml: waterState.naty || 0,
         goal_ml: waterState.natyGoal || 2500,
-        last_updated_date: waterState.date || new Date().toDateString(),
+        last_updated_date: getDateKey(new Date()),
       },
       {
         user_id: getAlmaUserId(),
         current_water_ml: waterState.alma || 0,
-        goal_ml: waterState.almaGoal || 2500,
-        last_updated_date: waterState.date || new Date().toDateString(),
+        goal_ml: waterState.almaGoal || 2000,
+        last_updated_date: getDateKey(new Date()),
       }
     ],
   };
@@ -1295,25 +1295,46 @@ function applyCloudState(state, triggerTimers = false) {
   }
 
   if (Array.isArray(state.water_state) && state.water_state.length) {
+    const today = getDateKey(new Date());
     const natyId = getCloudUserId();
     const almaId = getAlmaUserId();
     
     const natyW = state.water_state.find((r) => r.user_id === natyId || r.user_id === PRIMARY_NATY_ID) ||
                   state.water_state.find(r => !r.user_id.endsWith("a"));
     if (natyW) {
-      waterState.naty = natyW.current_water_ml || 0;
-      waterState.natyGoal = natyW.goal_ml || 2500;
-      waterState.date = natyW.last_updated_date || waterState.date;
+      const cloudDate = natyW.last_updated_date ? 
+        (natyW.last_updated_date.includes("T") || natyW.last_updated_date.includes("-") ? getDateKey(new Date(natyW.last_updated_date)) : natyW.last_updated_date) 
+        : today;
+
+      if (cloudDate === today) {
+        waterState.naty = Math.max(waterState.naty || 0, natyW.current_water_ml || 0);
+      }
+      if (natyW.goal_ml) waterState.natyGoal = natyW.goal_ml;
     }
     
     const almaW = state.water_state.find((r) => r.user_id === almaId || r.user_id === PRIMARY_ALMA_ID) ||
                   state.water_state.find(r => r.user_id.endsWith("a"));
     if (almaW) {
-      waterState.alma = almaW.current_water_ml || 0;
-      waterState.almaGoal = almaW.goal_ml || 2500;
-      waterState.date = almaW.last_updated_date || waterState.date;
+      const cloudDate = almaW.last_updated_date ? 
+        (almaW.last_updated_date.includes("T") || almaW.last_updated_date.includes("-") ? getDateKey(new Date(almaW.last_updated_date)) : almaW.last_updated_date) 
+        : today;
+
+      if (cloudDate === today) {
+        waterState.alma = Math.max(waterState.alma || 0, almaW.current_water_ml || 0);
+      }
+      if (almaW.goal_ml) waterState.almaGoal = almaW.goal_ml;
     }
+    
+    waterState.date = today;
     localStorage.setItem("water_tracker_state", JSON.stringify(waterState));
+
+    if (!trainingHistory[today]) {
+      trainingHistory[today] = { alma: false, naty: false, weights: {}, water: {} };
+    }
+    if (!trainingHistory[today].water) trainingHistory[today].water = {};
+    trainingHistory[today].water.naty = waterState.naty;
+    trainingHistory[today].water.alma = waterState.alma;
+    localStorage.setItem("gymTrainingHistory", JSON.stringify(trainingHistory));
   }
 
   return true;
@@ -2243,22 +2264,51 @@ if (!userProfile.naty.age) userProfile.naty.age = 23;
 if (!userProfile.alma.age) userProfile.alma.age = 23;
 
 // Water State
+const todayWaterDateKey = getDateKey(new Date());
 let waterState = JSON.parse(localStorage.getItem("water_tracker_state")) || {
   naty: 0,
   alma: 0,
   natyGoal: 2500,
   almaGoal: 2000,
   history: [],
-  date: new Date().toDateString(),
+  date: todayWaterDateKey,
 };
 
-// Reset if new day
-if (waterState.date !== new Date().toDateString()) {
+// Check if we have higher logged water in today's training history
+if (trainingHistory && trainingHistory[todayWaterDateKey] && trainingHistory[todayWaterDateKey].water) {
+  const hWater = trainingHistory[todayWaterDateKey].water;
+  if ((hWater.naty || 0) > (waterState.naty || 0)) {
+    waterState.naty = hWater.naty;
+  }
+  if ((hWater.alma || 0) > (waterState.alma || 0)) {
+    waterState.alma = hWater.alma;
+  }
+}
+
+// Normalize waterState.date to standard ISO format (YYYY-MM-DD)
+let normalizedWaterDate = waterState.date;
+if (normalizedWaterDate) {
+  if (normalizedWaterDate.includes(" ") || normalizedWaterDate.includes(",")) {
+    try {
+      normalizedWaterDate = getDateKey(new Date(normalizedWaterDate));
+    } catch (e) {
+      normalizedWaterDate = todayWaterDateKey;
+    }
+  }
+} else {
+  normalizedWaterDate = todayWaterDateKey;
+}
+
+// Reset ONLY if the date is genuinely from a previous day
+if (normalizedWaterDate !== todayWaterDateKey) {
   waterState.naty = 0;
   waterState.alma = 0;
   waterState.history = [];
-  waterState.date = new Date().toDateString();
-  saveWaterState(); // Safe to call if defined, or we define it below
+  waterState.date = todayWaterDateKey;
+  localStorage.setItem("water_tracker_state", JSON.stringify(waterState));
+} else {
+  waterState.date = todayWaterDateKey;
+  localStorage.setItem("water_tracker_state", JSON.stringify(waterState));
 }
 
 let currentTemp = parseInt(localStorage.getItem("cachedTemp")) || 25; // Load cached or default
@@ -2556,8 +2606,23 @@ function renderWaterHistory() {
 }
 
 function saveWaterState() {
+  const today = getDateKey(new Date());
+  waterState.date = today;
   localStorage.setItem("water_tracker_state", JSON.stringify(waterState));
-  scheduleCloudSync();
+  
+  if (!trainingHistory[today]) {
+    trainingHistory[today] = { alma: false, naty: false, weights: {}, water: {} };
+  }
+  if (!trainingHistory[today].water) trainingHistory[today].water = {};
+  trainingHistory[today].water.naty = waterState.naty;
+  trainingHistory[today].water.alma = waterState.alma;
+  localStorage.setItem("gymTrainingHistory", JSON.stringify(trainingHistory));
+
+  if (typeof debouncedSaveToCloud === "function") {
+    debouncedSaveToCloud(1000);
+  } else if (typeof scheduleCloudSync === "function") {
+    scheduleCloudSync();
+  }
 }
 
 function resetDay(user) {
@@ -5633,12 +5698,18 @@ function updateSingleSetUI(setKey, user, isCompleted, clickedBtn) {
   if (completionMsg) {
     if (progress === 100) {
       completionMsg.classList.remove("hidden");
+      if (typeof freezeTodayWorkoutDuration === "function") {
+        freezeTodayWorkoutDuration();
+      }
       if (!isSummaryDismissedToday(activeTab) && typeof openWorkoutSummaryModal === "function") {
         setTimeout(() => openWorkoutSummaryModal(false), 600);
       }
     } else {
       completionMsg.classList.add("hidden");
       clearSummaryDismissedToday(activeTab);
+      const todayKey = getDateKey(new Date());
+      localStorage.removeItem("vital_frozen_duration_" + todayKey);
+      localStorage.removeItem("vital_frozen_duration_secs_" + todayKey);
     }
   }
 
@@ -8739,6 +8810,70 @@ function clearSummaryDismissedToday(tabIdx = activeTab) {
   localStorage.removeItem(`workout_summary_dismissed_${activeRoutineId}_${tabIdx}_${todayKey}`);
 }
 
+function getTodayWorkoutDurationFormatted() {
+  const todayKey = getDateKey(new Date());
+  const savedFrozen = localStorage.getItem("vital_frozen_duration_" + todayKey);
+  if (savedFrozen) return savedFrozen;
+  
+  if (trainingHistory && trainingHistory[todayKey] && trainingHistory[todayKey].duration_formatted) {
+    return trainingHistory[todayKey].duration_formatted;
+  }
+  
+  let currentElapsed = sessionElapsedSeconds;
+  if (isSessionTimerRunning && sessionStartTime) {
+    const diffSeconds = Math.floor((Date.now() - sessionStartTime) / 1000);
+    currentElapsed = sessionElapsedSeconds + Math.max(0, diffSeconds);
+  }
+  
+  if (currentElapsed > 0) {
+    return formatStopwatchTime(currentElapsed);
+  }
+  
+  return "00:45:00";
+}
+
+function freezeTodayWorkoutDuration() {
+  const todayKey = getDateKey(new Date());
+  const existing = localStorage.getItem("vital_frozen_duration_" + todayKey);
+  if (existing) return existing;
+
+  let finalSeconds = sessionElapsedSeconds;
+  if (isSessionTimerRunning && sessionStartTime) {
+    const diffSeconds = Math.floor((Date.now() - sessionStartTime) / 1000);
+    finalSeconds += Math.max(0, diffSeconds);
+  }
+  
+  if (finalSeconds <= 0) {
+    let completedCount = 0;
+    const dayData = routineData[activeTab];
+    if (dayData && dayData.exercises) {
+      dayData.exercises.forEach((ex, idx) => {
+        const numSets = parseInt(ex.sets) || 3;
+        for (let s = 0; s < numSets; s++) {
+          const k = `${activeTab}-${idx}-${s}`;
+          if (completedSets[k] && completedSets[k].naty) completedCount++;
+        }
+      });
+    }
+    finalSeconds = completedCount > 0 ? Math.max(1200, completedCount * 150) : 2700;
+  }
+  
+  const formatted = formatStopwatchTime(finalSeconds);
+  localStorage.setItem("vital_frozen_duration_" + todayKey, formatted);
+  localStorage.setItem("vital_frozen_duration_secs_" + todayKey, finalSeconds.toString());
+  
+  if (!trainingHistory[todayKey]) {
+    trainingHistory[todayKey] = { alma: false, naty: false, weights: {}, completed_sets: {} };
+  }
+  trainingHistory[todayKey].duration_formatted = formatted;
+  trainingHistory[todayKey].duration_seconds = finalSeconds;
+  localStorage.setItem("gymTrainingHistory", JSON.stringify(trainingHistory));
+  
+  pauseWorkoutSession();
+  
+  return formatted;
+}
+
 function openWorkoutSummaryModal(force = false) {
   if (!force && isSummaryDismissedToday(activeTab)) {
     return;
@@ -8746,7 +8881,10 @@ function openWorkoutSummaryModal(force = false) {
   const modal = document.getElementById("workout-summary-modal");
   if (!modal) return;
 
-  const durationText = document.getElementById("session-stopwatch")?.textContent || "00:00:00";
+  // Lock and freeze the finalized duration for today
+  freezeTodayWorkoutDuration();
+
+  const durationText = getTodayWorkoutDurationFormatted();
   const durationEl = document.getElementById("summary-duration");
   if (durationEl) durationEl.textContent = durationText;
 
@@ -8855,6 +8993,7 @@ function closeWorkoutSummaryModal() {
 }
 
 function saveSessionAndCloseSummary() {
+  freezeTodayWorkoutDuration();
   setSummaryDismissedToday(activeTab);
   let who = "both";
   if (whoTrainsToday === "naty") {
@@ -8902,6 +9041,8 @@ window.initSessionStopwatch = initSessionStopwatch;
 window.isSummaryDismissedToday = isSummaryDismissedToday;
 window.setSummaryDismissedToday = setSummaryDismissedToday;
 window.clearSummaryDismissedToday = clearSummaryDismissedToday;
+window.getTodayWorkoutDurationFormatted = getTodayWorkoutDurationFormatted;
+window.freezeTodayWorkoutDuration = freezeTodayWorkoutDuration;
 
 
 
@@ -9221,7 +9362,9 @@ function renderStoryCanvas() {
   const currentRoutine = (routineData && routineData[activeTab]) || { title: "Entrenamiento", day: "Hoy" };
   const routineTitle = (currentRoutine.title || "Entrenamiento").toUpperCase();
 
-  const duration = document.getElementById("session-stopwatch")?.textContent || "00:45:00";
+  const duration = typeof getTodayWorkoutDurationFormatted === "function" 
+    ? getTodayWorkoutDurationFormatted() 
+    : (document.getElementById("session-stopwatch-display")?.textContent || "00:45:00");
   const volNaty = calculateSessionVolume("naty") || 0;
   const streak = (gamification && gamification.naty && gamification.naty.streak) || 1;
 
